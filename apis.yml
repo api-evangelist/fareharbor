@@ -1,23 +1,122 @@
 aid: fareharbor
 name: FareHarbor
-description: 'FareHarbor is a company surfaced via the API Evangelist harvest backlog (source: travel)
-  and added to the network as a stub for full-pipeline profiling.'
+image: https://marketing.fareharbor.com/wp-content/uploads/2023/03/Home-First-fold-2.png
+description: FareHarbor provides online booking software for tours, activities, rentals, and attractions, enabling businesses to manage reservations,
+  payments, and customer experiences through a scalable, cloud‑based platform. The solution supports multi‑channel sales, staff management, reporting,
+  and integrations with partners, aiming to simplify operations for tour operators and activity providers worldwide.
 url: https://raw.githubusercontent.com/api-evangelist/fareharbor/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:travel
-x-tier: stub
-x-tier-reason: harvest
+x-tier: profiled
+x-tier-reason: enrichment pass 2026-10-12 (modular-v1; was harvest)
 specificationVersion: '0.20'
 created: '2026-10-12'
 modified: '2026-10-12'
 tags:
-- Company
-apis: []
+- Travel
+- Booking
+- SaaS
+- Tourism
+- Software
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: Spectral
+  url: rules/fareharbor-rules.yml
+- type: JSONLD
+  url: json-ld/fareharbor-context.jsonld
+- type: Vocabulary
+  url: vocabulary/fareharbor-vocabulary.yml
+- type: Conformance
+  url: conformance/fareharbor-conformance.yml
+- type: Vendors
+  url: vendors/fareharbor-vendors.yml
+- type: DataModel
+  url: data-model/fareharbor-data-model.yml
+- type: Compliance
+  url: https://trust.fareharbor.com/
+- type: Security
+  url: security/fareharbor-vulnerability-disclosure.yml
+- type: ErrorCatalog
+  url: errors/fareharbor-problem-types.yml
+- type: LLMsTxt
+  url: llms/fareharbor-llms.txt
+- type: SecurityTxt
+  url: well-known/fareharbor-status-security.txt
+- type: SecurityTxt
+  url: well-known/fareharbor-security.txt
+- type: WellKnown
+  url: well-known/fareharbor-well-known.yml
+- type: Hosts
+  url: hosts/fareharbor-hosts.yml
+- type: Support
+  url: https://help.fareharbor.com/
+- type: StatusPage
+  url: https://status.fareharbor.com/
+- type: SignUp
+  url: https://marketing.fareharbor.com/become-an-affiliate/signup/
+- type: Documentation
+  url: https://developer.fareharbor.com/
+- type: APIReference
+  url: https://developer.fareharbor.com/api/external/v1/
+- type: GitHubOrganization
+  url: https://github.com/FareHarbor
+- type: TrustCenter
+  url: security/fareharbor-trust-center.yml
+- type: VulnerabilityDisclosure
+  url: security/fareharbor-vulnerability-disclosure.yml
+- type: DomainSecurity
+  url: security/fareharbor-domain-security.yml
 - type: Website
   url: https://fareharbor.com/
+apis:
+- name: FareHarbor Integration Center
+  description: FareHarbor Integration Center API
+  humanURL: https://developer.fareharbor.com/api/external/v1/
+  baseURL: https://fareharbor.com/api/external/v1
+  aid: fareharbor:fareharbor-integration-center
+- aid: fareharbor:fareharbor-integration-center-home-api
+  name: FareHarbor Integration Center Home API
+  description: 'FareHarbor Integration Center Home API: 31 operations.'
+  humanURL: https://developer.fareharbor.com/api/external/v1/
+  baseURL: https://fareharbor.com/api/external/v1
+  properties:
+  - type: OpenAPI
+    url: openapi/_original/fareharbor-home-openapi.yml
+  - type: JSONSchema
+    url: json-schema/fareharbor-booking-with-resource-uses-response-json-schema-schema.json
+  - type: JSONSchema
+    url: json-schema/fareharbor-booking-with-payments-response-json-schema-schema.json
+  - type: JSONSchema
+    url: json-schema/fareharbor-booking-response-json-schema-schema.json
+  - type: JSONSchema
+    url: json-schema/fareharbor-items-response-json-schema-schema.json
+  - type: JSONSchema
+    url: json-schema/fareharbor-item-response-json-schema-schema.json
+  - type: JSONSchema
+    url: json-schema/fareharbor-availability-response-json-schema-schema.json
+x-coverage:
+  state: none
+  reason: no-developer-program
+  method: derived
+  generated: '2026-10-12'
+  generator: derive-coverage.py (pre-flight evidence)
+  detail: the company publishes no developer documentation host and no machine-readable contract on its own domain
+  evidence:
+  - url: https://api.fareharbor.com/mcp
+    status: 403
+  - url: https://fareharbor.com/mcp
+    status: 403
+  - url: https://help.fareharbor.com/mcp
+    status: 401
+  - url: https://fareharbor.com/
+    status: 200
+x-enrichment:
+  date: '2026-10-12'
+  status: enriched
+  artifacts_added: 16
+  pass: modular-v1
+  engine: identity=local,contract=local,surfaces=local,docs=local,regulatory=local

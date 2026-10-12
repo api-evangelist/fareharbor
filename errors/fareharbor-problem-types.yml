@@ -1,0 +1,47 @@
+generated: '2026-10-12'
+method: derived
+generator: derive-problem-types.py
+source:
+- openapi/_original/fareharbor-home-openapi.yml
+format: custom
+envelope:
+  media_type: application/json
+  schema: Error400
+coverage:
+  operations: 31
+  statuses_declared: 5
+problems:
+- status: 400
+  title: Bad Request
+  description: Bad Request (see [Error Codes](#tag/Error-Codes))
+  operations: 31
+  media_types:
+  - application/json
+  schema: Error400
+- status: 403
+  title: Forbidden
+  description: Forbidden (see [Error Codes](#tag/Error-Codes))
+  operations: 31
+  media_types:
+  - application/json
+  schema: Error403
+- status: 404
+  title: Not Found
+  description: The specified resource was not found (see [Error Codes](#tag/Error-Codes))
+  operations: 31
+  media_types:
+  - application/json
+  schema: Error404
+- status: 429
+  title: Too Many Requests
+  description: Too Many Requests (see [Rate Limits](#tag/Getting-Started/Rate-Limits))
+  operations: 31
+  media_types:
+  - application/json
+  schema: Error
+- status: 504
+  title: Gateway Timeout
+  description: '[Gateway Timeout](#tag/Getting-Started/Timeouts)'
+  operations: 31
+  media_types: []
+  schema: null

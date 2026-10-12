@@ -1,0 +1,8 @@
+generated: '2026-10-12'
+method: probed
+generator: harvest-sibling-contracts.py --bootstrap
+source: https://developer.fareharbor.com/api/external/v1/FareHarbor-External-API.yaml/home
+operations: 31
+version: 3.1.0
+ownership: the contract module fetched this URL and reported it saved with ownership
+  verified; its write was empty, so the closeout saved it

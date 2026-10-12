@@ -1,0 +1,834 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/fareharbor/main/json-schema/fareharbor-items-response-json-schema-schema.json",
+  "title": "ITEMS_RESPONSE_JSON_SCHEMA",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/_original/fareharbor-home-openapi.yml#/components/schemas/ITEMS_RESPONSE_JSON_SCHEMA",
+  "additionalProperties": false,
+  "definitions": {
+    "address": {
+      "additionalProperties": false,
+      "properties": {
+        "city": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        },
+        "postal_code": {
+          "type": "string"
+        },
+        "province": {
+          "type": "string"
+        },
+        "street": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "city",
+        "country",
+        "postal_code",
+        "province",
+        "street"
+      ],
+      "type": "object"
+    },
+    "customer_prototype": {
+      "additionalProperties": false,
+      "properties": {
+        "display_name": {
+          "description": "The customer prototype's display name.",
+          "type": "string"
+        },
+        "maximum_age": {
+          "oneOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "minimum_age": {
+          "oneOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "note": {
+          "type": "string"
+        },
+        "pk": {
+          "description": "The customer prototype's unique ID.",
+          "format": "int32",
+          "type": "number"
+        },
+        "total": {
+          "description": "The price of a single customer of this type.",
+          "type": "number"
+        },
+        "total_including_tax": {
+          "description": "The price of a single customer of this type plus applicable taxes.",
+          "type": "number"
+        }
+      },
+      "required": [
+        "pk",
+        "display_name",
+        "note",
+        "minimum_age",
+        "maximum_age",
+        "total"
+      ],
+      "type": "object"
+    },
+    "faq_item": {
+      "additionalProperties": false,
+      "properties": {
+        "answer": {
+          "description": "FAQ answer.",
+          "type": "string"
+        },
+        "question": {
+          "description": "FAQ question.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "question",
+        "answer"
+      ],
+      "type": "object"
+    },
+    "guided_language": {
+      "additionalProperties": false,
+      "properties": {
+        "language_code": {
+          "description": "IETF BCP 47 language tag for the guided commentary.",
+          "type": "string"
+        },
+        "type": {
+          "description": "The delivery format of the guided commentary.",
+          "enum": [
+            "in_person",
+            "recorded_audio"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "language_code"
+      ],
+      "type": "object"
+    },
+    "image": {
+      "additionalProperties": false,
+      "properties": {
+        "gallery": {
+          "description": "The image's gallery name.",
+          "type": "string"
+        },
+        "image_cdn_url": {
+          "description": "A URL to the item's primary image.",
+          "format": "uri",
+          "type": "string"
+        },
+        "pk": {
+          "description": "The image's unique ID.",
+          "format": "int32",
+          "type": "number"
+        }
+      },
+      "required": [
+        "pk",
+        "gallery",
+        "image_cdn_url"
+      ],
+      "type": "object"
+    },
+    "item": {
+      "properties": {
+        "cancellation_policy": {
+          "description": "The item's cancellation policy.",
+          "format": "markdown",
+          "type": "string"
+        },
+        "cancellation_policy_safe_html": {
+          "description": "The item's cancellation policy.",
+          "format": "markdown",
+          "type": "string"
+        },
+        "customer_prototypes": {
+          "description": "An array of CustomerPrototype objects associated with the item.",
+          "items": {
+            "$ref": "#/$defs/customer_prototype"
+          },
+          "type": "array"
+        },
+        "description": {
+          "description": "The item's description.",
+          "format": "markdown",
+          "type": "string"
+        },
+        "description_bullets": {
+          "description": "An array containing plain-text descriptive bullet points for the item.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "description_safe_html": {
+          "description": "The item's description.",
+          "format": "markdown",
+          "type": "string"
+        },
+        "description_text": {
+          "description": "The item's plain-text description.",
+          "type": "string"
+        },
+        "effective_cancellation_policy": {
+          "additionalProperties": false,
+          "properties": {
+            "cutoff_hours_before": {
+              "oneOf": [
+                {
+                  "description": "The number of hours for the hours-before-start and hours-before-midnight types.",
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": {
+              "description": "The cancellation policy's type",
+              "enum": [
+                "hours-before-start",
+                "hours-before-midnight",
+                "always",
+                "never"
+              ],
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "cutoff_hours_before"
+          ],
+          "type": "object"
+        },
+        "headline": {
+          "description": "The item's headline.",
+          "type": "string"
+        },
+        "health_and_safety_policy": {
+          "description": "The item's health and safety policy. It includes details and procedures related to specific activities for the item like the precautions being taken, equipment to bring, and any additional special rules.",
+          "format": "markdown",
+          "type": "string"
+        },
+        "health_and_safety_policy_safe_html": {
+          "description": "The item's health and safety policy. It includes details and procedures related to specific activities for the item like the precautions being taken, equipment to bring, and any additional special rules.",
+          "format": "markdown",
+          "type": "string"
+        },
+        "image_cdn_url": {
+          "description": "A URL to the item's primary image.",
+          "format": "uri",
+          "type": "string"
+        },
+        "images": {
+          "items": {
+            "$ref": "#/$defs/image"
+          },
+          "type": "array"
+        },
+        "is_pickup_ever_available": {
+          "description": "Indicates whether the item is configured to provide pickups.",
+          "type": "boolean"
+        },
+        "location": {
+          "type": "string"
+        },
+        "locations": {
+          "items": {
+            "$ref": "#/$defs/location"
+          },
+          "type": "array"
+        },
+        "name": {
+          "description": "The item's name.",
+          "type": "string"
+        },
+        "pk": {
+          "description": "The items's unique ID.",
+          "format": "int32",
+          "type": "number"
+        },
+        "primary_location": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/primary_location"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "ratings": {
+          "$ref": "#/$defs/ratings"
+        },
+        "structured_description": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/structured_description"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "tags": {
+          "items": {
+            "$ref": "#/$defs/tag"
+          },
+          "type": "array"
+        },
+        "tax_percentage": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "pk",
+        "name",
+        "tax_percentage",
+        "headline",
+        "booking_notes",
+        "booking_notes_safe_html",
+        "description",
+        "description_safe_html",
+        "description_text",
+        "description_bullets",
+        "cancellation_policy",
+        "cancellation_policy_safe_html",
+        "location",
+        "locations",
+        "primary_location",
+        "image_cdn_url",
+        "images",
+        "customer_prototypes",
+        "is_pickup_ever_available",
+        "health_and_safety_policy",
+        "health_and_safety_policy_safe_html"
+      ],
+      "type": "object"
+    },
+    "location": {
+      "additionalProperties": false,
+      "properties": {
+        "address": {
+          "$ref": "#/$defs/address",
+          "description": "The location's physical address."
+        },
+        "google_place_id": {
+          "description": "The location's Google Place ID.",
+          "format": "uuid",
+          "type": "string"
+        },
+        "latitude": {
+          "description": "The location's latitude.",
+          "oneOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "longitude": {
+          "description": "The location's longitude.",
+          "oneOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "note": {
+          "description": "A brief note about this location that can be displayed to end users.",
+          "format": "markdown",
+          "type": "string"
+        },
+        "note_safe_html": {
+          "description": "A brief note about this location that can be displayed to end users.",
+          "format": "markdown",
+          "type": "string"
+        },
+        "pk": {
+          "description": "The location's unique ID.",
+          "format": "int32",
+          "type": "number"
+        },
+        "tripadvisor_url": {
+          "description": "The location's TripAdvisor URL.",
+          "format": "uri",
+          "type": "string"
+        },
+        "type": {
+          "description": "The location's type.",
+          "enum": [
+            "pre",
+            "primary",
+            "start",
+            "end"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "pk",
+        "type",
+        "note",
+        "note_safe_html",
+        "address",
+        "longitude",
+        "latitude",
+        "google_place_id",
+        "tripadvisor_url"
+      ],
+      "type": "object"
+    },
+    "primary_location": {
+      "additionalProperties": false,
+      "properties": {
+        "address": {
+          "$ref": "#/$defs/address",
+          "description": "The location's physical address."
+        },
+        "google_place_id": {
+          "description": "The location's Google Place ID.",
+          "format": "uuid",
+          "type": "string"
+        },
+        "latitude": {
+          "description": "The location's latitude.",
+          "oneOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "longitude": {
+          "description": "The location's longitude.",
+          "oneOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "note": {
+          "description": "A brief note about this location that can be displayed to end users.",
+          "format": "markdown",
+          "type": "string"
+        },
+        "note_safe_html": {
+          "description": "A brief note about this location that can be displayed to end users.",
+          "format": "markdown",
+          "type": "string"
+        },
+        "pk": {
+          "description": "The location's unique ID.",
+          "format": "int32",
+          "type": "number"
+        },
+        "tripadvisor_url": {
+          "description": "The location's TripAdvisor URL.",
+          "format": "uri",
+          "type": "string"
+        },
+        "type": {
+          "description": "The location's type.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "pk",
+        "type",
+        "note",
+        "note_safe_html",
+        "address",
+        "longitude",
+        "latitude",
+        "google_place_id",
+        "tripadvisor_url"
+      ],
+      "type": "object"
+    },
+    "ratings": {
+      "properties": {
+        "google_reviews": {
+          "oneOf": [
+            {
+              "properties": {
+                "cached_at": {
+                  "format": "date-time",
+                  "type": "string"
+                },
+                "rating": {
+                  "type": "number"
+                },
+                "user_ratings_total": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "cached_at",
+                "user_ratings_total",
+                "rating"
+              ],
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "tripadvisor": {
+          "oneOf": [
+            {
+              "properties": {
+                "cached_at": {
+                  "format": "date-time",
+                  "type": "string"
+                },
+                "geo_location_name": {
+                  "type": "string"
+                },
+                "num_reviews": {
+                  "type": "integer"
+                },
+                "ranking": {
+                  "type": "integer"
+                },
+                "ranking_out_of": {
+                  "type": "integer"
+                },
+                "ranking_string": {
+                  "type": "string"
+                },
+                "rating": {
+                  "type": "number"
+                },
+                "rating_image_url": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "cached_at",
+                "num_reviews",
+                "rating",
+                "rating_image_url",
+                "ranking",
+                "ranking_out_of",
+                "ranking_string",
+                "geo_location_name"
+              ],
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "google_reviews",
+        "tripadvisor"
+      ],
+      "type": "object"
+    },
+    "structured_description": {
+      "additionalProperties": false,
+      "properties": {
+        "accessibility": {
+          "description": "Accessibility options that are available.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "cancellation_summary": {
+          "description": "Summary of the cancellation policy.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "check_in_details": {
+          "description": "Where and how to check-in.",
+          "format": "markdown",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "description": {
+          "description": "Description of the item and what customers can expect.",
+          "format": "markdown",
+          "type": "string"
+        },
+        "disclaimers": {
+          "description": "Limitations or potential events in which the operator is not responsible.",
+          "format": "markdown",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "duration": {
+          "description": "Freeform text describing the duration.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "extras": {
+          "description": "Any equipment, add-ons or services that can be purchased.",
+          "format": "markdown",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "faq_items": {
+          "description": "Answers to customers frequently asked questions.",
+          "items": {
+            "$ref": "#/$defs/faq_item"
+          },
+          "type": "array"
+        },
+        "faqs": {
+          "description": "Answers to customers frequently asked questions.",
+          "format": "markdown",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "group_size": {
+          "description": "Freeform text describing group size constraints.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "guided_languages": {
+          "description": "A list of guided language options available for the activity.",
+          "items": {
+            "$ref": "#/$defs/guided_language"
+          },
+          "type": "array"
+        },
+        "highlights": {
+          "description": "What makes this activitiy special.",
+          "format": "markdown",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "itinerary": {
+          "description": "Detailed agenda of what the customer can expect.",
+          "format": "markdown",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "max_age": {
+          "description": "Maximum age restriction.",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "meeting_point": {
+          "description": "Freeform text describing address, city or landkmark of where to meet.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "min_age": {
+          "description": "Minimum age restriction.",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "pricing": {
+          "description": "Overview of prices and options offered.",
+          "format": "markdown",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "restrictions": {
+          "description": "Any restrictions that cannot be accommodated.",
+          "format": "markdown",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "short_description": {
+          "description": "A concise summary describing the activity.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "special_requirements": {
+          "description": "Any requirements that should be known before booking.",
+          "format": "markdown",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "what_is_included": {
+          "description": "What is included in the price of the activity.",
+          "format": "markdown",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "what_is_included_items": {
+          "description": "List of items that are included in the price of the activity.",
+          "items": {
+            "$ref": "#/$defs/what_is_included_item"
+          },
+          "type": "array"
+        },
+        "what_is_not_included": {
+          "description": "What is not included in the price of the activity.",
+          "format": "markdown",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "what_is_not_included_items": {
+          "description": "List of items that are not included in the price of the activity.",
+          "items": {
+            "$ref": "#/$defs/what_is_not_included_item"
+          },
+          "type": "array"
+        },
+        "what_to_bring": {
+          "description": "Any items the customer should bring.",
+          "format": "markdown",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "what_to_bring_items": {
+          "description": "List of items that the customer should bring.",
+          "items": {
+            "$ref": "#/$defs/what_to_bring_item"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "tag": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "description": "The tag's display name.",
+          "type": "string"
+        },
+        "shortname": {
+          "description": "The tag's short name. The short name is unique per company and is limited to lowercase letters (a-z), digits (0-9), and the dash character.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "type": "object"
+    },
+    "what_is_included_item": {
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "description": "Included item text.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "value"
+      ],
+      "type": "object"
+    },
+    "what_is_not_included_item": {
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "description": "Not included item text.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "value"
+      ],
+      "type": "object"
+    },
+    "what_to_bring_item": {
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "description": "What to bring item text.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "value"
+      ],
+      "type": "object"
+    }
+  },
+  "properties": {
+    "items": {
+      "items": {
+        "$ref": "#/$defs/item"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "items"
+  ],
+  "type": "object"
+}

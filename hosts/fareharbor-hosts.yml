@@ -1,0 +1,142 @@
+generated: '2026-10-12'
+method: derived
+source: the pre-flight dossier, apis.yml pointers, spec servers, well-known, vendors -- nothing fetched here
+generator: derive-hosts.py
+summary:
+  hosts: 10
+  own: 9
+  other_domain: 0
+  platform: 1
+  roles:
+  - api
+  - docs
+  - identity
+  - other
+  - source
+  - status
+  - support
+  - website
+hosts:
+- host: api.fareharbor.com
+  found_by:
+  - contract-discovery
+  types: []
+  serves: []
+  registrable_domain: fareharbor.com
+  role: api
+  relation: own
+- host: developer.fareharbor.com
+  found_by:
+  - pointer
+  - apis[]
+  - probed
+  - site-links
+  - docs-index
+  - spec-found
+  - contract-discovery
+  - well-known
+  types:
+  - Documentation
+  - APIReference
+  serves:
+  - docs
+  - spec
+  registrable_domain: fareharbor.com
+  role: docs
+  relation: own
+- host: fareharbor.com
+  found_by:
+  - pointer
+  - apis[]
+  - probed
+  - contract-discovery
+  - well-known
+  types:
+  - Website
+  serves:
+  - api
+  registrable_domain: fareharbor.com
+  role: website
+  relation: own
+- host: github.com
+  found_by:
+  - pointer
+  types:
+  - GitHubOrganization
+  serves: []
+  registrable_domain: github.com
+  role: source
+  relation: platform
+- host: help.fareharbor.com
+  found_by:
+  - pointer
+  - probed
+  - site-links
+  - docs-index
+  - contract-discovery
+  - well-known
+  types:
+  - Support
+  serves:
+  - docs
+  registrable_domain: fareharbor.com
+  role: support
+  relation: own
+- host: marketing.fareharbor.com
+  found_by:
+  - pointer
+  - probed
+  - site-links
+  - contract-discovery
+  - well-known
+  types:
+  - SignUp
+  serves: []
+  registrable_domain: fareharbor.com
+  role: identity
+  relation: own
+- host: pages.fareharbor.com
+  found_by:
+  - probed
+  - site-links
+  - well-known
+  types: []
+  serves: []
+  registrable_domain: fareharbor.com
+  role: other
+  relation: own
+- host: spark.fareharbor.com
+  found_by:
+  - probed
+  - site-links
+  - well-known
+  types: []
+  serves: []
+  registrable_domain: fareharbor.com
+  role: other
+  relation: own
+- host: status.fareharbor.com
+  found_by:
+  - pointer
+  - probed
+  - site-links
+  - well-known
+  types:
+  - StatusPage
+  serves: []
+  registrable_domain: fareharbor.com
+  role: status
+  relation: own
+- host: trust.fareharbor.com
+  found_by:
+  - pointer
+  - probed
+  - site-links
+  - well-known
+  types:
+  - Compliance
+  serves: []
+  platform: app.safebase.io
+  registrable_domain: fareharbor.com
+  role: other
+  relation: own

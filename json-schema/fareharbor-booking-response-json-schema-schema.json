@@ -1,0 +1,2302 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/fareharbor/main/json-schema/fareharbor-booking-response-json-schema-schema.json",
+  "title": "BOOKING_RESPONSE_JSON_SCHEMA",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/_original/fareharbor-home-openapi.yml#/components/schemas/BOOKING_RESPONSE_JSON_SCHEMA",
+  "additionalProperties": false,
+  "definitions": {
+    "address": {
+      "additionalProperties": false,
+      "properties": {
+        "city": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        },
+        "postal_code": {
+          "type": "string"
+        },
+        "province": {
+          "type": "string"
+        },
+        "street": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "city",
+        "country",
+        "postal_code",
+        "province",
+        "street"
+      ],
+      "type": "object"
+    },
+    "affiliate_company": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "currency": {
+              "description": "The company's currency.",
+              "enum": [
+                "aed",
+                "aud",
+                "bgn",
+                "brl",
+                "cad",
+                "chf",
+                "czk",
+                "dkk",
+                "eur",
+                "gbp",
+                "hkd",
+                "huf",
+                "mxn",
+                "nok",
+                "nzd",
+                "pln",
+                "ron",
+                "sek",
+                "sgd",
+                "usd"
+              ],
+              "type": "string"
+            },
+            "name": {
+              "description": "The affiliate companies name.",
+              "type": "string"
+            },
+            "shortname": {
+              "description": "A unique FareHarbor name assigned to each company when their Dashboard is created, used to access the company's specific information.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "shortname",
+            "name",
+            "currency"
+          ],
+          "type": "object"
+        },
+        {
+          "description": "",
+          "type": "null"
+        }
+      ]
+    },
+    "affiliate_metadata": {
+      "description": "Metadata from affiliate sources.",
+      "properties": {
+        "airbnb": {
+          "$ref": "#/$defs/airbnb_metadata"
+        }
+      },
+      "type": "object"
+    },
+    "affiliation": {
+      "additionalProperties": false,
+      "properties": {
+        "affiliate_company": {
+          "$ref": "#/$defs/affiliate_company"
+        }
+      },
+      "required": [
+        "affiliate_company"
+      ],
+      "type": "object"
+    },
+    "agent": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "name": {
+              "description": "The agent's name.",
+              "type": "string"
+            },
+            "pk": {
+              "description": "The agent's unique ID.",
+              "format": "int32",
+              "type": "number"
+            }
+          },
+          "required": [
+            "pk",
+            "name"
+          ],
+          "type": "object"
+        },
+        {
+          "description": "",
+          "type": "null"
+        }
+      ]
+    },
+    "airbnb_guest_profile": {
+      "description": "An Airbnb guest profile.",
+      "properties": {
+        "direct_thread_id": {
+          "description": "The direct thread ID for the guest.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "user_id": {
+          "description": "The Airbnb user ID.",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "type": "object"
+    },
+    "airbnb_metadata": {
+      "description": "Metadata from Airbnb bookings.",
+      "properties": {
+        "activity_id": {
+          "description": "The Airbnb activity ID.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "channel_thread_id": {
+          "description": "The Airbnb channel thread ID.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "guest_id": {
+          "description": "The Airbnb guest ID.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "guest_profiles": {
+          "description": "List of Airbnb guest profiles.",
+          "items": {
+            "$ref": "#/$defs/airbnb_guest_profile"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "host_id": {
+          "description": "The Airbnb host ID.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "offering_id": {
+          "description": "The Airbnb offering ID.",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "type": "object"
+    },
+    "arrival": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "display_text": {
+              "description": "A formatted string that can be shown to customers.",
+              "type": "string"
+            },
+            "notes": {
+              "description": "Notes from the activity company regarding arrival (e.g. check-in location details, driving directions); may not be provided.",
+              "format": "markdown",
+              "type": "string"
+            },
+            "notes_safe_html": {
+              "format": "markdown",
+              "type": "string"
+            },
+            "time": {
+              "description": "The arrival time (set in the company's local time); the customer must provide their own transporation and arrive at the activity location by this time.",
+              "format": "datetime",
+              "type": "string"
+            }
+          },
+          "required": [
+            "time",
+            "notes",
+            "notes_safe_html",
+            "display_text"
+          ],
+          "type": "object"
+        },
+        {
+          "description": "",
+          "type": "null"
+        }
+      ]
+    },
+    "availability": {
+      "additionalProperties": false,
+      "properties": {
+        "capacity": {
+          "description": "The overall maximum number of customers that can currently book this availability; this number will change over time as other customers book.",
+          "type": "number"
+        },
+        "crew_members": {
+          "items": {
+            "$ref": "#/$defs/crew_member"
+          },
+          "type": "array"
+        },
+        "custom_field_instances": {
+          "items": {
+            "$ref": "#/$defs/custom_field_instance"
+          },
+          "type": "array"
+        },
+        "customer_type_rates": {
+          "items": {
+            "$ref": "#/$defs/customer_type_rate"
+          },
+          "type": "array"
+        },
+        "effective_cancellation_policy": {
+          "$ref": "#/$defs/effective_cancellation_policy"
+        },
+        "end_at": {
+          "description": "The availability's end time (set in the company's local time); note that this time can be arbitrarily long or short, and that start_at can equal end_at for 'point' availabilities.",
+          "format": "datetime",
+          "type": "string"
+        },
+        "headline": {
+          "description": "The availability's headline.",
+          "type": "string"
+        },
+        "item": {
+          "$ref": "#/$defs/item"
+        },
+        "maximum_party_size": {
+          "oneOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "minimum_party_size": {
+          "oneOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "online_booking_status": {
+          "description": "The availability's status.",
+          "enum": [
+            "auto",
+            "open",
+            "call",
+            "closed",
+            "cancelled"
+          ],
+          "type": "string"
+        },
+        "pk": {
+          "description": "The availabilities's unique ID.",
+          "format": "int32",
+          "type": "number"
+        },
+        "start_at": {
+          "description": "The availability's start time (set in the company's local time); note that this time can be arbitrarily long or short, and that start_at can equal end_at for 'point' availabilities.",
+          "format": "datetime",
+          "type": "string"
+        }
+      },
+      "required": [
+        "pk",
+        "start_at",
+        "end_at",
+        "capacity",
+        "minimum_party_size",
+        "maximum_party_size",
+        "online_booking_status",
+        "headline",
+        "item",
+        "customer_type_rates",
+        "custom_field_instances"
+      ],
+      "type": "object"
+    },
+    "booking": {
+      "additionalProperties": false,
+      "properties": {
+        "affiliate_company": {
+          "$ref": "#/$defs/affiliate_company"
+        },
+        "affiliate_metadata": {
+          "$ref": "#/$defs/affiliate_metadata"
+        },
+        "agent": {
+          "$ref": "#/$defs/agent"
+        },
+        "amount_paid": {
+          "oneOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "amount_paid_display": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "arrival": {
+          "$ref": "#/$defs/arrival"
+        },
+        "availability": {
+          "$ref": "#/$defs/availability",
+          "description": "The availability to which this booking corresponds."
+        },
+        "booked_by": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "name": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name"
+              ],
+              "type": "object"
+            }
+          ]
+        },
+        "company": {
+          "$ref": "#/$defs/company"
+        },
+        "confirmation_url": {
+          "description": "The booking's confirmation page URL.",
+          "format": "uri",
+          "type": "string"
+        },
+        "contact": {
+          "$ref": "#/$defs/contact",
+          "description": "Contact information for this booking."
+        },
+        "created_at": {
+          "description": "The date and time at which the booking was created (set in utc time).",
+          "format": "datetime",
+          "type": "string"
+        },
+        "custom_field_values": {
+          "items": {
+            "$ref": "#/$defs/custom_field_value"
+          },
+          "type": "array"
+        },
+        "customer_count": {
+          "description": "The number of customers on this booking.",
+          "type": "number"
+        },
+        "customers": {
+          "description": "A list of customers on this booking.",
+          "items": {
+            "$ref": "#/$defs/customer"
+          },
+          "type": "array"
+        },
+        "dashboard_url": {
+          "description": "The booking's dashboard URL.",
+          "format": "uri",
+          "type": "string"
+        },
+        "desk": {
+          "$ref": "#/$defs/desk"
+        },
+        "display_id": {
+          "type": "string"
+        },
+        "effective_cancellation_policy": {
+          "$ref": "#/$defs/effective_cancellation_policy"
+        },
+        "external_id": {
+          "description": "An additional identifier if necessary.",
+          "maxLength": 128,
+          "type": "string"
+        },
+        "generated_codes": {
+          "items": {
+            "$ref": "#/$defs/generated_code"
+          },
+          "type": "array"
+        },
+        "invoice_price": {
+          "oneOf": [
+            {
+              "description": "The invoice price of this booking. Assuming that the user of the API is a reseller this will be the amount that the user of the API owes the vendor on this booking, if the vendor has opted to set up that information; otherwise it will be null.",
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "invoice_price_display": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "is_eligible_for_cancellation": {
+          "type": "boolean"
+        },
+        "is_follow_up_email_disabled": {
+          "type": "boolean"
+        },
+        "is_reminder_email_disabled": {
+          "type": "boolean"
+        },
+        "is_subscribed_for_sms_updates": {
+          "description": "Whether or not the contact would like the booking company to send them SMS updates about this booking. Note that the value of this field does not reflect whether or not the user has sent a STOP request to FareHarbor. If the user sends a STOP request to an External API client, that API client should respect that request.",
+          "type": "boolean"
+        },
+        "line_items": {
+          "description": "Line items on the booking.",
+          "items": {
+            "$ref": "#/$defs/line_item"
+          },
+          "type": "array"
+        },
+        "lodging": {
+          "oneOf": [
+            {
+              "additionalProperties": false,
+              "properties": {
+                "name": {
+                  "description": "The lodging's name.",
+                  "type": "string"
+                },
+                "pk": {
+                  "description": "The lodging's unique ID.",
+                  "format": "int32",
+                  "type": "number"
+                }
+              },
+              "required": [
+                "pk",
+                "name"
+              ],
+              "type": "object"
+            },
+            {
+              "description": "",
+              "type": "null"
+            }
+          ]
+        },
+        "note": {
+          "format": "markdown",
+          "type": "string"
+        },
+        "note_safe_html": {
+          "format": "markdown",
+          "type": "string"
+        },
+        "online_booking_references": {
+          "type": "string"
+        },
+        "order": {
+          "description": "When there is no order associated with the booking, order will be null.",
+          "oneOf": [
+            {
+              "properties": {
+                "display_id": {
+                  "description": "A unique identifier for the order",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            {
+              "description": "",
+              "type": "null"
+            }
+          ]
+        },
+        "pickup": {
+          "$ref": "#/$defs/pickup"
+        },
+        "pk": {
+          "description": "The booking's unique ID.",
+          "format": "int32",
+          "type": "number"
+        },
+        "rebooked_from": {
+          "oneOf": [
+            {
+              "description": "See [Rebooking](#tag/Rebooking)",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "rebooked_to": {
+          "oneOf": [
+            {
+              "description": "See [Rebooking](#tag/Rebooking)",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "receipt_subtotal": {
+          "oneOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "receipt_subtotal_display": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "receipt_taxes": {
+          "oneOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "receipt_taxes_display": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "receipt_total": {
+          "oneOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "receipt_total_display": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "related_bookings": {
+          "properties": {
+            "related_order": {
+              "properties": {
+                "bookings": {
+                  "description": "Booking UUIDs related to the order",
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "id": {
+                  "description": "Order ID",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "type": "object"
+        },
+        "source_type": {
+          "enum": [
+            "online",
+            "direct",
+            "pos",
+            "reseller",
+            "external-api",
+            "kiosk",
+            "imported",
+            "unkown"
+          ],
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "booked",
+            "cancelled",
+            "rebooked"
+          ],
+          "type": "string"
+        },
+        "uuid": {
+          "description": "The booking's universally unique identifier; used to access the booking via the API.",
+          "format": "uuid",
+          "type": "string"
+        },
+        "voucher_number": {
+          "type": "string"
+        },
+        "waiver_signatures": {
+          "$ref": "#/$defs/waiver_signatures"
+        }
+      },
+      "required": [
+        "pk",
+        "uuid",
+        "availability",
+        "contact",
+        "company",
+        "affiliate_company",
+        "customers",
+        "invoice_price",
+        "invoice_price_display",
+        "display_id",
+        "external_id",
+        "order",
+        "status",
+        "rebooked_from",
+        "rebooked_to",
+        "confirmation_url",
+        "voucher_number",
+        "online_booking_references",
+        "receipt_subtotal",
+        "receipt_subtotal_display",
+        "receipt_taxes",
+        "receipt_taxes_display",
+        "receipt_total",
+        "receipt_total_display",
+        "amount_paid",
+        "amount_paid_display",
+        "custom_field_values",
+        "note",
+        "note_safe_html",
+        "pickup",
+        "arrival",
+        "effective_cancellation_policy",
+        "is_eligible_for_cancellation",
+        "agent",
+        "desk",
+        "dashboard_url",
+        "customer_count",
+        "is_subscribed_for_sms_updates",
+        "is_follow_up_email_disabled",
+        "is_reminder_email_disabled",
+        "created_at",
+        "source_type",
+        "booked_by",
+        "generated_codes",
+        "waiver_signatures",
+        "line_items",
+        "lodging",
+        "related_bookings"
+      ],
+      "type": "object"
+    },
+    "campaign": {
+      "additionalProperties": false,
+      "properties": {
+        "created_at": {
+          "description": "The date and time the campaign was created at (set in utc time).",
+          "format": "datetime",
+          "type": "string"
+        },
+        "is_archived": {
+          "type": "boolean"
+        },
+        "name": {
+          "type": "string"
+        },
+        "prefix": {
+          "type": "string"
+        },
+        "summary": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "created_at",
+        "is_archived"
+      ],
+      "type": "object"
+    },
+    "checkin_status": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "description": "The checkin status' name.",
+          "type": "string"
+        },
+        "pk": {
+          "format": "int32",
+          "type": "number"
+        },
+        "type": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "pk",
+        "name",
+        "type"
+      ],
+      "type": "object"
+    },
+    "company": {
+      "additionalProperties": false,
+      "properties": {
+        "currency": {
+          "description": "The company's currency.",
+          "enum": [
+            "aed",
+            "aud",
+            "bgn",
+            "brl",
+            "cad",
+            "chf",
+            "czk",
+            "dkk",
+            "eur",
+            "gbp",
+            "hkd",
+            "huf",
+            "mxn",
+            "nok",
+            "nzd",
+            "pln",
+            "ron",
+            "sek",
+            "sgd",
+            "usd"
+          ],
+          "type": "string"
+        },
+        "name": {
+          "description": "The company's name.",
+          "type": "string"
+        },
+        "shortname": {
+          "description": "A unique FareHarbor name assigned to each company when their Dashboard is created, used to access the company's specific information.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "shortname",
+        "name",
+        "currency"
+      ],
+      "type": "object"
+    },
+    "contact": {
+      "additionalProperties": false,
+      "properties": {
+        "email": {
+          "description": "The contact email for the party.",
+          "format": "email",
+          "type": "string"
+        },
+        "is_subscribed_for_email_updates": {
+          "description": "Whether or not the contact would like email updates.",
+          "type": "boolean"
+        },
+        "language": {
+          "description": "The contact language.",
+          "type": "string"
+        },
+        "member": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/member"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "name": {
+          "description": "The name of the head of the party.",
+          "type": "string"
+        },
+        "normalized_phone": {
+          "description": "The party's contact phone number. This will have a plus sign, the country code, and no extra characters such as commas or dashes.",
+          "type": "string"
+        },
+        "phone": {
+          "description": "The contact phone number for the party.",
+          "type": "string"
+        },
+        "phone_country": {
+          "oneOf": [
+            {
+              "description": "The contact phone's country code.",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "name",
+        "phone",
+        "phone_country",
+        "normalized_phone",
+        "email",
+        "is_subscribed_for_email_updates"
+      ],
+      "type": "object"
+    },
+    "crew_member": {
+      "additionalProperties": false,
+      "properties": {
+        "note": {
+          "description": "A note on the crew member.",
+          "type": "string"
+        },
+        "pk": {
+          "description": "The crew member's unique ID.",
+          "format": "int32",
+          "type": "number"
+        },
+        "role": {
+          "$ref": "#/$defs/role",
+          "description": "The role of the crew member."
+        },
+        "user": {
+          "$ref": "#/$defs/user",
+          "description": "The crew member user."
+        }
+      },
+      "required": [
+        "pk",
+        "note",
+        "user"
+      ],
+      "type": "object"
+    },
+    "custom_field": {
+      "additionalProperties": false,
+      "properties": {
+        "booking_notes": {
+          "description": "General notes for booking customers.",
+          "format": "markdown",
+          "type": "string"
+        },
+        "booking_notes_safe_html": {
+          "description": "Notes for the customer specific to the custom field.",
+          "format": "markdown",
+          "type": "string"
+        },
+        "count_max": {
+          "description": "The maximum amount possible for a count type custom field.",
+          "type": "number"
+        },
+        "count_min": {
+          "description": "The minimum amount possible for a count type custom field.",
+          "type": "number"
+        },
+        "description": {
+          "description": "The custom field's description.",
+          "format": "markdown",
+          "type": "string"
+        },
+        "description_safe_html": {
+          "description": "The custom field's description.",
+          "format": "markdown",
+          "type": "string"
+        },
+        "extended_options": {
+          "items": {
+            "$ref": "#/$defs/extended_option"
+          },
+          "type": "array"
+        },
+        "is_always_per_customer": {
+          "description": "Whether pricing should be applied to each customer (when the customer field is at the booking level).",
+          "type": "boolean"
+        },
+        "is_required": {
+          "description": "Indicates whether the custom field requires a value.",
+          "type": "boolean"
+        },
+        "is_taxable": {
+          "description": "Whether the cost of this option should affect the taxable total of a booking.",
+          "type": "boolean"
+        },
+        "modifier_kind": {
+          "description": "Determines whether an offset or percentage is used when the total is adjusted or set.",
+          "enum": [
+            "percentage",
+            "offset"
+          ],
+          "type": "string"
+        },
+        "modifier_type": {
+          "description": "Determines whether the total is adjusted or set.",
+          "enum": [
+            "adjust",
+            "set",
+            "none"
+          ],
+          "type": "string"
+        },
+        "name": {
+          "description": "The name of the custom field.",
+          "type": "string"
+        },
+        "offset": {
+          "description": "When modifier_type is adjust: a positive or negative amount value. When modifier_type is set: a positive amount value. Only applicable when modifier_kind is offset.",
+          "type": "number"
+        },
+        "percentage": {
+          "description": "When modifier_type is adjust: a number between -100 and 100 inclusive. When modifier_type is set: a number between 0 and 100 inclusive. Only applicable when modifier_kind is percentage.",
+          "type": "number"
+        },
+        "pk": {
+          "description": "The custom field's unique ID.",
+          "format": "int32",
+          "type": "number"
+        },
+        "tags": {
+          "items": {
+            "$ref": "#/$defs/tag"
+          },
+          "type": "array"
+        },
+        "title": {
+          "type": "string"
+        },
+        "total": {
+          "description": "The price of a single custom field of this type.",
+          "type": "number"
+        },
+        "total_including_tax": {
+          "description": "The price of a single custom field of this type plus applicable taxes.",
+          "type": "number"
+        },
+        "type": {
+          "description": "The custom field's type.",
+          "enum": [
+            "yes-no",
+            "short",
+            "long",
+            "extended-option",
+            "count",
+            "multi-campaign",
+            "code-generator",
+            "date"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "pk",
+        "type",
+        "is_required",
+        "description",
+        "description_safe_html",
+        "name",
+        "booking_notes",
+        "booking_notes_safe_html",
+        "offset",
+        "total",
+        "total_including_tax"
+      ],
+      "type": "object"
+    },
+    "custom_field_instance": {
+      "additionalProperties": false,
+      "properties": {
+        "custom_field": {
+          "$ref": "#/$defs/custom_field"
+        },
+        "pk": {
+          "description": "The custom field instance's unique ID.",
+          "format": "int32",
+          "type": "number"
+        }
+      },
+      "required": [
+        "pk",
+        "custom_field"
+      ],
+      "type": "object"
+    },
+    "custom_field_value": {
+      "additionalProperties": false,
+      "properties": {
+        "custom_field": {
+          "$ref": "#/$defs/custom_field"
+        },
+        "display_value": {
+          "maxLength": 2048,
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "pk": {
+          "description": "A valid Custom Field pk.",
+          "format": "int32",
+          "type": "number"
+        },
+        "total_cost": {
+          "$ref": "#/$defs/total_cost"
+        },
+        "value": {
+          "description": "A string up to 2048 characters. If the custom field is of type yes-no, 'true' or 'false' must be specified. If the custom field is of type extended-option, an extended option pk must be specified.",
+          "maxLength": 2048,
+          "type": "string"
+        }
+      },
+      "required": [
+        "pk",
+        "custom_field",
+        "name",
+        "value",
+        "display_value",
+        "total_cost"
+      ],
+      "type": "object"
+    },
+    "customer": {
+      "additionalProperties": false,
+      "properties": {
+        "checkin_status": {
+          "description": "The customer's checkin status. When there is no checkin status associated with the customer, checkin_status will be null.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/checkin_status"
+            },
+            {
+              "description": "",
+              "type": "null"
+            }
+          ]
+        },
+        "checkin_url": {
+          "description": "A short URL that can be rendered as a QR code for check-in purposes (the QR code should be 'type 4' with 'error correction H').",
+          "format": "uri",
+          "type": "string"
+        },
+        "custom_field_values": {
+          "description": "A list of custom field values for the customer.",
+          "items": {
+            "$ref": "#/$defs/custom_field_value"
+          },
+          "type": "array"
+        },
+        "customer_type_rate": {
+          "$ref": "#/$defs/customer_type_rate",
+          "description": "The customer type rate to which this customer corresponds."
+        },
+        "invoice_cost": {
+          "description": "The invoice_cost will be included only if the permission View invoice prices is enabled, otherwise it will be null.",
+          "oneOf": [
+            {
+              "properties": {
+                "feeable": {
+                  "description": "The portion of the price the is subject to fees.",
+                  "type": "number"
+                },
+                "price": {
+                  "oneOf": [
+                    {
+                      "description": "The line item price.",
+                      "type": "number"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "tax": {
+                  "description": "The tax price.",
+                  "type": "number"
+                },
+                "tax_by_type": {
+                  "description": "A breakdown of taxes by tax type.",
+                  "type": "object"
+                },
+                "taxable": {
+                  "description": "The portion of the price that is subject to taxes.",
+                  "type": "number"
+                },
+                "total": {
+                  "description": "The total cost after taxes and fees.",
+                  "type": "number"
+                }
+              },
+              "type": "object"
+            },
+            {
+              "description": "",
+              "type": "null"
+            }
+          ]
+        },
+        "pk": {
+          "format": "int32",
+          "type": "number"
+        },
+        "seat_assigned": {
+          "$ref": "#/$defs/seat_assigned"
+        },
+        "total_cost": {
+          "$ref": "#/$defs/total_cost"
+        }
+      },
+      "required": [
+        "pk",
+        "checkin_url",
+        "customer_type_rate",
+        "custom_field_values"
+      ],
+      "type": "object"
+    },
+    "customer_prototype": {
+      "additionalProperties": false,
+      "properties": {
+        "display_name": {
+          "description": "The customer prototype's display name.",
+          "type": "string"
+        },
+        "maximum_age": {
+          "oneOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "minimum_age": {
+          "oneOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "note": {
+          "type": "string"
+        },
+        "pk": {
+          "description": "The customer prototype's unique ID.",
+          "format": "int32",
+          "type": "number"
+        },
+        "total": {
+          "description": "The price of a single customer of this type.",
+          "type": "number"
+        },
+        "total_including_tax": {
+          "description": "The price of a single customer of this type plus applicable taxes.",
+          "type": "number"
+        }
+      },
+      "required": [
+        "pk",
+        "display_name",
+        "note",
+        "minimum_age",
+        "maximum_age",
+        "total"
+      ],
+      "type": "object"
+    },
+    "customer_type": {
+      "additionalProperties": false,
+      "properties": {
+        "note": {
+          "description": "A brief note about this customer type that can be displayed to end users.",
+          "type": "string"
+        },
+        "pk": {
+          "description": "The customer type's unique ID.",
+          "format": "int32",
+          "type": "number"
+        },
+        "plural": {
+          "description": "The plural form of the name of this customer type.",
+          "type": "string"
+        },
+        "singular": {
+          "description": "The singular form of the name of this customer type.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "pk",
+        "singular",
+        "plural"
+      ],
+      "type": "object"
+    },
+    "customer_type_rate": {
+      "additionalProperties": false,
+      "properties": {
+        "capacity": {
+          "oneOf": [
+            {
+              "description": "The maximum number of customers of this type that can currently book this availability; this number will change over time as other customers book.",
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "custom_field_instances": {
+          "items": {
+            "$ref": "#/$defs/custom_field_instance"
+          },
+          "type": "array"
+        },
+        "customer_prototype": {
+          "$ref": "#/$defs/customer_prototype"
+        },
+        "customer_type": {
+          "$ref": "#/$defs/customer_type"
+        },
+        "maximum_party_size": {
+          "oneOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "minimum_party_size": {
+          "oneOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "pk": {
+          "description": "The customer type rate's unique ID.",
+          "format": "int32",
+          "type": "number"
+        },
+        "total": {
+          "description": "The price of a single customer of this type.",
+          "type": "number"
+        },
+        "total_including_tax": {
+          "description": "The price of a single customer of this type plus applicable taxes.",
+          "type": "number"
+        }
+      },
+      "required": [
+        "pk",
+        "total",
+        "capacity",
+        "minimum_party_size",
+        "maximum_party_size",
+        "customer_type",
+        "customer_prototype"
+      ],
+      "type": "object"
+    },
+    "desk": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "name": {
+              "description": "The desk's name.",
+              "type": "string"
+            },
+            "pk": {
+              "description": "The desk's unique ID.",
+              "format": "int32",
+              "type": "number"
+            }
+          },
+          "required": [
+            "pk",
+            "name"
+          ],
+          "type": "object"
+        },
+        {
+          "description": "",
+          "type": "null"
+        }
+      ]
+    },
+    "effective_cancellation_policy": {
+      "additionalProperties": false,
+      "properties": {
+        "cutoff": {
+          "oneOf": [
+            {
+              "description": "The number of hours for the hours-before-start and hours-before-midnight types (set in the company's local time).",
+              "format": "datetime",
+              "type": "string"
+            },
+            {
+              "description": "",
+              "type": "null"
+            }
+          ]
+        },
+        "type": {
+          "description": "The cancellation policy's type",
+          "enum": [
+            "hours-before-start",
+            "hours-before-midnight",
+            "always",
+            "never"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "cutoff"
+      ],
+      "type": "object"
+    },
+    "extended_option": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "description": "The extended option's description.",
+          "format": "markdown",
+          "type": "string"
+        },
+        "description_safe_html": {
+          "description": "The extended option's description.",
+          "format": "markdown",
+          "type": "string"
+        },
+        "is_always_per_customer": {
+          "description": "Whether pricing should be applied to each customer (when the customer field is at the booking level).",
+          "type": "boolean"
+        },
+        "is_taxable": {
+          "description": "Whether pricing should be applied to each customer (when the customer field is at the booking level).",
+          "type": "boolean"
+        },
+        "modifier_kind": {
+          "description": "Determines whether an offset or percentage is used when the total is adjusted or set.",
+          "enum": [
+            "percentage",
+            "offset"
+          ],
+          "type": "string"
+        },
+        "modifier_type": {
+          "description": "Determines whether the total is adjusted or set.",
+          "enum": [
+            "adjust",
+            "set",
+            "none"
+          ],
+          "type": "string"
+        },
+        "name": {
+          "description": "The extended option's name.",
+          "type": "string"
+        },
+        "offset": {
+          "description": "When modifier_type is adjust: a positive or negative amount value. When modifier_type is set: a positive amount value. Only applicable when modifier_kind is offset.",
+          "type": "number"
+        },
+        "percentage": {
+          "description": "When modifier_type is adjust: a number between -100 and 100 inclusive. When modifier_type is set: a number between 0 and 100 inclusive. Only applicable when modifier_kind is percentage.",
+          "type": "number"
+        },
+        "pk": {
+          "description": "The extended option's unique ID.",
+          "format": "int32",
+          "type": "number"
+        },
+        "total": {
+          "description": "The price of a single custom field of this type.",
+          "type": "number"
+        },
+        "total_including_tax": {
+          "description": "The price of a single custom field of this type plus applicable taxes.",
+          "type": "number"
+        }
+      },
+      "required": [
+        "pk",
+        "name",
+        "description",
+        "description_safe_html",
+        "modifier_kind",
+        "modifier_type",
+        "offset",
+        "percentage",
+        "is_always_per_customer",
+        "is_taxable",
+        "total",
+        "total_including_tax"
+      ],
+      "type": "object"
+    },
+    "fh_waiver_signatures": {
+      "description": "A list of FareHarbor waivers signatures with details.",
+      "items": {
+        "properties": {
+          "address_line": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "city": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "country": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "dob": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "email": {
+            "format": "email",
+            "type": "string"
+          },
+          "first_name": {
+            "type": "string"
+          },
+          "is_customer_parent": {
+            "description": "Indicating if the signature has any related minor records.",
+            "type": "boolean"
+          },
+          "is_marketing_allowed": {
+            "description": "Whether the person signing the waiver has opted in for marketing communications.",
+            "type": "boolean"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "phone_number": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "postcode": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "state_province": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "email",
+          "first_name",
+          "last_name",
+          "is_marketing_allowed",
+          "is_customer_parent",
+          "dob",
+          "phone_number",
+          "address_line",
+          "city",
+          "state_province",
+          "postcode",
+          "country"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "generated_code": {
+      "additionalProperties": false,
+      "properties": {
+        "affiliation": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/affiliation"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "code": {
+          "description": "The generated code.",
+          "type": "string"
+        },
+        "generating_campaign": {
+          "$ref": "#/$defs/generating_campaign"
+        },
+        "maximum_uses": {
+          "type": "number"
+        },
+        "use_count": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "affiliation",
+        "code",
+        "generating_campaign",
+        "maximum_uses",
+        "use_count"
+      ],
+      "type": "object"
+    },
+    "generating_campaign": {
+      "additionalProperties": false,
+      "properties": {
+        "campaign": {
+          "$ref": "#/$defs/campaign"
+        },
+        "custom_field": {
+          "$ref": "#/$defs/custom_field"
+        },
+        "instructions": {
+          "type": "string"
+        },
+        "is_per_customer": {
+          "type": "boolean"
+        },
+        "is_use_existing_codes": {
+          "type": "boolean"
+        },
+        "maximum_uses": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "campaign",
+        "custom_field",
+        "instructions",
+        "is_per_customer",
+        "is_use_existing_codes",
+        "maximum_uses"
+      ],
+      "type": "object"
+    },
+    "item": {
+      "additionalProperties": false,
+      "properties": {
+        "headline": {
+          "description": "The item's headline.",
+          "type": "string"
+        },
+        "name": {
+          "description": "The item's name.",
+          "type": "string"
+        },
+        "pk": {
+          "description": "The items's unique ID.",
+          "format": "int32",
+          "type": "number"
+        },
+        "primary_location": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/primary_location"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "pk",
+        "name",
+        "headline",
+        "primary_location"
+      ],
+      "type": "object"
+    },
+    "line_item": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "description": "Description of the line item.",
+          "type": "string"
+        },
+        "discount_code": {
+          "oneOf": [
+            {
+              "description": "The discount code applied to the line item.",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "is_private": {
+          "description": "Whether the line item is hidden from the customer.",
+          "type": "boolean"
+        },
+        "is_taxable": {
+          "description": "Whether the line item is taxable.",
+          "type": "boolean"
+        },
+        "offset": {
+          "description": "Amount in the smallest currency unit (e.g. cents).",
+          "type": "number"
+        },
+        "pk": {
+          "description": "The line item unique identifier.",
+          "format": "int32",
+          "type": "number"
+        }
+      },
+      "required": [
+        "pk",
+        "description",
+        "offset",
+        "is_taxable",
+        "is_private",
+        "discount_code"
+      ],
+      "type": "object"
+    },
+    "member": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "description": "The member's ID.",
+          "type": "string"
+        },
+        "created_at": {
+          "description": "The date and time the member was created at (set in utc time).",
+          "format": "datetime",
+          "type": "string"
+        },
+        "membership_ranges": {
+          "items": {
+            "$ref": "#/$defs/membership_range"
+          },
+          "type": "array"
+        },
+        "modified_at": {
+          "description": "The date and time the member was last modified at (set in utc time).",
+          "format": "datetime",
+          "type": "string"
+        },
+        "note": {
+          "type": "string"
+        },
+        "pk": {
+          "description": "The members's unique ID.",
+          "format": "int32",
+          "type": "number"
+        }
+      },
+      "required": [
+        "pk",
+        "code",
+        "created_at",
+        "modified_at",
+        "note",
+        "membership_ranges"
+      ],
+      "type": "object"
+    },
+    "membership": {
+      "additionalProperties": false,
+      "properties": {
+        "duration": {
+          "description": "The duration of the membershi[p.",
+          "format": "int32",
+          "type": "number"
+        },
+        "duration_type": {
+          "enum": [
+            "days",
+            "weeks",
+            "months",
+            "years"
+          ],
+          "type": "string"
+        },
+        "note": {
+          "type": "string"
+        },
+        "pk": {
+          "description": "The membership's unique ID.",
+          "format": "int32",
+          "type": "number"
+        },
+        "plural": {
+          "type": "string"
+        },
+        "short_name": {
+          "description": "The membership's short name.",
+          "type": "string"
+        },
+        "singular": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "pk",
+        "short_name",
+        "singular",
+        "plural",
+        "note",
+        "duration",
+        "duration_type"
+      ],
+      "type": "object"
+    },
+    "membership_range": {
+      "additionalProperties": false,
+      "properties": {
+        "end_at": {
+          "description": "The end date of this membership range.",
+          "format": "datetime",
+          "type": "string"
+        },
+        "is_cancelled": {
+          "type": "boolean"
+        },
+        "is_deferred_start": {
+          "type": "boolean"
+        },
+        "membership": {
+          "$ref": "#/$defs/membership"
+        },
+        "pk": {
+          "description": "The membership range's unique ID.",
+          "format": "int32",
+          "type": "number"
+        },
+        "start_at": {
+          "description": "The start date of this membership range.",
+          "format": "datetime",
+          "type": "string"
+        },
+        "utc_end_at": {
+          "description": "The end date of this membership range in utc.",
+          "format": "datetime",
+          "type": "string"
+        },
+        "utc_start_at": {
+          "description": "The start date of this membership range in utc.",
+          "format": "datetime",
+          "type": "string"
+        }
+      },
+      "required": [
+        "pk",
+        "start_at",
+        "utc_start_at",
+        "end_at",
+        "utc_end_at",
+        "is_cancelled",
+        "is_deferred_start",
+        "membership"
+      ],
+      "type": "object"
+    },
+    "pickup": {
+      "description": "If a lodging is specified and transportation is not available for the specified lodging (or any lodging), the pickup property will have a null value.",
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "description": {
+              "description": "Pickup instructions from the activity company; may not be provided.",
+              "format": "markdown",
+              "type": "string"
+            },
+            "description_safe_html": {
+              "description": "Pickup instructions from the activity company; may not be provided.",
+              "format": "markdown",
+              "type": "string"
+            },
+            "display_text": {
+              "description": "A formatted string that can be shown to customers.",
+              "type": "string"
+            },
+            "map_url": {
+              "description": "A URL to a map showing the pickup location; may not be provided.",
+              "format": "uri",
+              "type": "string"
+            },
+            "name": {
+              "description": "The name of the pickup location.",
+              "type": "string"
+            },
+            "time": {
+              "description": "The pickup time; the customer must arrive at the pickup location by this time.",
+              "format": "time",
+              "type": "string"
+            }
+          },
+          "required": [
+            "time",
+            "name",
+            "description",
+            "description_safe_html",
+            "map_url",
+            "display_text"
+          ],
+          "type": "object"
+        },
+        {
+          "description": "",
+          "type": "null"
+        }
+      ]
+    },
+    "primary_location": {
+      "additionalProperties": false,
+      "properties": {
+        "address": {
+          "$ref": "#/$defs/address",
+          "description": "The location's physical address."
+        },
+        "google_place_id": {
+          "description": "The location's Google Place ID.",
+          "format": "uuid",
+          "type": "string"
+        },
+        "latitude": {
+          "description": "The location's latitude.",
+          "oneOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "longitude": {
+          "description": "The location's longitude.",
+          "oneOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "note": {
+          "description": "A brief note about this location that can be displayed to end users.",
+          "format": "markdown",
+          "type": "string"
+        },
+        "note_safe_html": {
+          "description": "A brief note about this location that can be displayed to end users.",
+          "format": "markdown",
+          "type": "string"
+        },
+        "pk": {
+          "description": "The location's unique ID.",
+          "format": "int32",
+          "type": "number"
+        },
+        "tripadvisor_url": {
+          "description": "The location's TripAdvisor URL.",
+          "format": "uri",
+          "type": "string"
+        },
+        "type": {
+          "description": "The location's type.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "pk",
+        "type",
+        "note",
+        "note_safe_html",
+        "address",
+        "longitude",
+        "latitude",
+        "google_place_id",
+        "tripadvisor_url"
+      ],
+      "type": "object"
+    },
+    "role": {
+      "additionalProperties": false,
+      "properties": {
+        "pk": {
+          "description": "The role's unique ID.",
+          "format": "int32",
+          "type": "number"
+        },
+        "short_name": {
+          "description": "The roles's short name.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "pk",
+        "short_name"
+      ],
+      "type": "object"
+    },
+    "seat_assigned": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "pk": {
+              "description": "The seat's unique ID.",
+              "format": "int32",
+              "type": "number"
+            },
+            "seat_group": {
+              "$ref": "#/$defs/seat_group"
+            },
+            "seat_map": {
+              "$ref": "#/$defs/seat_map"
+            },
+            "seat_zone": {
+              "$ref": "#/$defs/seat_zone"
+            }
+          },
+          "required": [
+            "pk",
+            "name",
+            "seat_map",
+            "seat_zone",
+            "seat_group"
+          ],
+          "type": "object"
+        },
+        {
+          "description": "",
+          "type": "null"
+        }
+      ]
+    },
+    "seat_group": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "pk": {
+          "description": "The seat group's unique ID.",
+          "format": "int32",
+          "type": "number"
+        }
+      },
+      "required": [
+        "pk",
+        "name"
+      ],
+      "type": "object"
+    },
+    "seat_map": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "pk": {
+          "description": "The seat map's unique ID.",
+          "format": "int32",
+          "type": "number"
+        }
+      },
+      "required": [
+        "pk",
+        "name"
+      ],
+      "type": "object"
+    },
+    "seat_zone": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "pk": {
+          "description": "The seat zone's unique ID.",
+          "format": "int32",
+          "type": "number"
+        }
+      },
+      "required": [
+        "pk",
+        "name"
+      ],
+      "type": "object"
+    },
+    "smartwaiver_signatures": {
+      "description": "A list of Smartwaiver signatures with details.",
+      "items": {
+        "properties": {
+          "dob_at": {
+            "type": "string"
+          },
+          "email": {
+            "format": "email",
+            "type": "string"
+          },
+          "is_age_verified": {
+            "description": "Whether the person's age that is signing the waiver is verified.",
+            "type": "boolean"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "email",
+          "name",
+          "is_age_verified",
+          "dob_at"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "tag": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "description": "The tag's display name.",
+          "type": "string"
+        },
+        "shortname": {
+          "description": "The tag's short name. The short name is unique per company and is limited to lowercase letters (a-z), digits (0-9), and the dash character.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "type": "object"
+    },
+    "total_cost": {
+      "description": "The total_cost will be included only if the permission View amounts is enabled, otherwise it will be null.",
+      "oneOf": [
+        {
+          "properties": {
+            "feeable": {
+              "description": "The portion of the price the is subject to fees.",
+              "type": "number"
+            },
+            "price": {
+              "oneOf": [
+                {
+                  "description": "The line item price.",
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "tax": {
+              "description": "The tax price.",
+              "type": "number"
+            },
+            "tax_by_type": {
+              "description": "A breakdown of taxes by tax type.",
+              "type": "object"
+            },
+            "taxable": {
+              "description": "The portion of the price that is subject to taxes.",
+              "type": "number"
+            },
+            "total": {
+              "description": "The total cost after taxes and fees.",
+              "type": "number"
+            }
+          },
+          "type": "object"
+        },
+        {
+          "description": "",
+          "type": "null"
+        }
+      ]
+    },
+    "user": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "description": "The name of the user.",
+          "type": "string"
+        },
+        "username": {
+          "description": "The username of the user.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "username"
+      ],
+      "type": "object"
+    },
+    "waiver_signatures": {
+      "properties": {
+        "fareharbor": {
+          "$ref": "#/$defs/fh_waiver_signatures"
+        },
+        "smartwaiver": {
+          "$ref": "#/$defs/smartwaiver_signatures"
+        },
+        "wherewolf": {
+          "$ref": "#/$defs/wherewolf_waiver_signatures"
+        }
+      },
+      "type": "object"
+    },
+    "wherewolf_waiver_signatures": {
+      "description": "A list of Wherewolf waivers signatures with details.",
+      "items": {
+        "properties": {
+          "dob_at": {
+            "type": "string"
+          },
+          "email": {
+            "format": "email",
+            "type": "string"
+          },
+          "is_age_verified": {
+            "description": "Whether the person's age that is signing the waiver is verified.",
+            "type": "boolean"
+          },
+          "name": {
+            "type": "string"
+          },
+          "wherewolf_participant_status": {
+            "oneOf": [
+              {
+                "enum": [
+                  "Checked In",
+                  "Active",
+                  "Finalised",
+                  "Deleted",
+                  "Ineligible",
+                  "Started",
+                  "Loaded",
+                  "Blank",
+                  "Incomplete",
+                  "No-Show"
+                ],
+                "type": "string"
+              },
+              {
+                "description": "",
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "email",
+          "name",
+          "is_age_verified",
+          "dob_at",
+          "wherewolf_participant_status"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "properties": {
+    "booking": {
+      "$ref": "#/$defs/booking"
+    }
+  },
+  "required": [
+    "booking"
+  ],
+  "type": "object"
+}

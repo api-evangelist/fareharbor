@@ -1,0 +1,375 @@
+generated: '2026-10-12'
+method: derived
+generator: derive-vocabulary.py
+source: openapi/_original/fareharbor-home-openapi.yml
+vocabulary:
+  name: FareHarbor Domain Vocabulary
+  description: 'Terms declared by FareHarbor''s own API contract: its resource groups, objects and enumerations, with the contract''s definitions.
+    Derived, not authored.'
+  version: '2026-10-12'
+  terms:
+  - term: Getting Started
+    definition: 'FareHarbor offers powerful APIs and webhooks designed to streamline integrations, increase automation, and scale your business--whether
+      you''re an affiliate aiming to integrate live booking capabilities, or a software partner enhancing backend operations. ### Who Can Access
+      the API? FareHarbor offers API access to: - **Affiliates** looking to sell FareHarbor client inventory directly within their o'
+    tags:
+    - Resource Group
+    source: openapi/_original/fareharbor-home-openapi.yml
+  - term: Availabilities Endpoints
+    definition: The `/availabilities` endpoint is used to retrieve all bookable availabilities for a single item within a specified date or date
+      range. The request pulls availability data from the Item calendar of the FareHarbor dashboard. Each individual availability shows a unique
+      PK, which is then used during the booking process, as well as a summary of its related settings, including start/end times, capacity
+    tags:
+    - Resource Group
+    source: openapi/_original/fareharbor-home-openapi.yml
+  - term: Bookings Endpoints
+    definition: The bookings endpoints in the FareHarbor API provide comprehensive functionalities for managing reservations efficiently. These
+      endpoints enable developers and business owners to integrate and automate booking-related operations seamlessly into their services. Through
+      these endpoints, users can create, retrieve, update, and cancel bookings directly through the API. Key functionalities offered by t
+    tags:
+    - Resource Group
+    source: openapi/_original/fareharbor-home-openapi.yml
+  - term: Checkin Endpoints
+    definition: 'The check-in endpoints in the FareHarbor API provide essential capabilities for managing the check-in processes efficiently and
+      seamlessly. These endpoints are crucial for businesses in the tour and activity sector, as they allow for real-time, automated check-in
+      operations through integrated systems. Key functionalities offered by the check-in endpoints include: * **Checking In Participants:** Au'
+    tags:
+    - Resource Group
+    source: openapi/_original/fareharbor-home-openapi.yml
+  - term: Company Endpoints
+    definition: The Company endpoints in the FareHarbor API provide robust functionalities for accessing and managing information related to companies
+      that offer tours and activities. These endpoints are crucial for developers who need to integrate company-specific data into their applications,
+      ensuring that users have up-to-date and detailed information about the services they are interested in. Key functionalit
+    tags:
+    - Resource Group
+    source: openapi/_original/fareharbor-home-openapi.yml
+  - term: Items Endpoints
+    definition: 'The Items endpoints in the FareHarbor API provide comprehensive access to detailed information about the various activities and
+      services offered by a company. These endpoints are essential for any application that needs to integrate, display, or manage bookings for
+      specific items or activities within a company''s portfolio. Key functionalities offered by the Items endpoints include: * **Retrieving '
+    tags:
+    - Resource Group
+    source: openapi/_original/fareharbor-home-openapi.yml
+  - term: Crew Members Endpoints
+    definition: 'The Crew Members endpoints in the FareHarbor API provide comprehensive functionality for managing crew assignments on availabilities.
+      These endpoints allow you to assign, update, and remove crew members from specific availability slots, ensuring proper staffing and crew
+      coordination for tours and activities. Key functionalities offered by the Crew Members endpoints include: * **Listing Crew Member'
+    tags:
+    - Resource Group
+    source: openapi/_original/fareharbor-home-openapi.yml
+  - term: Users Endpoints
+    definition: The Users endpoints provide access to user information within the context of company operations, specifically for crew management
+      purposes.
+    tags:
+    - Resource Group
+    source: openapi/_original/fareharbor-home-openapi.yml
+  - term: Roles Endpoints
+    definition: The Roles endpoints provide access to role definitions within companies, enabling structured crew member assignments with specific
+      responsibilities and permissions.
+    tags:
+    - Resource Group
+    source: openapi/_original/fareharbor-home-openapi.yml
+  - term: Lodging Endpoints
+    definition: With our `/lodgings` endpoints our API Partners are able to retrieve our charters’ lodging options, both on a dashboard level
+      as well as on the availability level, and offer these for customers to choose from when creating a booking.
+    tags:
+    - Resource Group
+    source: openapi/_original/fareharbor-home-openapi.yml
+  - term: Affiliates And Integrations
+    definition: 'Read about the robust network and capabilities that FareHarbor offers through its affiliate networks and integrations, facilitating
+      enhanced services and operations for different user types. ## For Affiliates Available Integrations: * **FHDN API:** Learn more about our
+      distribution network [here](https://fareharbor.com/scale/distribution-network/fareharbor-distribution-network/) * **Inventory Acce'
+    tags:
+    - Resource Group
+    source: openapi/_original/fareharbor-home-openapi.yml
+  - term: Authentication
+    definition: An app key and a user key are required to authenticate all requests to the FareHarbor external API. The app key identifies your
+      application, and can be used for all of your affiliates. The user key identifies a specific user on a specific affiliate. These keys are
+      in UUID format. Note that these keys *must* be kept private. If your key is disclosed publicly please contact support@fareharbor.com to
+    tags:
+    - Resource Group
+    source: openapi/_original/fareharbor-home-openapi.yml
+  - term: Booking Overlay Links
+    definition: Partners can deep-link customers into FareHarbor's online booking flow with query parameters that pre-select affiliate attribution,
+      party size, and related booking context. These URLs open the FareHarbor booking lightbox (often called the booking overlay) for a specific
+      company, item, and availability. Use them when an integration should send a customer into FareHarbor's hosted checkout instead of
+    tags:
+    - Resource Group
+    source: openapi/_original/fareharbor-home-openapi.yml
+  - term: Cancellation Policies
+    definition: 'In order for cancellations to be made via API, all connections must be assigned a technical cancellation policy in the supplier’s
+      settings in FareHarbor. As a standard step in the enablement process, we assign the **Default - API** cancellation policy when we set up
+      every new API partner with access to mutual suppliers. *The Default - API cancellation policy allows for a booking to be canceled up '
+    tags:
+    - Resource Group
+    source: openapi/_original/fareharbor-home-openapi.yml
+  - term: Custom Fields
+    definition: 'Custom fields allow an activity company to provide booking options and collect information from their customers during the booking
+      process. For example, scuba companies often use custom fields to collect the height, weight, and shoe size of their customers during the
+      booking process so they can set aside gear that fits properly for a dive. ## Custom Field Instances A custom field instance represen'
+    tags:
+    - Resource Group
+    source: openapi/_original/fareharbor-home-openapi.yml
+  - term: Data Types
+    definition: '# Fields ## Markdown fields Many of the fields returned by the API contain user-defined Markdown. We also return the rendered
+      HTML version of the field. In the following schemas, fields of type `markdown` actually contain a `string`, and imply a second field in
+      the schema containing the rendered HTML. So the following: * `field`: `markdown` Should be treated as if it were: * `field`: `string` *
+      `f'
+    tags:
+    - Resource Group
+    source: openapi/_original/fareharbor-home-openapi.yml
+  - term: Error Codes
+    definition: 'This document provides more information about the following types of error codes and messages: | status | Code | Error | | -------
+      | ------ | ------- | | 400 |availability-date-range-invalid | Please specify an end date that comes after start date `start_date` | | 400
+      |book-data-amount-paid-invalid | Amount paid cannot be negative | | 400 |book-data-amount-paid-rebooking-invalid | Amount paid cann'
+    tags:
+    - Resource Group
+    source: openapi/_original/fareharbor-home-openapi.yml
+  - term: Examples
+    definition: '# PHP ### Dependencies Httpful PHP library. See the [installation instructions](http://phphttpclient.com/) for more information.
+      include("./httpful.phar"); ### Request headers $api_app = "your app key"; $api_user = "your user key"; ### Root URL $root_url = "https://test.fareharbor.com/api/external/v1";
+      ## Listing companies ``` $companies_url = "$root_url/companies/"; $response = \Httpful\Request::'
+    tags:
+    - Resource Group
+    source: openapi/_original/fareharbor-home-openapi.yml
+  - term: Format
+    definition: '# Interchange Format All interactions with the API are done via JSON. # Requests ## Request Body Some requests (particularly
+      the `POST` to create a booking) require a body. The body should consist entirely of a JSON object. ## Authentication You''ll need to authenticate
+      every request you make the API; see [authentication](#tag/Authentication). # Responses ## General Structure The body of every resp'
+    tags:
+    - Resource Group
+    source: openapi/_original/fareharbor-home-openapi.yml
+  - term: Orders
+    definition: 'Multiple bookings can be grouped into an **Order**. This feature is beneficial for API Partners and Affiliates who want to offer
+      bundled experiences to increase guest satisfaction and revenue. For example, they can allow guests to book multiple activities at once or
+      to create custom packages booking activities one by one. This can increase operational efficiency for activity providers. # General O'
+    tags:
+    - Resource Group
+    source: openapi/_original/fareharbor-home-openapi.yml
+  - term: Rebooking
+    definition: 'If it is necessary to change a booking to another date/time or change customer types/count, the booking must be cancelled and
+      a new booking must be created. Rebooking is a shortcut for that process. To rebook an existing booking, specify the existing booking''s
+      UUID value for the `rebooking` property when creating a booking. Note: valid values for all properties required by the create booking reque'
+    tags:
+    - Resource Group
+    source: openapi/_original/fareharbor-home-openapi.yml
+  - term: Webhooks
+    definition: '# What is a webhook A webhook is an HTTPS request sent from FareHarbor to a server of your choice as a result of an event. FareHarbor
+      can send webhooks when bookings are created, updated, rebooked, or cancelled, when a contact changes, when a checkin occurs, when items
+      are updated, when crew members are created, updated, or deleted, etc. For ideas about how to use webhooks in concert with the Exte'
+    tags:
+    - Resource Group
+    source: openapi/_original/fareharbor-home-openapi.yml
+  - term: FAQ And Best Practices
+    definition: '## Question: Slow `/availabilities/date-range/` endpoint The Availabilities Date Range endpoint takes too long to return, or
+      times out and never returns. What should I do? ### Answer There are a couple of things you can do: 1. BE SURE YOU ARE USING THE MINIMAL
+      AVAILABILITIES ENDPOINT. This is the one described in the documentation: [Availabilities Endpoint](#tag/Availabilities-Endpoints) `GET /com'
+    tags:
+    - Resource Group
+    source: openapi/_original/fareharbor-home-openapi.yml
+  - term: Update Crew Member Request
+    definition: JSON body for updating an existing crew member assignment on an availability.
+    tags:
+    - Object
+    source: openapi/_original/fareharbor-home-openapi.yml#/components/schemas/UPDATE_CREW_MEMBER_REQUEST_JSON_SCHEMA
+  - term: CHECKIN_QR_CODE_REQUEST_JSON_SCHEMA
+    definition: 'Object declared by the contract with fields: checkin_status, is_whole_booking, qr_code.'
+    tags:
+    - Object
+    source: openapi/_original/fareharbor-home-openapi.yml#/components/schemas/CHECKIN_QR_CODE_REQUEST_JSON_SCHEMA
+  - term: Create Crew Member Request
+    definition: JSON body for creating a crew member assignment on an availability.
+    tags:
+    - Object
+    source: openapi/_original/fareharbor-home-openapi.yml#/components/schemas/CREATE_CREW_MEMBER_REQUEST_JSON_SCHEMA
+  - term: Create Line Item Request
+    definition: JSON body for creating a line item on a booking.
+    tags:
+    - Object
+    source: openapi/_original/fareharbor-home-openapi.yml#/components/schemas/CREATE_LINE_ITEM_REQUEST_JSON_SCHEMA
+  - term: Resend Confirmation Email Request
+    definition: JSON body for queueing confirmation email resends by customer email and activity date range.
+    tags:
+    - Object
+    source: openapi/_original/fareharbor-home-openapi.yml#/components/schemas/RESEND_CONFIRMATION_EMAIL_REQUEST_JSON_SCHEMA
+  - term: Update Resource Use Request
+    definition: JSON body for updating an existing resource use on a booking.
+    tags:
+    - Object
+    source: openapi/_original/fareharbor-home-openapi.yml#/components/schemas/RESOURCE_USE_REQUEST_JSON_SCHEMA
+  - term: Update Customer Custom Field Value Request
+    definition: JSON body for updating an existing customer custom field value on a booking.
+    tags:
+    - Object
+    source: openapi/_original/fareharbor-home-openapi.yml#/components/schemas/CUSTOMER_CUSTOM_FIELD_VALUE_REQUEST_JSON_SCHEMA
+  - term: CHECKIN_BOOKING_REQUEST_JSON_SCHEMA
+    definition: 'Object declared by the contract with fields: checkin_status, customer.'
+    tags:
+    - Object
+    source: openapi/_original/fareharbor-home-openapi.yml#/components/schemas/CHECKIN_BOOKING_REQUEST_JSON_SCHEMA
+  - term: BOOKING_NOTE_REQUEST_JSON_SCHEMA
+    definition: 'Object declared by the contract with fields: note.'
+    tags:
+    - Object
+    source: openapi/_original/fareharbor-home-openapi.yml#/components/schemas/BOOKING_NOTE_REQUEST_JSON_SCHEMA
+  - term: VALIDATE_REQUEST_JSON_SCHEMA
+    definition: 'Object declared by the contract with fields: contact, custom_field_values, customers, external_id, note, voucher_number.'
+    tags:
+    - Object
+    source: openapi/_original/fareharbor-home-openapi.yml#/components/schemas/VALIDATE_REQUEST_JSON_SCHEMA
+  - term: BOOK_REQUEST_JSON_SCHEMA
+    definition: 'Object declared by the contract with fields: agent, agent_name, amount_paid, contact, custom_field_values, customers, desk, desk_name,
+      external_id, lodging, note, orderize_booking. (2 more)'
+    tags:
+    - Object
+    source: openapi/_original/fareharbor-home-openapi.yml#/components/schemas/BOOK_REQUEST_JSON_SCHEMA
+  - term: BOOKING_WITH_PAYMENTS_RESPONSE_JSON_SCHEMA
+    definition: 'Object declared by the contract with fields: booking.'
+    tags:
+    - Object
+    source: openapi/_original/fareharbor-home-openapi.yml#/components/schemas/BOOKING_WITH_PAYMENTS_RESPONSE_JSON_SCHEMA
+  - term: VERY_MINIMAL_BOOKINGS_RESPONSE_JSON_SCHEMA
+    definition: 'Object declared by the contract with fields: bookings.'
+    tags:
+    - Object
+    source: openapi/_original/fareharbor-home-openapi.yml#/components/schemas/VERY_MINIMAL_BOOKINGS_RESPONSE_JSON_SCHEMA
+  - term: Update Customer Custom Field Value Response
+    definition: 'Object declared by the contract with fields: custom_field_value.'
+    tags:
+    - Object
+    source: openapi/_original/fareharbor-home-openapi.yml#/components/schemas/CUSTOMER_CUSTOM_FIELD_VALUE_RESPONSE_JSON_SCHEMA
+  - term: AGENTS_RESPONSE_JSON_SCHEMA
+    definition: 'Object declared by the contract with fields: agents.'
+    tags:
+    - Object
+    source: openapi/_original/fareharbor-home-openapi.yml#/components/schemas/AGENTS_RESPONSE_JSON_SCHEMA
+  - term: Crew Member Response
+    definition: Response containing a single crew member assignment.
+    tags:
+    - Object
+    source: openapi/_original/fareharbor-home-openapi.yml#/components/schemas/CREW_MEMBER_RESPONSE_JSON_SCHEMA
+  - term: ITEMS_RESPONSE_JSON_SCHEMA
+    definition: 'Object declared by the contract with fields: items.'
+    tags:
+    - Object
+    source: openapi/_original/fareharbor-home-openapi.yml#/components/schemas/ITEMS_RESPONSE_JSON_SCHEMA
+  - term: MINIMAL_AVAILABILITIES_RESPONSE_JSON_SCHEMA
+    definition: 'Object declared by the contract with fields: availabilities.'
+    tags:
+    - Object
+    source: openapi/_original/fareharbor-home-openapi.yml#/components/schemas/MINIMAL_AVAILABILITIES_RESPONSE_JSON_SCHEMA
+  - term: Roles Response
+    definition: Response containing the list of roles available for a company.
+    tags:
+    - Object
+    source: openapi/_original/fareharbor-home-openapi.yml#/components/schemas/ROLES_RESPONSE_JSON_SCHEMA
+  - term: COMPANY_RESPONSE_JSON_SCHEMA
+    definition: 'Object declared by the contract with fields: company.'
+    tags:
+    - Object
+    source: openapi/_original/fareharbor-home-openapi.yml#/components/schemas/COMPANY_RESPONSE_JSON_SCHEMA
+  - term: DESKS_RESPONSE_JSON_SCHEMA
+    definition: 'Object declared by the contract with fields: desks.'
+    tags:
+    - Object
+    source: openapi/_original/fareharbor-home-openapi.yml#/components/schemas/DESKS_RESPONSE_JSON_SCHEMA
+  - term: Resend Confirmation Email Response
+    definition: Generic response returned whether or not any bookings matched.
+    tags:
+    - Object
+    source: openapi/_original/fareharbor-home-openapi.yml#/components/schemas/RESEND_CONFIRMATION_EMAIL_RESPONSE_JSON_SCHEMA
+  - term: CHECKIN_STATUSES_RESPONSE_JSON_SCHEMA
+    definition: 'Object declared by the contract with fields: checkin_statuses.'
+    tags:
+    - Object
+    source: openapi/_original/fareharbor-home-openapi.yml#/components/schemas/CHECKIN_STATUSES_RESPONSE_JSON_SCHEMA
+  - term: BOOKING_WITH_RESOURCE_USES_RESPONSE_JSON_SCHEMA
+    definition: 'Object declared by the contract with fields: booking.'
+    tags:
+    - Object
+    source: openapi/_original/fareharbor-home-openapi.yml#/components/schemas/BOOKING_WITH_RESOURCE_USES_RESPONSE_JSON_SCHEMA
+  - term: Crew Members Response
+    definition: Response containing a list of crew members assigned to an availability.
+    tags:
+    - Object
+    source: openapi/_original/fareharbor-home-openapi.yml#/components/schemas/CREW_MEMBERS_RESPONSE_JSON_SCHEMA
+  - term: COMPANIES_RESPONSE_JSON_SCHEMA
+    definition: 'Object declared by the contract with fields: companies.'
+    tags:
+    - Object
+    source: openapi/_original/fareharbor-home-openapi.yml#/components/schemas/COMPANIES_RESPONSE_JSON_SCHEMA
+  - term: Users Response
+    definition: Response containing a list of all distinct users created in the FareHarbor Dashboard.
+    tags:
+    - Object
+    source: openapi/_original/fareharbor-home-openapi.yml#/components/schemas/USERS_RESPONSE_JSON_SCHEMA
+  - term: AVAILABILITY_LODGINGS_RESPONSE_JSON_SCHEMA
+    definition: 'Object declared by the contract with fields: lodgings.'
+    tags:
+    - Object
+    source: openapi/_original/fareharbor-home-openapi.yml#/components/schemas/AVAILABILITY_LODGINGS_RESPONSE_JSON_SCHEMA
+  - term: BOOKINGS_RESPONSE_JSON_SCHEMA
+    definition: 'Object declared by the contract with fields: bookings.'
+    tags:
+    - Object
+    source: openapi/_original/fareharbor-home-openapi.yml#/components/schemas/BOOKINGS_RESPONSE_JSON_SCHEMA
+  - term: LODGINGS_RESPONSE_JSON_SCHEMA
+    definition: 'Object declared by the contract with fields: lodgings.'
+    tags:
+    - Object
+    source: openapi/_original/fareharbor-home-openapi.yml#/components/schemas/LODGINGS_RESPONSE_JSON_SCHEMA
+  - term: AVAILABILITY_RESPONSE_JSON_SCHEMA
+    definition: 'Object declared by the contract with fields: availability.'
+    tags:
+    - Object
+    source: openapi/_original/fareharbor-home-openapi.yml#/components/schemas/AVAILABILITY_RESPONSE_JSON_SCHEMA
+  - term: BOOKING_RESPONSE_JSON_SCHEMA
+    definition: 'Object declared by the contract with fields: booking.'
+    tags:
+    - Object
+    source: openapi/_original/fareharbor-home-openapi.yml#/components/schemas/BOOKING_RESPONSE_JSON_SCHEMA
+  - term: VALIDATE_RESPONSE_JSON_SCHEMA
+    definition: 'Object declared by the contract with fields: agent, code, desk, error, invoice_price, is_bookable, pickup, receipt_subtotal,
+      receipt_taxes, receipt_total.'
+    tags:
+    - Object
+    source: openapi/_original/fareharbor-home-openapi.yml#/components/schemas/VALIDATE_RESPONSE_JSON_SCHEMA
+  - term: ITEM_RESPONSE_JSON_SCHEMA
+    definition: 'Object declared by the contract with fields: item.'
+    tags:
+    - Object
+    source: openapi/_original/fareharbor-home-openapi.yml#/components/schemas/ITEM_RESPONSE_JSON_SCHEMA
+  - term: Line Item Response
+    definition: Response containing the created line item (pk, description, amount, is_taxable, is_private, discount_code).
+    tags:
+    - Object
+    source: openapi/_original/fareharbor-home-openapi.yml#/components/schemas/LINE_ITEM_RESPONSE_JSON_SCHEMA
+  - term: AVAILABILITIES_RESPONSE_JSON_SCHEMA
+    definition: 'Object declared by the contract with fields: availabilities.'
+    tags:
+    - Object
+    source: openapi/_original/fareharbor-home-openapi.yml#/components/schemas/AVAILABILITIES_RESPONSE_JSON_SCHEMA
+  - term: Error
+    definition: 'Object declared by the contract with fields: code, message.'
+    tags:
+    - Object
+    source: openapi/_original/fareharbor-home-openapi.yml#/components/schemas/Error
+  - term: Codes400
+    definition: 'Enumeration declared by the contract with values: availability-date-range-invalid, book-data-parse-error, book-data-validation-error,
+      bookability-error, booking-cancellation-error, booking-creation-error, booking-custom-field-value-creation-error, booking-custom-field-values-invalid,
+      booking-note-error, contact-error, content-type-invalid-error, customer-custom-field-value-creation-error. (16 more)'
+    tags:
+    - Enumeration
+    source: openapi/_original/fareharbor-home-openapi.yml#/components/schemas/Codes400
+  - term: Codes403
+    definition: 'Enumeration declared by the contract with values: app-invalid, app-key-invalid, invalid-checkin-permissions-error, orderize-booking-uuid-invalid-error,
+      user-key-invalid.'
+    tags:
+    - Enumeration
+    source: openapi/_original/fareharbor-home-openapi.yml#/components/schemas/Codes403
+  - term: Codes404
+    definition: 'Enumeration declared by the contract with values: availability-pk-invalid, booking-uuid-invalid, company-shortname-invald, customer-custom-field-value-pk-invalid,
+      item-pk-invalid.'
+    tags:
+    - Enumeration
+    source: openapi/_original/fareharbor-home-openapi.yml#/components/schemas/Codes404

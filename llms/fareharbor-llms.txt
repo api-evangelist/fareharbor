@@ -1,0 +1,22 @@
+# FareHarbor Spark
+
+> FareHarbor Spark is FareHarbor’s premier summit for tour and activity operators, centered on community and built for what’s next.
+
+## Booking Portal
+
+- [Booking Portal] (https://fareharbor.com/embeds/book/spark_oneonones/) : A FareHarbor-powered booking portal for FareHarbor Spark one-on-one sessions.
+
+## Activities & Experiences
+
+- [Spark 2024 Agenda] (https://spark.fareharbor.com/2024-agenda/) : Agenda page outlining the “Spark Your Growth” track and related summit programming for 2024.
+- [Spark 2025 Agenda (Old)] (https://spark.fareharbor.com/2025-agenda-old/) : Earlier version of the Spark 2025 summit agenda, retained for reference.
+- [Spark 2025 Agenda (V2)] (https://spark.fareharbor.com/2025-agenda/) : Updated version of the Spark 2025 summit agenda.
+
+## Company
+
+- [Home] (https://spark.fareharbor.com/home-2/) : Overview of FareHarbor Spark, describing it as FareHarbor’s premier summit for tour and activity operators and highlighting its community focus and forward-looking content.
+- [Speaker/Sponsor Form] (https://spark.fareharbor.com/speaker-sponsor-form/) : Form page for prospective speakers and sponsors to express interest or submit information.
+
+## Policies & FAQs
+
+- [Privacy Policy] (https://spark.fareharbor.com/privacy-policy/) : Privacy policy outlining how FareHarbor Spark collects, uses, and protects visitor and participant data.

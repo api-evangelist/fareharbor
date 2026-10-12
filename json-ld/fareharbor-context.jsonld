@@ -1,0 +1,281 @@
+{
+  "@context": {
+    "@vocab": "https://fareharbor.com/schema#",
+    "schema": "https://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "fareharbor": "https://fareharbor.com/schema#",
+    "UPDATE_CREW_MEMBER_REQUEST_JSON_SCHEMA": "fareharbor:UPDATE_CREW_MEMBER_REQUEST_JSON_SCHEMA",
+    "note": {
+      "@id": "fareharbor:note",
+      "@type": "xsd:string"
+    },
+    "role": {
+      "@id": "fareharbor:role",
+      "@type": "xsd:string"
+    },
+    "CHECKIN_QR_CODE_REQUEST_JSON_SCHEMA": "fareharbor:CHECKIN_QR_CODE_REQUEST_JSON_SCHEMA",
+    "checkin_status": {
+      "@id": "fareharbor:checkin_status"
+    },
+    "is_whole_booking": {
+      "@id": "fareharbor:is_whole_booking",
+      "@type": "xsd:boolean"
+    },
+    "qr_code": {
+      "@id": "fareharbor:qr_code",
+      "@type": "@id"
+    },
+    "CREATE_CREW_MEMBER_REQUEST_JSON_SCHEMA": "fareharbor:CREATE_CREW_MEMBER_REQUEST_JSON_SCHEMA",
+    "username": {
+      "@id": "fareharbor:username",
+      "@type": "xsd:string"
+    },
+    "CREATE_LINE_ITEM_REQUEST_JSON_SCHEMA": "fareharbor:CREATE_LINE_ITEM_REQUEST_JSON_SCHEMA",
+    "description": {
+      "@id": "fareharbor:description",
+      "@type": "xsd:string"
+    },
+    "discount_code_pk": {
+      "@id": "fareharbor:discount_code_pk",
+      "@type": "xsd:integer"
+    },
+    "is_private": {
+      "@id": "fareharbor:is_private",
+      "@type": "xsd:boolean"
+    },
+    "is_taxable": {
+      "@id": "fareharbor:is_taxable",
+      "@type": "xsd:boolean"
+    },
+    "offset": {
+      "@id": "fareharbor:offset",
+      "@type": "xsd:integer"
+    },
+    "RESEND_CONFIRMATION_EMAIL_REQUEST_JSON_SCHEMA": "fareharbor:RESEND_CONFIRMATION_EMAIL_REQUEST_JSON_SCHEMA",
+    "date_from": {
+      "@id": "fareharbor:date_from",
+      "@type": "xsd:string"
+    },
+    "date_to": {
+      "@id": "fareharbor:date_to",
+      "@type": "xsd:string"
+    },
+    "email": {
+      "@id": "fareharbor:email",
+      "@type": "xsd:string"
+    },
+    "RESOURCE_USE_REQUEST_JSON_SCHEMA": "fareharbor:RESOURCE_USE_REQUEST_JSON_SCHEMA",
+    "resource_pk": {
+      "@id": "fareharbor:resource_pk",
+      "@type": "xsd:integer"
+    },
+    "CUSTOMER_CUSTOM_FIELD_VALUE_REQUEST_JSON_SCHEMA": "fareharbor:CUSTOMER_CUSTOM_FIELD_VALUE_REQUEST_JSON_SCHEMA",
+    "value": {
+      "@id": "fareharbor:value",
+      "@type": "xsd:string"
+    },
+    "CHECKIN_BOOKING_REQUEST_JSON_SCHEMA": "fareharbor:CHECKIN_BOOKING_REQUEST_JSON_SCHEMA",
+    "customer": {
+      "@id": "fareharbor:customer"
+    },
+    "BOOKING_NOTE_REQUEST_JSON_SCHEMA": "fareharbor:BOOKING_NOTE_REQUEST_JSON_SCHEMA",
+    "VALIDATE_REQUEST_JSON_SCHEMA": "fareharbor:VALIDATE_REQUEST_JSON_SCHEMA",
+    "contact": {
+      "@id": "fareharbor:contact",
+      "@type": "@id"
+    },
+    "custom_field_values": {
+      "@id": "fareharbor:custom_field_values",
+      "@type": "@id"
+    },
+    "customers": {
+      "@id": "fareharbor:customers",
+      "@type": "@id"
+    },
+    "external_id": {
+      "@id": "fareharbor:external_id",
+      "@type": "xsd:string"
+    },
+    "voucher_number": {
+      "@id": "fareharbor:voucher_number",
+      "@type": "xsd:string"
+    },
+    "BOOK_REQUEST_JSON_SCHEMA": "fareharbor:BOOK_REQUEST_JSON_SCHEMA",
+    "agent": {
+      "@id": "fareharbor:agent",
+      "@type": "xsd:decimal"
+    },
+    "agent_name": {
+      "@id": "fareharbor:agent_name",
+      "@type": "xsd:string"
+    },
+    "amount_paid": {
+      "@id": "fareharbor:amount_paid"
+    },
+    "desk": {
+      "@id": "fareharbor:desk",
+      "@type": "xsd:decimal"
+    },
+    "desk_name": {
+      "@id": "fareharbor:desk_name",
+      "@type": "xsd:string"
+    },
+    "lodging": {
+      "@id": "fareharbor:lodging",
+      "@type": "xsd:decimal"
+    },
+    "orderize_booking": {
+      "@id": "fareharbor:orderize_booking",
+      "@type": "xsd:string"
+    },
+    "rebooking": {
+      "@id": "fareharbor:rebooking",
+      "@type": "xsd:string"
+    },
+    "BOOKING_WITH_PAYMENTS_RESPONSE_JSON_SCHEMA": "fareharbor:BOOKING_WITH_PAYMENTS_RESPONSE_JSON_SCHEMA",
+    "booking": {
+      "@id": "fareharbor:booking",
+      "@type": "@id"
+    },
+    "VERY_MINIMAL_BOOKINGS_RESPONSE_JSON_SCHEMA": "fareharbor:VERY_MINIMAL_BOOKINGS_RESPONSE_JSON_SCHEMA",
+    "bookings": {
+      "@id": "fareharbor:bookings",
+      "@type": "@id"
+    },
+    "CUSTOMER_CUSTOM_FIELD_VALUE_RESPONSE_JSON_SCHEMA": "fareharbor:CUSTOMER_CUSTOM_FIELD_VALUE_RESPONSE_JSON_SCHEMA",
+    "custom_field_value": {
+      "@id": "fareharbor:custom_field_value",
+      "@type": "@id"
+    },
+    "AGENTS_RESPONSE_JSON_SCHEMA": "fareharbor:AGENTS_RESPONSE_JSON_SCHEMA",
+    "agents": {
+      "@id": "fareharbor:agents",
+      "@container": "@list"
+    },
+    "CREW_MEMBER_RESPONSE_JSON_SCHEMA": "fareharbor:CREW_MEMBER_RESPONSE_JSON_SCHEMA",
+    "crew_member": {
+      "@id": "fareharbor:crew_member",
+      "@type": "@id"
+    },
+    "ITEMS_RESPONSE_JSON_SCHEMA": "fareharbor:ITEMS_RESPONSE_JSON_SCHEMA",
+    "items": {
+      "@id": "fareharbor:items",
+      "@container": "@list"
+    },
+    "MINIMAL_AVAILABILITIES_RESPONSE_JSON_SCHEMA": "fareharbor:MINIMAL_AVAILABILITIES_RESPONSE_JSON_SCHEMA",
+    "availabilities": {
+      "@id": "fareharbor:availabilities",
+      "@container": "@list"
+    },
+    "ROLES_RESPONSE_JSON_SCHEMA": "fareharbor:ROLES_RESPONSE_JSON_SCHEMA",
+    "roles": {
+      "@id": "fareharbor:roles",
+      "@container": "@list"
+    },
+    "COMPANY_RESPONSE_JSON_SCHEMA": "fareharbor:COMPANY_RESPONSE_JSON_SCHEMA",
+    "company": {
+      "@id": "fareharbor:company",
+      "@type": "@id"
+    },
+    "DESKS_RESPONSE_JSON_SCHEMA": "fareharbor:DESKS_RESPONSE_JSON_SCHEMA",
+    "desks": {
+      "@id": "fareharbor:desks",
+      "@container": "@list"
+    },
+    "RESEND_CONFIRMATION_EMAIL_RESPONSE_JSON_SCHEMA": "fareharbor:RESEND_CONFIRMATION_EMAIL_RESPONSE_JSON_SCHEMA",
+    "message": {
+      "@id": "fareharbor:message",
+      "@type": "xsd:string"
+    },
+    "CHECKIN_STATUSES_RESPONSE_JSON_SCHEMA": "fareharbor:CHECKIN_STATUSES_RESPONSE_JSON_SCHEMA",
+    "checkin_statuses": {
+      "@id": "fareharbor:checkin_statuses",
+      "@container": "@list"
+    },
+    "BOOKING_WITH_RESOURCE_USES_RESPONSE_JSON_SCHEMA": "fareharbor:BOOKING_WITH_RESOURCE_USES_RESPONSE_JSON_SCHEMA",
+    "CREW_MEMBERS_RESPONSE_JSON_SCHEMA": "fareharbor:CREW_MEMBERS_RESPONSE_JSON_SCHEMA",
+    "crew_members": {
+      "@id": "fareharbor:crew_members",
+      "@container": "@list"
+    },
+    "COMPANIES_RESPONSE_JSON_SCHEMA": "fareharbor:COMPANIES_RESPONSE_JSON_SCHEMA",
+    "companies": {
+      "@id": "fareharbor:companies",
+      "@container": "@list"
+    },
+    "USERS_RESPONSE_JSON_SCHEMA": "fareharbor:USERS_RESPONSE_JSON_SCHEMA",
+    "users": {
+      "@id": "fareharbor:users",
+      "@container": "@list"
+    },
+    "AVAILABILITY_LODGINGS_RESPONSE_JSON_SCHEMA": "fareharbor:AVAILABILITY_LODGINGS_RESPONSE_JSON_SCHEMA",
+    "lodgings": {
+      "@id": "fareharbor:lodgings",
+      "@container": "@list"
+    },
+    "BOOKINGS_RESPONSE_JSON_SCHEMA": "fareharbor:BOOKINGS_RESPONSE_JSON_SCHEMA",
+    "LODGINGS_RESPONSE_JSON_SCHEMA": "fareharbor:LODGINGS_RESPONSE_JSON_SCHEMA",
+    "AVAILABILITY_RESPONSE_JSON_SCHEMA": "fareharbor:AVAILABILITY_RESPONSE_JSON_SCHEMA",
+    "availability": {
+      "@id": "fareharbor:availability",
+      "@type": "@id"
+    },
+    "BOOKING_RESPONSE_JSON_SCHEMA": "fareharbor:BOOKING_RESPONSE_JSON_SCHEMA",
+    "VALIDATE_RESPONSE_JSON_SCHEMA": "fareharbor:VALIDATE_RESPONSE_JSON_SCHEMA",
+    "code": {
+      "@id": "fareharbor:code",
+      "@type": "xsd:string"
+    },
+    "error": {
+      "@id": "fareharbor:error",
+      "@type": "xsd:string"
+    },
+    "invoice_price": {
+      "@id": "fareharbor:invoice_price",
+      "@type": "xsd:decimal"
+    },
+    "is_bookable": {
+      "@id": "fareharbor:is_bookable",
+      "@type": "xsd:boolean"
+    },
+    "pickup": {
+      "@id": "fareharbor:pickup",
+      "@type": "@id"
+    },
+    "receipt_subtotal": {
+      "@id": "fareharbor:receipt_subtotal",
+      "@type": "xsd:decimal"
+    },
+    "receipt_taxes": {
+      "@id": "fareharbor:receipt_taxes",
+      "@type": "xsd:decimal"
+    },
+    "receipt_total": {
+      "@id": "fareharbor:receipt_total",
+      "@type": "xsd:decimal"
+    },
+    "ITEM_RESPONSE_JSON_SCHEMA": "fareharbor:ITEM_RESPONSE_JSON_SCHEMA",
+    "item": {
+      "@id": "fareharbor:item",
+      "@type": "@id"
+    },
+    "LINE_ITEM_RESPONSE_JSON_SCHEMA": "fareharbor:LINE_ITEM_RESPONSE_JSON_SCHEMA",
+    "line_item": {
+      "@id": "fareharbor:line_item",
+      "@type": "@id"
+    },
+    "AVAILABILITIES_RESPONSE_JSON_SCHEMA": "fareharbor:AVAILABILITIES_RESPONSE_JSON_SCHEMA",
+    "Error": "fareharbor:Error",
+    "Codes400": "fareharbor:Codes400",
+    "Codes403": "fareharbor:Codes403",
+    "Codes404": "fareharbor:Codes404"
+  },
+  "@type": "schema:Dataset",
+  "schema:name": "FareHarbor API JSON-LD context",
+  "schema:description": "A JSON-LD @context for the objects FareHarbor's own API contract declares: one class per component schema, one property per declared field, typed from the contract. Derived by script (derive-json-ld.py, 2026-10-12) from openapi/_original/fareharbor-home-openapi.yml.",
+  "dcterms:created": "2026-10-12",
+  "dcterms:source": [
+    "openapi/_original/fareharbor-home-openapi.yml"
+  ]
+}

@@ -1,0 +1,170 @@
+generated: '2026-10-12'
+method: derived
+generator: derive-mcp-candidate.py
+source:
+- openapi/_original/fareharbor-home-openapi.yml
+status: candidate
+deployment:
+  mode: none
+  auth: unknown
+  verified: probed
+note: 'No MCP server was found. The pre-flight posted tools/list to /mcp on api.fareharbor.com, fareharbor.com, developer.fareharbor.com, help.fareharbor.com;
+  verdict opaque (https://api.fareharbor.com/mcp answered 403: the edge authenticates before it routes, which proves nothing either way). Candidate
+  tools below are derived from the 31 operation(s) in the provider''s own OpenAPI (31 listed); they describe what a server WOULD expose, not one
+  that exists.'
+tools:
+- name: get_companies
+  operationId: get-companies
+  method: GET
+  path: /companies/\Z
+  description: Companies
+- name: get_company
+  operationId: get-company
+  method: GET
+  path: /companies/<company-shortname>/
+  description: Company
+- name: get_company_users
+  operationId: get-company-users
+  method: GET
+  path: /companies/<shortname>/users/
+  description: Company Users
+- name: put_checkin_qr_code
+  operationId: put-checkin-qr-code
+  method: PUT
+  path: /companies/<shortname>/checkin/
+  description: Checkin Qr Code
+- name: get_checkin_statuses
+  operationId: get-checkin-statuses
+  method: GET
+  path: /companies/<company-shortname>/checkin-statuses/
+  description: Checkin Statuses
+- name: get_lodgings
+  operationId: get-lodgings
+  method: GET
+  path: /companies/<shortname>/lodgings/
+  description: Lodgings
+- name: get_availability_lodgings
+  operationId: get-availability-lodgings
+  method: GET
+  path: /companies/<shortname>/availabilities/<availability.pk>/lodgings/
+  description: Availability Lodgings
+- name: get_agents
+  operationId: get-agents
+  method: GET
+  path: /companies/<affiliate-shortname>/agents/
+  description: Agents
+- name: get_desks
+  operationId: get-desks
+  method: GET
+  path: /companies/<affiliate-shortname>/desks/
+  description: Desks
+- name: get_items
+  operationId: get-items
+  method: GET
+  path: /companies/<shortname>/items/
+  description: Items
+- name: get_item
+  operationId: get-item
+  method: GET
+  path: /companies/<shortname>/items/<item.pk>/
+  description: Item
+- name: get_availability
+  operationId: get-availability
+  method: GET
+  path: /companies/<shortname>/availabilities/<availability.pk>/
+  description: Availability
+- name: get_minimal_availabilities_by_date
+  operationId: get-minimal-availabilities-by-date
+  method: GET
+  path: /companies/<shortname>/items/<item.pk>/minimal/availabilities/date/<date>/
+  description: Minimal Availabilities By Date
+- name: get_minimal_availabilities_by_date_range
+  operationId: get-minimal-availabilities-by-date-range
+  method: GET
+  path: /companies/<shortname>/items/<item.pk>/minimal/availabilities/date-range/<start-date>/<end-date>/
+  description: Minimal Availabilities By Date Range
+- name: get_bookings
+  operationId: get-bookings
+  method: GET
+  path: /companies/<shortname>/availabilities/<availability.pk>/bookings/
+  description: Bookings
+- name: post_bookings
+  operationId: post-bookings
+  method: POST
+  path: /companies/<shortname>/availabilities/<availability.pk>/bookings/
+  description: Bookings
+- name: post_validate
+  operationId: post-validate
+  method: POST
+  path: /companies/<shortname>/availabilities/<availability.pk>/bookings/validate/
+  description: Validate
+- name: get_booking
+  operationId: get-booking
+  method: GET
+  path: /companies/<shortname>/bookings/<Booking.uuid>/
+  description: Booking
+- name: delete_booking
+  operationId: delete-booking
+  method: DELETE
+  path: /companies/<shortname>/bookings/<Booking.uuid>/
+  description: Booking
+- name: put_update_booking_note
+  operationId: put-update-booking-note
+  method: PUT
+  path: /companies/<shortname>/bookings/<Booking.uuid>/note/
+  description: Update Booking Note
+- name: put_update_customer_custom_field_value
+  operationId: put-update-customer-custom-field-value
+  method: PUT
+  path: /companies/<shortname>/bookings/<Booking.uuid>/customer-custom-field-values/<custom_field_value.pk>/
+  description: Update Customer Custom Field Value
+- name: patch_update_resource_use
+  operationId: patch-update-resource-use
+  method: PATCH
+  path: /companies/<shortname>/bookings/<Booking.uuid>/resource-uses/<resource_use.pk>/
+  description: Update Resource Use
+- name: put_checkin_booking
+  operationId: put-checkin-booking
+  method: PUT
+  path: /companies/<shortname>/bookings/<Booking.uuid>/checkin/
+  description: Checkin Booking
+- name: get_bookings_by_create_date
+  operationId: get-bookings-by-create-date
+  method: GET
+  path: /companies/<shortname>/minimal/bookings-by-create-date/<date>/
+  description: Bookings By Create Date
+- name: post_resend_confirmation_email
+  operationId: post-resend-confirmation-email
+  method: POST
+  path: /bookings/resend-confirmation-email/
+  description: Resend Confirmation Email
+- name: get_crew_members
+  operationId: get-crew-members
+  method: GET
+  path: /companies/<shortname>/availabilities/<availability.pk>/crew-members/
+  description: Crew Members
+- name: post_crew_members
+  operationId: post-crew-members
+  method: POST
+  path: /companies/<shortname>/availabilities/<availability.pk>/crew-members/
+  description: Crew Members
+- name: patch_crew_member
+  operationId: patch-crew-member
+  method: PATCH
+  path: /companies/<shortname>/availabilities/<availability.pk>/crew-members/(?P<crew_member_id>\d+)/
+  description: Crew Member
+- name: delete_crew_member
+  operationId: delete-crew-member
+  method: DELETE
+  path: /companies/<shortname>/availabilities/<availability.pk>/crew-members/(?P<crew_member_id>\d+)/
+  description: Crew Member
+- name: get_roles
+  operationId: get-roles
+  method: GET
+  path: /companies/<shortname>/roles/
+  description: Roles
+- name: get_ping
+  operationId: get-ping
+  method: GET
+  path: /ping/\Z
+  description: Ping

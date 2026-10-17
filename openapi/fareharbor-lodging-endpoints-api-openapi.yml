@@ -1,0 +1,371 @@
+openapi: 3.2.0
+info:
+  title: FareHarbor Integration Center Lodging Endpoints API
+  version: '1.0'
+  contact:
+    email: support@fareharbor.com
+    name: FareHarbor
+    url: https://help.fareharbor.com/hc/
+  description: With our `/lodgings` endpoints our API Partners are able to retrieve our charters’ lodging options, both on a dashboard level as well as on the availability level, and offer these for customers to choose from when creating a booking.
+servers:
+- url: https://fareharbor.com/api/external/v1
+  description: production
+- url: https://demo.fareharbor.com/api/external/v1
+  description: demo
+tags:
+- name: Lodging Endpoints
+  description: With our `/lodgings` endpoints our API Partners are able to retrieve our charters’ lodging options, both on a dashboard level as well as on the availability level, and offer these for customers to choose from when creating a booking.
+paths:
+  /companies/<shortname>/lodgings/:
+    get:
+      summary: Lodgings
+      operationId: get-lodgings
+      deprecated: false
+      tags:
+      - Lodging Endpoints
+      parameters:
+      - $ref: '#/components/parameters/X-FareHarbor-API-App'
+      - $ref: '#/components/parameters/X-FareHarbor-API-User'
+      - schema:
+          type: string
+          example: 'hawaiianadventures
+
+            '
+        name: shortname
+        in: path
+        required: true
+        description: '
+
+          A unique FareHarbor name assigned to each company when their Dashboard is created, used to access the company''s specific information.
+
+          '
+      responses:
+        '200':
+          description: '
+
+            Returns an array of `Lodging` objects.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LODGINGS_RESPONSE_JSON_SCHEMA'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '504':
+          $ref: '#/components/responses/GatewayTimeout'
+      description: Used to check all of the lodging options available on a dashboard.
+  /companies/<shortname>/availabilities/<availability.pk>/lodgings/:
+    get:
+      summary: Availability Lodgings
+      operationId: get-availability-lodgings
+      deprecated: false
+      tags:
+      - Lodging Endpoints
+      parameters:
+      - $ref: '#/components/parameters/X-FareHarbor-API-App'
+      - $ref: '#/components/parameters/X-FareHarbor-API-User'
+      - schema:
+          type: string
+          example: 'hawaiianadventures
+
+            '
+        name: shortname
+        in: path
+        required: true
+        description: '
+
+          A unique FareHarbor name assigned to each company when their Dashboard is created, used to access the company''s specific information.
+
+          '
+      - schema:
+          type: integer
+          example: '4787
+
+            '
+        name: availability.pk
+        in: path
+        required: true
+        description: '
+
+          The unique numerical ID of the requested `Availability` object, that is then used during the booking process.
+
+          '
+      responses:
+        '200':
+          description: '
+
+            Returns an array of `Lodging` objects that include availability specific data.
+
+
+            The `is_pickup_available` property indicates whether a pickup is offered for the lodging (for the availability specified in the request URL). This value reflects the current state of the system and can change when updates are made.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AVAILABILITY_LODGINGS_RESPONSE_JSON_SCHEMA'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '504':
+          $ref: '#/components/responses/GatewayTimeout'
+      description: Used to check lodging options on a specific availability, including whether pick-up is available for each lodging option.
+components:
+  schemas:
+    Codes403:
+      type: string
+      enum:
+      - app-invalid
+      - app-key-invalid
+      - invalid-checkin-permissions-error
+      - orderize-booking-uuid-invalid-error
+      - user-key-invalid
+    LODGINGS_RESPONSE_JSON_SCHEMA:
+      $schema: http://json-schema.org/draft-04/schema#
+      additionalProperties: false
+      definitions:
+        lodging:
+          additionalProperties: false
+          properties:
+            address:
+              description: The lodging's address.
+              example: 440 Olohana St Honolulu, HI 96815
+              type: string
+            is_self_lodging:
+              description: Whether the lodging is a customer provided, non-hotel lodging (e.g. private residence).
+              example: false
+              type: boolean
+            name:
+              description: The lodging's name.
+              example: Wyndham Royal Garden
+              type: string
+            phone:
+              description: The lodging's phone number.
+              example: (808) 943-0202
+              type: string
+            pk:
+              description: The lodging's unique ID.
+              example: 2314
+              format: int32
+              type: number
+            url:
+              description: The lodging's URL.
+              example: https://www.extraholidays.com/honolulu-hawaii/royal-garden-at-waikiki.aspx
+              format: uri
+              type: string
+          required:
+          - pk
+          - name
+          - phone
+          - address
+          - url
+          - is_self_lodging
+          type: object
+      properties:
+        lodgings:
+          items:
+            $ref: '#/components/schemas/LODGINGS_RESPONSE_JSON_SCHEMA/definitions/lodging'
+          type: array
+      required:
+      - lodgings
+      type: object
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      required:
+      - code
+      - message
+    Codes400:
+      type: string
+      enum:
+      - availability-date-range-invalid
+      - book-data-parse-error
+      - book-data-validation-error
+      - bookability-error
+      - booking-cancellation-error
+      - booking-creation-error
+      - booking-custom-field-value-creation-error
+      - booking-custom-field-values-invalid
+      - booking-note-error
+      - contact-error
+      - content-type-invalid-error
+      - customer-custom-field-value-creation-error
+      - customer-custom-field-value-update-error
+      - customer-custom-field-values-invalid
+      - customer-type-rates-invalid
+      - invalid-checkin-already-checked-in
+      - invalid-checkin-customer
+      - invalid-checkin-status-error
+      - invalid-qr-code-error
+      - key-missing
+      - lodging-pk-invalid
+      - no-default-checkin-status-error
+      - orderize-booking-uuid-invalid-error
+      - payment-error
+      - rebooking-uuid-invalid-error
+      - resource-bookability-error
+      - voucher-number-invalid
+      - voucher-number-not-specified
+    AVAILABILITY_LODGINGS_RESPONSE_JSON_SCHEMA:
+      $schema: http://json-schema.org/draft-04/schema#
+      additionalProperties: false
+      definitions:
+        lodging:
+          additionalProperties: false
+          properties:
+            is_pickup_available:
+              description: Indicates whether a pickup is offered for the lodging (for the availability specified in the request URL). This value reflects the current state of the system and can change when updates are made.
+              example: true
+              type: boolean
+            name:
+              description: The lodging's name.
+              example: Wyndham Royal Garden
+              type: string
+            pickup_time:
+              description: The preferred pickup time (set in the company's local time).
+              example: 2024-10-08T09:00:00-0400
+              format: datetime
+              type:
+              - string
+              - 'null'
+            pk:
+              description: The lodging's unique ID.
+              example: 2314
+              format: int32
+              type: number
+            preferred_pickup:
+              $ref: '#/components/schemas/AVAILABILITY_LODGINGS_RESPONSE_JSON_SCHEMA/definitions/preferred_pickup'
+          required:
+          - pk
+          - name
+          - is_pickup_available
+          type: object
+        preferred_pickup:
+          additionalProperties: false
+          properties:
+            latitude:
+              description: The preferred pickup location's latitude.
+              example: '-157.85'
+              type:
+              - number
+              - 'null'
+            longitude:
+              description: The preferred pickup location's longitude.
+              example: '21.30'
+              type:
+              - number
+              - 'null'
+            map_url:
+              description: The google maps link of the preferred pickup location
+              example: https://goo.gl/maps/qW2THBcd5Pj8Ga8w6
+              format: uri
+              type: string
+            name:
+              description: The name of the preferred pickup location
+              example: Frankton Bus Shelter
+              type: string
+          required:
+          - name
+          - map_url
+          - longitude
+          - latitude
+          type: object
+      properties:
+        lodgings:
+          items:
+            $ref: '#/components/schemas/AVAILABILITY_LODGINGS_RESPONSE_JSON_SCHEMA/definitions/lodging'
+          type: array
+      required:
+      - lodgings
+      type: object
+    Error400:
+      allOf:
+      - $ref: '#/components/schemas/Error'
+      - type: object
+        properties:
+          code:
+            $ref: '#/components/schemas/Codes400'
+    Error404:
+      allOf:
+      - $ref: '#/components/schemas/Error'
+      - type: object
+        properties:
+          code:
+            $ref: '#/components/schemas/Codes404'
+    Error403:
+      allOf:
+      - $ref: '#/components/schemas/Error'
+      - type: object
+        properties:
+          code:
+            $ref: '#/components/schemas/Codes403'
+    Codes404:
+      type: string
+      enum:
+      - availability-pk-invalid
+      - booking-uuid-invalid
+      - company-shortname-invald
+      - customer-custom-field-value-pk-invalid
+      - item-pk-invalid
+  responses:
+    Forbidden:
+      description: Forbidden (see [Error Codes](#tag/Error-Codes))
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error403'
+    BadRequest:
+      description: Bad Request (see [Error Codes](#tag/Error-Codes))
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error400'
+    NotFound:
+      description: The specified resource was not found (see [Error Codes](#tag/Error-Codes))
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error404'
+    TooManyRequests:
+      description: Too Many Requests (see [Rate Limits](#tag/Getting-Started/Rate-Limits))
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    GatewayTimeout:
+      description: '[Gateway Timeout](#tag/Getting-Started/Timeouts)'
+  parameters:
+    X-FareHarbor-API-User:
+      name: X-FareHarbor-API-User
+      in: header
+      required: true
+      schema:
+        type: string
+      description: USER-KEY (Please log in to see your key)
+      example: USER-KEY
+    X-FareHarbor-API-App:
+      name: X-FareHarbor-API-App
+      in: header
+      required: true
+      schema:
+        type: string
+      description: APP-KEY (Please log in to see your key)
+      example: APP-KEY
+x-stoplight:
+  id: obltqlvi1ac1n

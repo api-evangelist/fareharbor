@@ -1,0 +1,1707 @@
+openapi: 3.2.0
+info:
+  title: FareHarbor Integration Center Items Endpoints API
+  version: '1.0'
+  contact:
+    email: support@fareharbor.com
+    name: FareHarbor
+    url: https://help.fareharbor.com/hc/
+  description: The Items endpoints in the FareHarbor API provide comprehensive access to detailed information about the various activities and services offered by a company.
+servers:
+- url: https://fareharbor.com/api/external/v1
+  description: production
+- url: https://demo.fareharbor.com/api/external/v1
+  description: demo
+tags:
+- name: Items Endpoints
+  description: The Items endpoints in the FareHarbor API provide comprehensive access to detailed information about the various activities and services offered by a company.
+paths:
+  /companies/<shortname>/items/:
+    get:
+      summary: Items
+      operationId: get-items
+      deprecated: false
+      tags:
+      - Items Endpoints
+      parameters:
+      - $ref: '#/components/parameters/X-FareHarbor-API-App'
+      - $ref: '#/components/parameters/X-FareHarbor-API-User'
+      - schema:
+          type: string
+          example: 'hawaiianadventures
+
+            '
+        name: shortname
+        in: path
+        required: true
+        description: '
+
+          A unique FareHarbor name assigned to each company when their Dashboard is created, used to access the company''s specific information.
+
+          '
+      - schema:
+          type: string
+          example: '[yes|no]
+
+            '
+        name: require_future_availabilities
+        in: query
+        required: false
+        description: '
+
+          Only include items that have future availabilities
+
+          '
+      - schema:
+          type: string
+          example: '[yes|no]
+
+            '
+        name: detailed
+        in: query
+        required: false
+        description: '
+
+          Include additional item details
+
+          '
+      - schema:
+          type: string
+          example: '[yes|no]
+
+            '
+        name: optimized
+        in: query
+        required: false
+        description: '
+
+          Include only minimal item details. Only applies when `detailed=no`.
+
+          '
+      responses:
+        '200':
+          description: '
+
+            Returns a list of items as for which you have permission to create bookings; again, note that this may include items that have no bookable availabilities.
+
+
+            Returns an array of `Item` objects.
+
+
+            When `require_future_availabilities` = yes is specified, only `Item` objects with bookable future availabilities are returned.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ITEMS_RESPONSE_JSON_SCHEMA'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '504':
+          $ref: '#/components/responses/GatewayTimeout'
+      description: 'The `/items` endpoint shows every bookable product (referred to as “items” in FareHarbor) on a specified supplier dashboard along with a summary of fields associated with each product. This endpoint includes product photos, locations, booking notes, and ticket options.
+
+
+        **Things to note:**
+
+        * API Partners use this endpoint to import product details and content so that they can build out the appropriate listing on their platform, taking an item’s specific PK (its unique ID) to connect it to the listing.
+
+        * If an item is not displayed through this endpoint, it might mean that it has been discontinued, replaced by another item on the list, or made private or inactive by the supplier.
+
+        * Routine calls to this endpoint are recommended to pull the most up to date list of items for an active supplier. If an item PK is no longer listed, it can be removed from future /availabilities/ requests to avoid ongoing errors for items that have been restricted.
+
+        * Using the `optimized` query parameter, affiliates can retrieve just basic information like name, location, and tags for all the items offered by their partner companies; then using the Item endpoint they can get full information for only the items they''re interested in.
+
+
+        To get additional information such as `effective_cancellation_policy` in the response, add the query parameter `?detailed=yes` to the end of the URL. Note that `effective_booking_cutoff` is not included in item responses; use the Availabilities endpoints with `?detailed=yes` to retrieve the booking cutoff for each availability.'
+  /companies/<shortname>/items/<item.pk>/:
+    get:
+      summary: Item
+      operationId: get-item
+      deprecated: false
+      tags:
+      - Items Endpoints
+      parameters:
+      - $ref: '#/components/parameters/X-FareHarbor-API-App'
+      - $ref: '#/components/parameters/X-FareHarbor-API-User'
+      - schema:
+          type: string
+          example: 'hawaiianadventures
+
+            '
+        name: shortname
+        in: path
+        required: true
+        description: '
+
+          A unique FareHarbor name assigned to each company when their Dashboard is created, used to access the company''s specific information.
+
+          '
+      - schema:
+          type: integer
+          example: '1867
+
+            '
+        name: item.pk
+        in: path
+        required: true
+        description: '
+
+          The unique numerical ID of the bookable product (referred to as `item` in FareHarbor).
+
+          '
+      - schema:
+          type: string
+          example: '[yes|no]
+
+            '
+        name: detailed
+        in: query
+        required: false
+        description: '
+
+          Include additional item details
+
+          '
+      responses:
+        '200':
+          description: '
+
+            Returns a detailed `Item` object.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ITEM_RESPONSE_JSON_SCHEMA'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '504':
+          $ref: '#/components/responses/GatewayTimeout'
+      description: 'The `/item` endpoint shows a single bookable product (referred to as an `Item` in FareHarbor) on a specified supplier dashboard along with a summary of fields associated with each product. This endpoint includes product photos, locations, booking notes, and ticket options.
+
+
+        To get additional information such as `effective_cancellation_policy` in the response, add the query parameter `?detailed=yes` to the end of the URL. Note that `effective_booking_cutoff` is not included in item responses; use the Availabilities endpoints with `?detailed=yes` to retrieve the booking cutoff for each availability.'
+components:
+  schemas:
+    ITEM_RESPONSE_JSON_SCHEMA:
+      $schema: http://json-schema.org/draft-04/schema#
+      additionalProperties: false
+      definitions:
+        address:
+          additionalProperties: false
+          properties:
+            city:
+              example: Honolulu
+              type: string
+            country:
+              example: US
+              type: string
+            postal_code:
+              example: '96821'
+              type: string
+            province:
+              example: HI
+              type: string
+            street:
+              example: 123 Wailupe Cir
+              type: string
+          required:
+          - city
+          - country
+          - postal_code
+          - province
+          - street
+          type: object
+        customer_prototype:
+          additionalProperties: false
+          properties:
+            display_name:
+              description: The customer prototype's display name.
+              example: Adult
+              type: string
+            maximum_age:
+              oneOf:
+              - example: 64
+                type: number
+              - type: 'null'
+            minimum_age:
+              oneOf:
+              - example: 18
+                type: number
+              - type: 'null'
+            note:
+              type: string
+            pk:
+              description: The customer prototype's unique ID.
+              example: 2522
+              format: int32
+              type: number
+            total:
+              description: The price of a single customer of this type.
+              example: 20000
+              type: number
+            total_including_tax:
+              description: The price of a single customer of this type plus applicable taxes.
+              example: 21550
+              type: number
+          required:
+          - pk
+          - display_name
+          - note
+          - minimum_age
+          - maximum_age
+          - total
+          type: object
+        faq_item:
+          additionalProperties: false
+          properties:
+            answer:
+              description: FAQ answer.
+              example: Absolutely, the more the merrier!
+              type: string
+            question:
+              description: FAQ question.
+              example: Can I bring a friend?
+              type: string
+          required:
+          - question
+          - answer
+          type: object
+        guided_language:
+          additionalProperties: false
+          properties:
+            language_code:
+              description: IETF BCP 47 language tag for the guided commentary.
+              example: en
+              type: string
+            type:
+              description: The delivery format of the guided commentary.
+              enum:
+              - in_person
+              - recorded_audio
+              example: in_person
+              type: string
+          required:
+          - type
+          - language_code
+          type: object
+        image:
+          additionalProperties: false
+          properties:
+            gallery:
+              description: The image's gallery name.
+              example: carousel
+              type: string
+            image_cdn_url:
+              description: A URL to the item's primary image.
+              example: https://d1a2dkr8rai8e2.cloudfront.net/api/file/rvybRyLWTgyV5w4xg42p/
+              format: uri
+              type: string
+            pk:
+              description: The image's unique ID.
+              example: 687
+              format: int32
+              type: number
+          required:
+          - pk
+          - gallery
+          - image_cdn_url
+          type: object
+        item:
+          properties:
+            cancellation_policy:
+              description: The item's cancellation policy.
+              example: A full refund will be issued if notice is given at least 24 hours before start time.
+              format: markdown
+              type: string
+            cancellation_policy_safe_html:
+              description: The item's cancellation policy.
+              example: <p>A full refund will be issued if notice is given at least 24 hours before start time.</p>
+              format: markdown
+              type: string
+            customer_prototypes:
+              description: An array of CustomerPrototype objects associated with the item.
+              items:
+                $ref: '#/components/schemas/ITEM_RESPONSE_JSON_SCHEMA/definitions/customer_prototype'
+              type: array
+            description:
+              description: The item's description.
+              example: We are conveniently located just 5 minutes from Waikiki and will arrange for pickup/dropoff at or near your hotel.
+              format: markdown
+              type: string
+            description_bullets:
+              description: An array containing plain-text descriptive bullet points for the item.
+              items:
+                example: Located just 5 minutes from Waikiki.
+                type: string
+              type: array
+            description_safe_html:
+              description: The item's description.
+              example: <p>We are conveniently located just 5 minutes from Waikiki and will arrange for pickup/dropoff at or near your hotel.</p>
+              format: markdown
+              type: string
+            description_text:
+              description: The item's plain-text description.
+              example: We are conveniently located just 5 minutes from Waikiki and will arrange for pickup/dropoff at or near your hotel.
+              type: string
+            effective_cancellation_policy:
+              additionalProperties: false
+              properties:
+                cutoff_hours_before:
+                  oneOf:
+                  - description: The number of hours for the hours-before-start and hours-before-midnight types.
+                    example: 24
+                    type: number
+                  - type: 'null'
+                type:
+                  description: The cancellation policy's type
+                  enum:
+                  - hours-before-start
+                  - hours-before-midnight
+                  - always
+                  - never
+                  example: hours-before-start
+                  type: string
+              required:
+              - type
+              - cutoff_hours_before
+              type: object
+            headline:
+              description: The item's headline.
+              example: Epic Jet Ski Tour
+              type: string
+            health_and_safety_policy:
+              description: The item's health and safety policy. It includes details and procedures related to specific activities for the item like the precautions being taken, equipment to bring, and any additional special rules.
+              example: Every lifejacket and seat is thoroughly disinfected both before and after each tour.  Hand sanitizer is available to all guests prior to boarding, during the tour, and after debarking the boat.
+              format: markdown
+              type: string
+            health_and_safety_policy_safe_html:
+              description: The item's health and safety policy. It includes details and procedures related to specific activities for the item like the precautions being taken, equipment to bring, and any additional special rules.
+              example: <p>Every lifejacket and seat is thoroughly disinfected both before and after each tour.  Hand sanitizer is available to all guests prior to boarding, during the tour, and after debarking the boat.</p>
+              format: markdown
+              type: string
+            image_cdn_url:
+              description: A URL to the item's primary image.
+              example: https://d1a2dkr8rai8e2.cloudfront.net/api/file/rvybRyLWTgyV5w4xg42p/
+              format: uri
+              type: string
+            images:
+              items:
+                $ref: '#/components/schemas/ITEM_RESPONSE_JSON_SCHEMA/definitions/image'
+              type: array
+            is_pickup_ever_available:
+              description: Indicates whether the item is configured to provide pickups.
+              example: true
+              type: boolean
+            location:
+              type: string
+            locations:
+              items:
+                $ref: '#/components/schemas/ITEM_RESPONSE_JSON_SCHEMA/definitions/location'
+              type: array
+            name:
+              description: The item's name.
+              example: Jet Ski Tour
+              type: string
+            pk:
+              description: The items's unique ID.
+              example: 1867
+              format: int32
+              type: number
+            primary_location:
+              oneOf:
+              - $ref: '#/components/schemas/ITEM_RESPONSE_JSON_SCHEMA/definitions/primary_location'
+              - type: 'null'
+            ratings:
+              $ref: '#/components/schemas/ITEM_RESPONSE_JSON_SCHEMA/definitions/ratings'
+            structured_description:
+              oneOf:
+              - $ref: '#/components/schemas/ITEM_RESPONSE_JSON_SCHEMA/definitions/structured_description'
+              - type: 'null'
+            tags:
+              items:
+                $ref: '#/components/schemas/ITEM_RESPONSE_JSON_SCHEMA/definitions/tag'
+              type: array
+            tax_percentage:
+              type: number
+          required:
+          - pk
+          - name
+          - tax_percentage
+          - headline
+          - booking_notes
+          - booking_notes_safe_html
+          - description
+          - description_safe_html
+          - description_text
+          - description_bullets
+          - cancellation_policy
+          - cancellation_policy_safe_html
+          - location
+          - locations
+          - primary_location
+          - image_cdn_url
+          - images
+          - customer_prototypes
+          - is_pickup_ever_available
+          - health_and_safety_policy
+          - health_and_safety_policy_safe_html
+          type: object
+        location:
+          additionalProperties: false
+          properties:
+            address:
+              $ref: '#/components/schemas/ITEM_RESPONSE_JSON_SCHEMA/definitions/address'
+              description: The location's physical address.
+            google_place_id:
+              description: The location's Google Place ID.
+              example: ChIJYZ4srGUSAHwRT1Da4amp3x
+              format: uuid
+              type: string
+            latitude:
+              description: The location's latitude.
+              oneOf:
+              - example: 90
+                type: number
+              - type: 'null'
+            longitude:
+              description: The location's longitude.
+              oneOf:
+              - example: 0
+                type: number
+              - type: 'null'
+            note:
+              description: A brief note about this location that can be displayed to end users.
+              example: Next to the blue fence.
+              format: markdown
+              type: string
+            note_safe_html:
+              description: A brief note about this location that can be displayed to end users.
+              example: <p>Next to the blue fence.</p>
+              format: markdown
+              type: string
+            pk:
+              description: The location's unique ID.
+              example: 234234
+              format: int32
+              type: number
+            tripadvisor_url:
+              description: The location's TripAdvisor URL.
+              example: https://www.tripadvisor.com/Attraction_Review-g60982-d184886-Reviews-Epic_Jet_Ski_Tour-Honolulu_Oahu_Hawaii.html
+              format: uri
+              type: string
+            type:
+              description: The location's type.
+              example: primary
+              type: string
+          required:
+          - pk
+          - type
+          - note
+          - note_safe_html
+          - address
+          - longitude
+          - latitude
+          - google_place_id
+          - tripadvisor_url
+          type: object
+        primary_location:
+          additionalProperties: false
+          properties:
+            address:
+              $ref: '#/components/schemas/ITEM_RESPONSE_JSON_SCHEMA/definitions/address'
+              description: The location's physical address.
+            google_place_id:
+              description: The location's Google Place ID.
+              example: ChIJYZ4srGUSAHwRT1Da4amp3x
+              format: uuid
+              type: string
+            latitude:
+              description: The location's latitude.
+              oneOf:
+              - example: '-157.85'
+                type: number
+              - type: 'null'
+            longitude:
+              description: The location's longitude.
+              oneOf:
+              - example: '21.30'
+                type: number
+              - type: 'null'
+            note:
+              description: A brief note about this location that can be displayed to end users.
+              example: Next to the blue fence.
+              format: markdown
+              type: string
+            note_safe_html:
+              description: A brief note about this location that can be displayed to end users.
+              example: <p>Next to the blue fence.</p>
+              format: markdown
+              type: string
+            pk:
+              description: The location's unique ID.
+              example: 234234
+              format: int32
+              type: number
+            tripadvisor_url:
+              description: The location's TripAdvisor URL.
+              example: https://www.tripadvisor.com/Attraction_Review-g60982-d184886-Reviews-Epic_Jet_Ski_Tour-Honolulu_Oahu_Hawaii.html
+              format: uri
+              type: string
+            type:
+              description: The location's type.
+              example: primary
+              type: string
+          required:
+          - pk
+          - type
+          - note
+          - note_safe_html
+          - address
+          - longitude
+          - latitude
+          - google_place_id
+          - tripadvisor_url
+          type: object
+        ratings:
+          properties:
+            google_reviews:
+              oneOf:
+              - properties:
+                  cached_at:
+                    format: date-time
+                    type: string
+                  rating:
+                    type: number
+                  user_ratings_total:
+                    type: integer
+                required:
+                - cached_at
+                - user_ratings_total
+                - rating
+                type: object
+              - type: 'null'
+            tripadvisor:
+              oneOf:
+              - properties:
+                  cached_at:
+                    format: date-time
+                    type: string
+                  geo_location_name:
+                    type: string
+                  num_reviews:
+                    type: integer
+                  ranking:
+                    type: integer
+                  ranking_out_of:
+                    type: integer
+                  ranking_string:
+                    type: string
+                  rating:
+                    type: number
+                  rating_image_url:
+                    type: string
+                required:
+                - cached_at
+                - num_reviews
+                - rating
+                - rating_image_url
+                - ranking
+                - ranking_out_of
+                - ranking_string
+                - geo_location_name
+                type: object
+              - type: 'null'
+          required:
+          - google_reviews
+          - tripadvisor
+          type: object
+        structured_description:
+          additionalProperties: false
+          properties:
+            accessibility:
+              description: Accessibility options that are available.
+              example: Stroller and wheelchair accessible.
+              type:
+              - string
+              - 'null'
+            cancellation_summary:
+              description: Summary of the cancellation policy.
+              example: A full refund will be issued if notice is given at least 24 hours before start time.
+              type:
+              - string
+              - 'null'
+            check_in_details:
+              description: Where and how to check-in.
+              example: Check in at the desk and scan QR code
+              format: markdown
+              type:
+              - string
+              - 'null'
+            description:
+              description: Description of the item and what customers can expect.
+              example: White water rafting followed by a picnic with included food and drinks.
+              format: markdown
+              type: string
+            disclaimers:
+              description: Limitations or potential events in which the operator is not responsible.
+              example: We cannot be held responsible if you get attacked by a bear.
+              format: markdown
+              type:
+              - string
+              - 'null'
+            duration:
+              description: Freeform text describing the duration.
+              example: 2 hours
+              type:
+              - string
+              - 'null'
+            extras:
+              description: Any equipment, add-ons or services that can be purchased.
+              example: '<p>The following can be purchased:</p><ul>
+
+                <li>Hats</li>
+
+                <li>Wetsuit rentals</li>
+
+                </ul>'
+              format: markdown
+              type:
+              - string
+              - 'null'
+            faq_items:
+              description: Answers to customers frequently asked questions.
+              items:
+                $ref: '#/components/schemas/ITEM_RESPONSE_JSON_SCHEMA/definitions/faq_item'
+              type: array
+            faqs:
+              description: Answers to customers frequently asked questions.
+              example: 'Q: Can I bring a friend?
+
+                A: Absolutely, the more the merrier!'
+              format: markdown
+              type:
+              - string
+              - 'null'
+            group_size:
+              description: Freeform text describing group size constraints.
+              example: Maximum 20 adults
+              type:
+              - string
+              - 'null'
+            guided_languages:
+              description: A list of guided language options available for the activity.
+              items:
+                $ref: '#/components/schemas/ITEM_RESPONSE_JSON_SCHEMA/definitions/guided_language'
+              type: array
+            highlights:
+              description: What makes this activitiy special.
+              example: Nature hike includes five different lookout spots with panoramoic views that are perfect for capturing memories with a photo.
+              format: markdown
+              type:
+              - string
+              - 'null'
+            itinerary:
+              description: Detailed agenda of what the customer can expect.
+              example: '<ol>
+
+                <li>Safety lesson</li>
+
+                <li>White water rafting</li>
+
+                <li>Lunch break</li>
+
+                <li>Nature hike</li>
+
+                </ol>'
+              format: markdown
+              type:
+              - string
+              - 'null'
+            max_age:
+              description: Maximum age restriction.
+              example: 65
+              type:
+              - number
+              - 'null'
+            meeting_point:
+              description: Freeform text describing address, city or landkmark of where to meet.
+              example: 123 Fake Street, Fakertown CA in front of the statue.
+              type:
+              - string
+              - 'null'
+            min_age:
+              description: Minimum age restriction.
+              example: 5
+              type:
+              - number
+              - 'null'
+            pricing:
+              description: Overview of prices and options offered.
+              example: '<p>Adult $20<br>
+
+                Child $10<br>
+
+                Children under 5 Free</p>'
+              format: markdown
+              type:
+              - string
+              - 'null'
+            restrictions:
+              description: Any restrictions that cannot be accommodated.
+              example: Must be at least 48in tall.
+              format: markdown
+              type:
+              - string
+              - 'null'
+            short_description:
+              description: A concise summary describing the activity.
+              example: White water rafting.
+              type:
+              - string
+              - 'null'
+            special_requirements:
+              description: Any requirements that should be known before booking.
+              example: Children under the age of 16 must be accompanied by an adult.
+              format: markdown
+              type:
+              - string
+              - 'null'
+            what_is_included:
+              description: What is included in the price of the activity.
+              example: '<ul>
+
+                <li>Water</li>
+
+                <li>Snacks</li>
+
+                </ul>'
+              format: markdown
+              type:
+              - string
+              - 'null'
+            what_is_included_items:
+              description: List of items that are included in the price of the activity.
+              items:
+                $ref: '#/components/schemas/ITEM_RESPONSE_JSON_SCHEMA/definitions/what_is_included_item'
+              type: array
+            what_is_not_included:
+              description: What is not included in the price of the activity.
+              example: '<ul>
+
+                <li>Towels</li>
+
+                <li>Wetsuit rentals</li>
+
+                </ul>'
+              format: markdown
+              type:
+              - string
+              - 'null'
+            what_is_not_included_items:
+              description: List of items that are not included in the price of the activity.
+              items:
+                $ref: '#/components/schemas/ITEM_RESPONSE_JSON_SCHEMA/definitions/what_is_not_included_item'
+              type: array
+            what_to_bring:
+              description: Any items the customer should bring.
+              example: '<ul>
+
+                <li>Swimsuit</li>
+
+                <li>Towel</li>
+
+                </ul>'
+              format: markdown
+              type:
+              - string
+              - 'null'
+            what_to_bring_items:
+              description: List of items that the customer should bring.
+              items:
+                $ref: '#/components/schemas/ITEM_RESPONSE_JSON_SCHEMA/definitions/what_to_bring_item'
+              type: array
+          type: object
+        tag:
+          additionalProperties: false
+          properties:
+            name:
+              description: The tag's display name.
+              example: Jet ski Tour
+              type: string
+            shortname:
+              description: The tag's short name. The short name is unique per company and is limited to lowercase letters (a-z), digits (0-9), and the dash character.
+              example: jet-ski-tour
+              type: string
+          required:
+          - name
+          type: object
+        what_is_included_item:
+          additionalProperties: false
+          properties:
+            value:
+              description: Included item text.
+              example: Water
+              type: string
+          required:
+          - value
+          type: object
+        what_is_not_included_item:
+          additionalProperties: false
+          properties:
+            value:
+              description: Not included item text.
+              example: Towels
+              type: string
+          required:
+          - value
+          type: object
+        what_to_bring_item:
+          additionalProperties: false
+          properties:
+            value:
+              description: What to bring item text.
+              example: Swimsuit
+              type: string
+          required:
+          - value
+          type: object
+      properties:
+        item:
+          $ref: '#/components/schemas/ITEM_RESPONSE_JSON_SCHEMA/definitions/item'
+      required:
+      - item
+      type: object
+    Codes403:
+      type: string
+      enum:
+      - app-invalid
+      - app-key-invalid
+      - invalid-checkin-permissions-error
+      - orderize-booking-uuid-invalid-error
+      - user-key-invalid
+    ITEMS_RESPONSE_JSON_SCHEMA:
+      $schema: http://json-schema.org/draft-04/schema#
+      additionalProperties: false
+      definitions:
+        address:
+          additionalProperties: false
+          properties:
+            city:
+              example: Honolulu
+              type: string
+            country:
+              example: US
+              type: string
+            postal_code:
+              example: '96821'
+              type: string
+            province:
+              example: HI
+              type: string
+            street:
+              example: 123 Wailupe Cir
+              type: string
+          required:
+          - city
+          - country
+          - postal_code
+          - province
+          - street
+          type: object
+        customer_prototype:
+          additionalProperties: false
+          properties:
+            display_name:
+              description: The customer prototype's display name.
+              example: Adult
+              type: string
+            maximum_age:
+              oneOf:
+              - example: 64
+                type: number
+              - type: 'null'
+            minimum_age:
+              oneOf:
+              - example: 18
+                type: number
+              - type: 'null'
+            note:
+              type: string
+            pk:
+              description: The customer prototype's unique ID.
+              example: 2522
+              format: int32
+              type: number
+            total:
+              description: The price of a single customer of this type.
+              example: 20000
+              type: number
+            total_including_tax:
+              description: The price of a single customer of this type plus applicable taxes.
+              example: 21550
+              type: number
+          required:
+          - pk
+          - display_name
+          - note
+          - minimum_age
+          - maximum_age
+          - total
+          type: object
+        faq_item:
+          additionalProperties: false
+          properties:
+            answer:
+              description: FAQ answer.
+              example: Absolutely, the more the merrier!
+              type: string
+            question:
+              description: FAQ question.
+              example: Can I bring a friend?
+              type: string
+          required:
+          - question
+          - answer
+          type: object
+        guided_language:
+          additionalProperties: false
+          properties:
+            language_code:
+              description: IETF BCP 47 language tag for the guided commentary.
+              example: en
+              type: string
+            type:
+              description: The delivery format of the guided commentary.
+              enum:
+              - in_person
+              - recorded_audio
+              example: in_person
+              type: string
+          required:
+          - type
+          - language_code
+          type: object
+        image:
+          additionalProperties: false
+          properties:
+            gallery:
+              description: The image's gallery name.
+              example: carousel
+              type: string
+            image_cdn_url:
+              description: A URL to the item's primary image.
+              example: https://d1a2dkr8rai8e2.cloudfront.net/api/file/rvybRyLWTgyV5w4xg42p/
+              format: uri
+              type: string
+            pk:
+              description: The image's unique ID.
+              example: 687
+              format: int32
+              type: number
+          required:
+          - pk
+          - gallery
+          - image_cdn_url
+          type: object
+        item:
+          properties:
+            cancellation_policy:
+              description: The item's cancellation policy.
+              example: A full refund will be issued if notice is given at least 24 hours before start time.
+              format: markdown
+              type: string
+            cancellation_policy_safe_html:
+              description: The item's cancellation policy.
+              example: <p>A full refund will be issued if notice is given at least 24 hours before start time.</p>
+              format: markdown
+              type: string
+            customer_prototypes:
+              description: An array of CustomerPrototype objects associated with the item.
+              items:
+                $ref: '#/components/schemas/ITEMS_RESPONSE_JSON_SCHEMA/definitions/customer_prototype'
+              type: array
+            description:
+              description: The item's description.
+              example: We are conveniently located just 5 minutes from Waikiki and will arrange for pickup/dropoff at or near your hotel.
+              format: markdown
+              type: string
+            description_bullets:
+              description: An array containing plain-text descriptive bullet points for the item.
+              items:
+                example: Located just 5 minutes from Waikiki.
+                type: string
+              type: array
+            description_safe_html:
+              description: The item's description.
+              example: <p>We are conveniently located just 5 minutes from Waikiki and will arrange for pickup/dropoff at or near your hotel.</p>
+              format: markdown
+              type: string
+            description_text:
+              description: The item's plain-text description.
+              example: We are conveniently located just 5 minutes from Waikiki and will arrange for pickup/dropoff at or near your hotel.
+              type: string
+            effective_cancellation_policy:
+              additionalProperties: false
+              properties:
+                cutoff_hours_before:
+                  oneOf:
+                  - description: The number of hours for the hours-before-start and hours-before-midnight types.
+                    example: 24
+                    type: number
+                  - type: 'null'
+                type:
+                  description: The cancellation policy's type
+                  enum:
+                  - hours-before-start
+                  - hours-before-midnight
+                  - always
+                  - never
+                  example: hours-before-start
+                  type: string
+              required:
+              - type
+              - cutoff_hours_before
+              type: object
+            headline:
+              description: The item's headline.
+              example: Epic Jet Ski Tour
+              type: string
+            health_and_safety_policy:
+              description: The item's health and safety policy. It includes details and procedures related to specific activities for the item like the precautions being taken, equipment to bring, and any additional special rules.
+              example: Every lifejacket and seat is thoroughly disinfected both before and after each tour.  Hand sanitizer is available to all guests prior to boarding, during the tour, and after debarking the boat.
+              format: markdown
+              type: string
+            health_and_safety_policy_safe_html:
+              description: The item's health and safety policy. It includes details and procedures related to specific activities for the item like the precautions being taken, equipment to bring, and any additional special rules.
+              example: <p>Every lifejacket and seat is thoroughly disinfected both before and after each tour.  Hand sanitizer is available to all guests prior to boarding, during the tour, and after debarking the boat.</p>
+              format: markdown
+              type: string
+            image_cdn_url:
+              description: A URL to the item's primary image.
+              example: https://d1a2dkr8rai8e2.cloudfront.net/api/file/rvybRyLWTgyV5w4xg42p/
+              format: uri
+              type: string
+            images:
+              items:
+                $ref: '#/components/schemas/ITEMS_RESPONSE_JSON_SCHEMA/definitions/image'
+              type: array
+            is_pickup_ever_available:
+              description: Indicates whether the item is configured to provide pickups.
+              example: true
+              type: boolean
+            location:
+              type: string
+            locations:
+              items:
+                $ref: '#/components/schemas/ITEMS_RESPONSE_JSON_SCHEMA/definitions/location'
+              type: array
+            name:
+              description: The item's name.
+              example: Jet Ski Tour
+              type: string
+            pk:
+              description: The items's unique ID.
+              example: 1867
+              format: int32
+              type: number
+            primary_location:
+              oneOf:
+              - $ref: '#/components/schemas/ITEMS_RESPONSE_JSON_SCHEMA/definitions/primary_location'
+              - type: 'null'
+            ratings:
+              $ref: '#/components/schemas/ITEMS_RESPONSE_JSON_SCHEMA/definitions/ratings'
+            structured_description:
+              oneOf:
+              - $ref: '#/components/schemas/ITEMS_RESPONSE_JSON_SCHEMA/definitions/structured_description'
+              - type: 'null'
+            tags:
+              items:
+                $ref: '#/components/schemas/ITEMS_RESPONSE_JSON_SCHEMA/definitions/tag'
+              type: array
+            tax_percentage:
+              type: number
+          required:
+          - pk
+          - name
+          - tax_percentage
+          - headline
+          - booking_notes
+          - booking_notes_safe_html
+          - description
+          - description_safe_html
+          - description_text
+          - description_bullets
+          - cancellation_policy
+          - cancellation_policy_safe_html
+          - location
+          - locations
+          - primary_location
+          - image_cdn_url
+          - images
+          - customer_prototypes
+          - is_pickup_ever_available
+          - health_and_safety_policy
+          - health_and_safety_policy_safe_html
+          type: object
+        location:
+          additionalProperties: false
+          properties:
+            address:
+              $ref: '#/components/schemas/ITEMS_RESPONSE_JSON_SCHEMA/definitions/address'
+              description: The location's physical address.
+            google_place_id:
+              description: The location's Google Place ID.
+              example: ChIJYZ4srGUSAHwRT1Da4amp3x
+              format: uuid
+              type: string
+            latitude:
+              description: The location's latitude.
+              oneOf:
+              - example: 90
+                type: number
+              - type: 'null'
+            longitude:
+              description: The location's longitude.
+              oneOf:
+              - example: 0
+                type: number
+              - type: 'null'
+            note:
+              description: A brief note about this location that can be displayed to end users.
+              example: Next to the blue fence.
+              format: markdown
+              type: string
+            note_safe_html:
+              description: A brief note about this location that can be displayed to end users.
+              example: <p>Next to the blue fence.</p>
+              format: markdown
+              type: string
+            pk:
+              description: The location's unique ID.
+              example: 234234
+              format: int32
+              type: number
+            tripadvisor_url:
+              description: The location's TripAdvisor URL.
+              example: https://www.tripadvisor.com/Attraction_Review-g60982-d184886-Reviews-Epic_Jet_Ski_Tour-Honolulu_Oahu_Hawaii.html
+              format: uri
+              type: string
+            type:
+              description: The location's type.
+              enum:
+              - pre
+              - primary
+              - start
+              - end
+              example: primary
+              type: string
+          required:
+          - pk
+          - type
+          - note
+          - note_safe_html
+          - address
+          - longitude
+          - latitude
+          - google_place_id
+          - tripadvisor_url
+          type: object
+        primary_location:
+          additionalProperties: false
+          properties:
+            address:
+              $ref: '#/components/schemas/ITEMS_RESPONSE_JSON_SCHEMA/definitions/address'
+              description: The location's physical address.
+            google_place_id:
+              description: The location's Google Place ID.
+              example: ChIJYZ4srGUSAHwRT1Da4amp3x
+              format: uuid
+              type: string
+            latitude:
+              description: The location's latitude.
+              oneOf:
+              - example: '-157.85'
+                type: number
+              - type: 'null'
+            longitude:
+              description: The location's longitude.
+              oneOf:
+              - example: '21.30'
+                type: number
+              - type: 'null'
+            note:
+              description: A brief note about this location that can be displayed to end users.
+              example: Next to the blue fence.
+              format: markdown
+              type: string
+            note_safe_html:
+              description: A brief note about this location that can be displayed to end users.
+              example: <p>Next to the blue fence.</p>
+              format: markdown
+              type: string
+            pk:
+              description: The location's unique ID.
+              example: 234234
+              format: int32
+              type: number
+            tripadvisor_url:
+              description: The location's TripAdvisor URL.
+              example: https://www.tripadvisor.com/Attraction_Review-g60982-d184886-Reviews-Epic_Jet_Ski_Tour-Honolulu_Oahu_Hawaii.html
+              format: uri
+              type: string
+            type:
+              description: The location's type.
+              example: primary
+              type: string
+          required:
+          - pk
+          - type
+          - note
+          - note_safe_html
+          - address
+          - longitude
+          - latitude
+          - google_place_id
+          - tripadvisor_url
+          type: object
+        ratings:
+          properties:
+            google_reviews:
+              oneOf:
+              - properties:
+                  cached_at:
+                    format: date-time
+                    type: string
+                  rating:
+                    type: number
+                  user_ratings_total:
+                    type: integer
+                required:
+                - cached_at
+                - user_ratings_total
+                - rating
+                type: object
+              - type: 'null'
+            tripadvisor:
+              oneOf:
+              - properties:
+                  cached_at:
+                    format: date-time
+                    type: string
+                  geo_location_name:
+                    type: string
+                  num_reviews:
+                    type: integer
+                  ranking:
+                    type: integer
+                  ranking_out_of:
+                    type: integer
+                  ranking_string:
+                    type: string
+                  rating:
+                    type: number
+                  rating_image_url:
+                    type: string
+                required:
+                - cached_at
+                - num_reviews
+                - rating
+                - rating_image_url
+                - ranking
+                - ranking_out_of
+                - ranking_string
+                - geo_location_name
+                type: object
+              - type: 'null'
+          required:
+          - google_reviews
+          - tripadvisor
+          type: object
+        structured_description:
+          additionalProperties: false
+          properties:
+            accessibility:
+              description: Accessibility options that are available.
+              example: Stroller and wheelchair accessible.
+              type:
+              - string
+              - 'null'
+            cancellation_summary:
+              description: Summary of the cancellation policy.
+              example: A full refund will be issued if notice is given at least 24 hours before start time.
+              type:
+              - string
+              - 'null'
+            check_in_details:
+              description: Where and how to check-in.
+              example: Check in at the desk and scan QR code
+              format: markdown
+              type:
+              - string
+              - 'null'
+            description:
+              description: Description of the item and what customers can expect.
+              example: White water rafting followed by a picnic with included food and drinks.
+              format: markdown
+              type: string
+            disclaimers:
+              description: Limitations or potential events in which the operator is not responsible.
+              example: We cannot be held responsible if you get attacked by a bear.
+              format: markdown
+              type:
+              - string
+              - 'null'
+            duration:
+              description: Freeform text describing the duration.
+              example: 2 hours
+              type:
+              - string
+              - 'null'
+            extras:
+              description: Any equipment, add-ons or services that can be purchased.
+              example: '<p>The following can be purchased:</p><ul>
+
+                <li>Hats</li>
+
+                <li>Wetsuit rentals</li>
+
+                </ul>'
+              format: markdown
+              type:
+              - string
+              - 'null'
+            faq_items:
+              description: Answers to customers frequently asked questions.
+              items:
+                $ref: '#/components/schemas/ITEMS_RESPONSE_JSON_SCHEMA/definitions/faq_item'
+              type: array
+            faqs:
+              description: Answers to customers frequently asked questions.
+              example: 'Q: Can I bring a friend?
+
+                A: Absolutely, the more the merrier!'
+              format: markdown
+              type:
+              - string
+              - 'null'
+            group_size:
+              description: Freeform text describing group size constraints.
+              example: Maximum 20 adults
+              type:
+              - string
+              - 'null'
+            guided_languages:
+              description: A list of guided language options available for the activity.
+              items:
+                $ref: '#/components/schemas/ITEMS_RESPONSE_JSON_SCHEMA/definitions/guided_language'
+              type: array
+            highlights:
+              description: What makes this activitiy special.
+              example: Nature hike includes five different lookout spots with panoramoic views that are perfect for capturing memories with a photo.
+              format: markdown
+              type:
+              - string
+              - 'null'
+            itinerary:
+              description: Detailed agenda of what the customer can expect.
+              example: '<ol>
+
+                <li>Safety lesson</li>
+
+                <li>White water rafting</li>
+
+                <li>Lunch break</li>
+
+                <li>Nature hike</li>
+
+                </ol>'
+              format: markdown
+              type:
+              - string
+              - 'null'
+            max_age:
+              description: Maximum age restriction.
+              example: 65
+              type:
+              - number
+              - 'null'
+            meeting_point:
+              description: Freeform text describing address, city or landkmark of where to meet.
+              example: 123 Fake Street, Fakertown CA in front of the statue.
+              type:
+              - string
+              - 'null'
+            min_age:
+              description: Minimum age restriction.
+              example: 5
+              type:
+              - number
+              - 'null'
+            pricing:
+              description: Overview of prices and options offered.
+              example: '<p>Adult $20<br>
+
+                Child $10<br>
+
+                Children under 5 Free</p>'
+              format: markdown
+              type:
+              - string
+              - 'null'
+            restrictions:
+              description: Any restrictions that cannot be accommodated.
+              example: Must be at least 48in tall.
+              format: markdown
+              type:
+              - string
+              - 'null'
+            short_description:
+              description: A concise summary describing the activity.
+              example: White water rafting.
+              type:
+              - string
+              - 'null'
+            special_requirements:
+              description: Any requirements that should be known before booking.
+              example: Children under the age of 16 must be accompanied by an adult.
+              format: markdown
+              type:
+              - string
+              - 'null'
+            what_is_included:
+              description: What is included in the price of the activity.
+              example: '<ul>
+
+                <li>Water</li>
+
+                <li>Snacks</li>
+
+                </ul>'
+              format: markdown
+              type:
+              - string
+              - 'null'
+            what_is_included_items:
+              description: List of items that are included in the price of the activity.
+              items:
+                $ref: '#/components/schemas/ITEMS_RESPONSE_JSON_SCHEMA/definitions/what_is_included_item'
+              type: array
+            what_is_not_included:
+              description: What is not included in the price of the activity.
+              example: '<ul>
+
+                <li>Towels</li>
+
+                <li>Wetsuit rentals</li>
+
+                </ul>'
+              format: markdown
+              type:
+              - string
+              - 'null'
+            what_is_not_included_items:
+              description: List of items that are not included in the price of the activity.
+              items:
+                $ref: '#/components/schemas/ITEMS_RESPONSE_JSON_SCHEMA/definitions/what_is_not_included_item'
+              type: array
+            what_to_bring:
+              description: Any items the customer should bring.
+              example: '<ul>
+
+                <li>Swimsuit</li>
+
+                <li>Towel</li>
+
+                </ul>'
+              format: markdown
+              type:
+              - string
+              - 'null'
+            what_to_bring_items:
+              description: List of items that the customer should bring.
+              items:
+                $ref: '#/components/schemas/ITEMS_RESPONSE_JSON_SCHEMA/definitions/what_to_bring_item'
+              type: array
+          type: object
+        tag:
+          additionalProperties: false
+          properties:
+            name:
+              description: The tag's display name.
+              example: Jet ski Tour
+              type: string
+            shortname:
+              description: The tag's short name. The short name is unique per company and is limited to lowercase letters (a-z), digits (0-9), and the dash character.
+              example: jet-ski-tour
+              type: string
+          required:
+          - name
+          type: object
+        what_is_included_item:
+          additionalProperties: false
+          properties:
+            value:
+              description: Included item text.
+              example: Water
+              type: string
+          required:
+          - value
+          type: object
+        what_is_not_included_item:
+          additionalProperties: false
+          properties:
+            value:
+              description: Not included item text.
+              example: Towels
+              type: string
+          required:
+          - value
+          type: object
+        what_to_bring_item:
+          additionalProperties: false
+          properties:
+            value:
+              description: What to bring item text.
+              example: Swimsuit
+              type: string
+          required:
+          - value
+          type: object
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/ITEMS_RESPONSE_JSON_SCHEMA/definitions/item'
+          type: array
+      required:
+      - items
+      type: object
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      required:
+      - code
+      - message
+    Codes400:
+      type: string
+      enum:
+      - availability-date-range-invalid
+      - book-data-parse-error
+      - book-data-validation-error
+      - bookability-error
+      - booking-cancellation-error
+      - booking-creation-error
+      - booking-custom-field-value-creation-error
+      - booking-custom-field-values-invalid
+      - booking-note-error
+      - contact-error
+      - content-type-invalid-error
+      - customer-custom-field-value-creation-error
+      - customer-custom-field-value-update-error
+      - customer-custom-field-values-invalid
+      - customer-type-rates-invalid
+      - invalid-checkin-already-checked-in
+      - invalid-checkin-customer
+      - invalid-checkin-status-error
+      - invalid-qr-code-error
+      - key-missing
+      - lodging-pk-invalid
+      - no-default-checkin-status-error
+      - orderize-booking-uuid-invalid-error
+      - payment-error
+      - rebooking-uuid-invalid-error
+      - resource-bookability-error
+      - voucher-number-invalid
+      - voucher-number-not-specified
+    Error400:
+      allOf:
+      - $ref: '#/components/schemas/Error'
+      - type: object
+        properties:
+          code:
+            $ref: '#/components/schemas/Codes400'
+    Error403:
+      allOf:
+      - $ref: '#/components/schemas/Error'
+      - type: object
+        properties:
+          code:
+            $ref: '#/components/schemas/Codes403'
+    Error404:
+      allOf:
+      - $ref: '#/components/schemas/Error'
+      - type: object
+        properties:
+          code:
+            $ref: '#/components/schemas/Codes404'
+    Codes404:
+      type: string
+      enum:
+      - availability-pk-invalid
+      - booking-uuid-invalid
+      - company-shortname-invald
+      - customer-custom-field-value-pk-invalid
+      - item-pk-invalid
+  responses:
+    Forbidden:
+      description: Forbidden (see [Error Codes](#tag/Error-Codes))
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error403'
+    BadRequest:
+      description: Bad Request (see [Error Codes](#tag/Error-Codes))
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error400'
+    NotFound:
+      description: The specified resource was not found (see [Error Codes](#tag/Error-Codes))
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error404'
+    TooManyRequests:
+      description: Too Many Requests (see [Rate Limits](#tag/Getting-Started/Rate-Limits))
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    GatewayTimeout:
+      description: '[Gateway Timeout](#tag/Getting-Started/Timeouts)'
+  parameters:
+    X-FareHarbor-API-User:
+      name: X-FareHarbor-API-User
+      in: header
+      required: true
+      schema:
+        type: string
+      description: USER-KEY (Please log in to see your key)
+      example: USER-KEY
+    X-FareHarbor-API-App:
+      name: X-FareHarbor-API-App
+      in: header
+      required: true
+      schema:
+        type: string
+      description: APP-KEY (Please log in to see your key)
+      example: APP-KEY
+x-stoplight:
+  id: obltqlvi1ac1n

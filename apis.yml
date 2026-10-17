@@ -78,14 +78,422 @@ apis:
   humanURL: https://developer.fareharbor.com/api/external/v1/
   baseURL: https://fareharbor.com/api/external/v1
   aid: fareharbor:fareharbor-integration-center
-- aid: fareharbor:fareharbor-integration-center-home-api
-  name: FareHarbor Integration Center Home API
-  description: 'FareHarbor Integration Center Home API: 31 operations.'
+- aid: fareharbor:fareharbor-availabilities-endpoints-api
+  name: FareHarbor Availabilities Endpoints API
+  description: >-
+    The `/availabilities` endpoint is used to retrieve all bookable availabilities for a single item within
+    a specified date or date range. The request pulls availability data from the Item calendar of the
+    FareHarbor dashboard. Each individual availability shows a unique PK, which is then used during the
+    booking process, as well as a summary of its related settings, including start/end times, capacity,
+    valid ticket options and their prices, custom fields, party size restrictions, and more.
+
+
+    Here the API Partner can gather the relevant PKs that they need to create their booking, and they
+    can use the data on the API to connect and display the bookable dates and times on the product calendars
+    on their end. The more frequently they hit this endpoint, the more accurate their product calendars
+    will be in respect to FareHarbor.
+
+
+    Online Booking Status: Each availability has an online booking status, which controls how it can be
+    viewed and booked by online customers. In most cases, the status will be set to `auto`, which automatically
+    prevents online customers from booking after a certain time cutoff, based on [item’s settings](https://help.fareharbor.com/dashboard/items/online-booking-settings/).
+
+
+    For a complete description of these statuses and their meaning, go to [https://help.fareharbor.com/dashboard/availabilities/updating/online-booking-status/](https://help.fareharbor.com/dashboard/availabilities/updating/online-booking-status/).
+
+
+    Booking Cutoff: The `effective_booking_cutoff` field exposes the last possible moment bookings are
+    allowed for an availability, accounting for the item's online bookability settings and any custom
+    booking restrictions. This field is only included in the response when `?detailed=yes` is passed on
+    the request.
+
+
+    **Things to Note:**
+
+
+    *   API Partners may pull availability at whatever intervals they want, as long as they fall within
+    the rate limit, but we generally recommend that, at minimum, partners pull availability for the next
+    90 days (in 7 day segments) once per week, for the next  30 days once per day, and for the current
+    day every 2 hours.
+
+
+    *   The standard availability endpoints will return the fully detailed availability, including custom
+    field information and headlines. If you are not connecting to custom fields, you can include `/minimal`
+    in your request to exclude custom field information from the response. This can also help with performance
+    speed.
+
+
+    *   We are constantly monitoring our API and optimizing for performance. Depending on the complexity
+    of certain products and how they are configured in our system, availability requests for some products
+    may take longer than others. In these cases it helps to reduce the date range being pulled.
+
+    * Availability Restrictions:
+        * FareHarbor supports optional party size booking restrictions at the availability level. The
+    following properties will be included for each availability provided by the availability endpoints
+    to indicate applicable restrictions:
+            * `minimum_party_size`: minimum number of customers currently allowed on a booking.
+            * `maximum_party_size`: maximum number of customers currently allowed on a booking.
+        * Note: a number value will be provided for enabled restrictions; a null value will be provided
+    for restrictions that are not enabled.
+    * Customer Type Rate Restrictions:
+        * FareHarbor also supports optional party size booking restrictions at the customer type rate
+    level. The following properties will be included for each customer type rate provided by availability
+    endpoints to indicate applicable restrictions:
+            * `minimum_party_size`: minimum number of the associated customer type allowed in a party.
+            * `maximum_party_size`: maximum number of the associated customer type allowed in a party.
+        * Note: the minimum_party_size restriction only applies when at least one customer of the associated
+    customer type is in the party.
+        * Note: a number value will be provided for enabled restrictions; a null value will be provided
+    for restrictions that are not enabled.
+    * Availability start and end times are in the company's local timezone.  When providing a date or
+    date range for availabilities, those dates are taken as local time of the company.
   humanURL: https://developer.fareharbor.com/api/external/v1/
   baseURL: https://fareharbor.com/api/external/v1
+  tags:
+  - Availabilities Endpoints
   properties:
   - type: OpenAPI
-    url: openapi/_original/fareharbor-home-openapi.yml
+    url: openapi/fareharbor-availabilities-endpoints-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/fareharbor-booking-with-resource-uses-response-json-schema-schema.json
+  - type: JSONSchema
+    url: json-schema/fareharbor-booking-with-payments-response-json-schema-schema.json
+  - type: JSONSchema
+    url: json-schema/fareharbor-booking-response-json-schema-schema.json
+  - type: JSONSchema
+    url: json-schema/fareharbor-items-response-json-schema-schema.json
+  - type: JSONSchema
+    url: json-schema/fareharbor-item-response-json-schema-schema.json
+  - type: JSONSchema
+    url: json-schema/fareharbor-availability-response-json-schema-schema.json
+- aid: fareharbor:fareharbor-bookings-endpoints-api
+  name: FareHarbor Bookings Endpoints API
+  description: >-
+    The bookings endpoints in the FareHarbor API provide comprehensive functionalities for managing reservations
+    efficiently. These endpoints enable developers and business owners to integrate and automate booking-related
+    operations seamlessly into their services. Through these endpoints, users can create, retrieve, update,
+    and cancel bookings directly through the API.
+
+
+    Key functionalities offered by the bookings endpoints include:
+
+    * **Creating Bookings:** Enables the creation of new bookings, allowing customers to reserve spots
+    for tours and activities directly through third-party applications.
+
+    * **Retrieving Bookings:** Offers the ability to query and retrieve details of existing bookings,
+    providing essential information like booking status, customer details, and payment information.
+
+    * **Updating Bookings:** Supports modifications to existing bookings, which is crucial for managing
+    changes in customer plans.
+
+    * **Cancelling Bookings:** Allows for the cancellation of bookings, helping to manage availability
+    and customer expectations effectively.
+
+
+    These endpoints are designed to foster a more connected experience between tour and activity operators
+    and their customers by simplifying the booking process through automation and integration. This ensures
+    that businesses can focus more on providing an exceptional service experience, while the logistical
+    aspects of bookings are handled efficiently through the API.
+
+
+    **Things to Note:**
+
+    * Orders:
+        * Orders are a way of grouping collections of bookings so that they can be created or cancelled
+    as a block.
+        * A booking can belong to an order, but it doesn't have to. An order can include any number of
+    bookings.
+        * When `order` is not `null`, `order` is an object that provides the following property:
+            * `display_id`: `string`  - A unique identifier for the order.
+        * See [Orders](#tag/Orders) to learn more about creating and retrieving orders.
+  humanURL: https://developer.fareharbor.com/api/external/v1/
+  baseURL: https://fareharbor.com/api/external/v1
+  tags:
+  - Bookings Endpoints
+  properties:
+  - type: OpenAPI
+    url: openapi/fareharbor-bookings-endpoints-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/fareharbor-booking-with-resource-uses-response-json-schema-schema.json
+  - type: JSONSchema
+    url: json-schema/fareharbor-booking-with-payments-response-json-schema-schema.json
+  - type: JSONSchema
+    url: json-schema/fareharbor-booking-response-json-schema-schema.json
+  - type: JSONSchema
+    url: json-schema/fareharbor-items-response-json-schema-schema.json
+  - type: JSONSchema
+    url: json-schema/fareharbor-item-response-json-schema-schema.json
+  - type: JSONSchema
+    url: json-schema/fareharbor-availability-response-json-schema-schema.json
+- aid: fareharbor:fareharbor-checkin-endpoints-api
+  name: FareHarbor Checkin Endpoints API
+  description: >-
+    The check-in endpoints in the FareHarbor API provide essential capabilities for managing the check-in
+    processes efficiently and seamlessly. These endpoints are crucial for businesses in the tour and activity
+    sector, as they allow for real-time, automated check-in operations through integrated systems.
+
+
+    Key functionalities offered by the check-in endpoints include:
+
+
+    * **Checking In Participants:** Automates the process of marking customers as present for an activity,
+    streamlining operations and reducing manual errors.
+
+    * **Listing Check-In Status:** Provides the ability to pull information on who has checked in and
+    who hasn't, ensuring staff are well-informed and can make necessary arrangements.
+
+    * **Updating Check-In Records:** Supports modifications to check-in records, which can be crucial
+    for managing late arrivals or last-minute changes in customer plans.
+
+    * **Integration with Scanning Devices:** Some endpoints are designed to work with barcode or QR code
+    scanning devices to facilitate faster and more reliable check-in procedures.
+
+
+    Integrating these check-in endpoints into business systems helps in providing a smoother and more
+    efficient customer service experience, minimizing wait times, and allowing staff to focus on customer
+    interaction rather than manual check-in processes. By leveraging these APIs, businesses can enhance
+    operational efficiency and improve customer satisfaction.
+  humanURL: https://developer.fareharbor.com/api/external/v1/
+  baseURL: https://fareharbor.com/api/external/v1
+  tags:
+  - Checkin Endpoints
+  properties:
+  - type: OpenAPI
+    url: openapi/fareharbor-checkin-endpoints-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/fareharbor-booking-with-resource-uses-response-json-schema-schema.json
+  - type: JSONSchema
+    url: json-schema/fareharbor-booking-with-payments-response-json-schema-schema.json
+  - type: JSONSchema
+    url: json-schema/fareharbor-booking-response-json-schema-schema.json
+  - type: JSONSchema
+    url: json-schema/fareharbor-items-response-json-schema-schema.json
+  - type: JSONSchema
+    url: json-schema/fareharbor-item-response-json-schema-schema.json
+  - type: JSONSchema
+    url: json-schema/fareharbor-availability-response-json-schema-schema.json
+- aid: fareharbor:fareharbor-company-endpoints-api
+  name: FareHarbor Company Endpoints API
+  description: >-
+    The Company endpoints in the FareHarbor API provide robust functionalities for accessing and managing
+    information related to companies that offer tours and activities. These endpoints are crucial for
+    developers who need to integrate company-specific data into their applications, ensuring that users
+    have up-to-date and detailed information about the services they are interested in.
+
+
+    Key functionalities offered by the Company endpoints include:
+
+    * **Retrieving Company Information:** Enables access to detailed information about a company, including
+    its description, contact details, and available locations. This is vital for providing comprehensive
+    data to users looking to book activities or tours.
+
+    * **Listing Services Offered:** Allows for the enumeration of all services and activities offered
+    by a company, which is essential for users to find and book relevant offerings.
+
+    * **Accessing Operational Details:** Provides insights into the operational aspects of a company,
+    such as business hours, peak times, and special events, assisting in better planning and resource
+    management.
+
+
+    These endpoints serve as a critical connection between companies in the tour and activity sectors
+    and their potential customers, facilitating seamless information sharing and service discovery. By
+    leveraging these API endpoints, businesses can offer enriched, detailed, and updated data to users,
+    which enhances transparency and trust while promoting ease of access to company offerings.
+  humanURL: https://developer.fareharbor.com/api/external/v1/
+  baseURL: https://fareharbor.com/api/external/v1
+  tags:
+  - Company Endpoints
+  properties:
+  - type: OpenAPI
+    url: openapi/fareharbor-company-endpoints-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/fareharbor-booking-with-resource-uses-response-json-schema-schema.json
+  - type: JSONSchema
+    url: json-schema/fareharbor-booking-with-payments-response-json-schema-schema.json
+  - type: JSONSchema
+    url: json-schema/fareharbor-booking-response-json-schema-schema.json
+  - type: JSONSchema
+    url: json-schema/fareharbor-items-response-json-schema-schema.json
+  - type: JSONSchema
+    url: json-schema/fareharbor-item-response-json-schema-schema.json
+  - type: JSONSchema
+    url: json-schema/fareharbor-availability-response-json-schema-schema.json
+- aid: fareharbor:fareharbor-crew-members-endpoints-api
+  name: FareHarbor Crew Members Endpoints API
+  description: >-
+    The Crew Members endpoints in the FareHarbor API provide comprehensive functionality for managing
+    crew assignments on availabilities. These endpoints allow you to assign, update, and remove crew members
+    from specific availability slots, ensuring proper staffing and crew coordination for tours and activities.
+
+
+    Key functionalities offered by the Crew Members endpoints include:
+
+    * **Listing Crew Members:** Retrieve all crew members currently assigned to a specific availability,
+    including their roles and notes.
+
+    * **Adding Crew Members:** Assign users to availabilities as crew members with optional role assignments
+    and notes.
+
+    * **Updating Crew Members:** Modify existing crew member assignments, specifically changing roles
+    or updating notes.
+
+    * **Removing Crew Members:** Remove crew members from availabilities when they are no longer needed.
+
+
+    These endpoints are essential for tour operators who need to manage staffing levels, assign specific
+    roles to crew members, and maintain clear communication about crew responsibilities through notes
+    and role assignments.
+  humanURL: https://developer.fareharbor.com/api/external/v1/
+  baseURL: https://fareharbor.com/api/external/v1
+  tags:
+  - Crew Members Endpoints
+  properties:
+  - type: OpenAPI
+    url: openapi/fareharbor-crew-members-endpoints-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/fareharbor-booking-with-resource-uses-response-json-schema-schema.json
+  - type: JSONSchema
+    url: json-schema/fareharbor-booking-with-payments-response-json-schema-schema.json
+  - type: JSONSchema
+    url: json-schema/fareharbor-booking-response-json-schema-schema.json
+  - type: JSONSchema
+    url: json-schema/fareharbor-items-response-json-schema-schema.json
+  - type: JSONSchema
+    url: json-schema/fareharbor-item-response-json-schema-schema.json
+  - type: JSONSchema
+    url: json-schema/fareharbor-availability-response-json-schema-schema.json
+- aid: fareharbor:fareharbor-items-endpoints-api
+  name: FareHarbor Items Endpoints API
+  description: >-
+    The Items endpoints in the FareHarbor API provide comprehensive access to detailed information about
+    the various activities and services offered by a company. These endpoints are essential for any application
+    that needs to integrate, display, or manage bookings for specific items or activities within a company's
+    portfolio.
+
+
+    Key functionalities offered by the Items endpoints include:
+
+    * **Retrieving Item Details:** Facilitates access to in-depth information about each item, including
+    descriptions, pricing, availability, and any special requirements or features associated with the
+    item.
+
+    * **Listing All Items:** Allows users to obtain a list of all available items offered by a company,
+    making it easier to browse and select suitable options based on preferences and requirements.
+
+    * **Item Availability:** Provides endpoints to check the availability of items, helping to ensure
+    that the booking process is up-to-date and accurate, preventing overbookings and scheduling conflicts.
+
+    * **Customizable Responses:** Supports filtering and customization of the data returned, enabling
+    developers to tailor the API responses to specific needs and ensure that the integration feels native
+    to the application.
+
+
+    By integrating these Items endpoints, developers can enhance their applications with powerful, real-time
+    access to activity data, ensuring that users receive a seamless, accurate, and engaging booking experience.
+    This integration is crucial for facilitating efficient and effective interactions between customers
+    and tour or activity providers.
+  humanURL: https://developer.fareharbor.com/api/external/v1/
+  baseURL: https://fareharbor.com/api/external/v1
+  tags:
+  - Items Endpoints
+  properties:
+  - type: OpenAPI
+    url: openapi/fareharbor-items-endpoints-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/fareharbor-booking-with-resource-uses-response-json-schema-schema.json
+  - type: JSONSchema
+    url: json-schema/fareharbor-booking-with-payments-response-json-schema-schema.json
+  - type: JSONSchema
+    url: json-schema/fareharbor-booking-response-json-schema-schema.json
+  - type: JSONSchema
+    url: json-schema/fareharbor-items-response-json-schema-schema.json
+  - type: JSONSchema
+    url: json-schema/fareharbor-item-response-json-schema-schema.json
+  - type: JSONSchema
+    url: json-schema/fareharbor-availability-response-json-schema-schema.json
+- aid: fareharbor:fareharbor-lodging-endpoints-api
+  name: FareHarbor Lodging Endpoints API
+  description: >-
+    With our `/lodgings` endpoints our API Partners are able to retrieve our charters’ lodging options,
+    both on a dashboard level as well as on the availability level, and offer these for customers to choose
+    from when creating a booking.
+  humanURL: https://developer.fareharbor.com/api/external/v1/
+  baseURL: https://fareharbor.com/api/external/v1
+  tags:
+  - Lodging Endpoints
+  properties:
+  - type: OpenAPI
+    url: openapi/fareharbor-lodging-endpoints-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/fareharbor-booking-with-resource-uses-response-json-schema-schema.json
+  - type: JSONSchema
+    url: json-schema/fareharbor-booking-with-payments-response-json-schema-schema.json
+  - type: JSONSchema
+    url: json-schema/fareharbor-booking-response-json-schema-schema.json
+  - type: JSONSchema
+    url: json-schema/fareharbor-items-response-json-schema-schema.json
+  - type: JSONSchema
+    url: json-schema/fareharbor-item-response-json-schema-schema.json
+  - type: JSONSchema
+    url: json-schema/fareharbor-availability-response-json-schema-schema.json
+- aid: fareharbor:fareharbor-ping-api
+  name: FareHarbor Ping API
+  description: The Ping API from FareHarbor — 1 operation(s) for ping.
+  humanURL: https://developer.fareharbor.com/api/external/v1/
+  baseURL: https://fareharbor.com/api/external/v1
+  tags:
+  - Ping
+  properties:
+  - type: OpenAPI
+    url: openapi/fareharbor-ping-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/fareharbor-booking-with-resource-uses-response-json-schema-schema.json
+  - type: JSONSchema
+    url: json-schema/fareharbor-booking-with-payments-response-json-schema-schema.json
+  - type: JSONSchema
+    url: json-schema/fareharbor-booking-response-json-schema-schema.json
+  - type: JSONSchema
+    url: json-schema/fareharbor-items-response-json-schema-schema.json
+  - type: JSONSchema
+    url: json-schema/fareharbor-item-response-json-schema-schema.json
+  - type: JSONSchema
+    url: json-schema/fareharbor-availability-response-json-schema-schema.json
+- aid: fareharbor:fareharbor-roles-endpoints-api
+  name: FareHarbor Roles Endpoints API
+  description: >-
+    The Roles endpoints provide access to role definitions within companies, enabling structured crew
+    member assignments with specific responsibilities and permissions.
+  humanURL: https://developer.fareharbor.com/api/external/v1/
+  baseURL: https://fareharbor.com/api/external/v1
+  tags:
+  - Roles Endpoints
+  properties:
+  - type: OpenAPI
+    url: openapi/fareharbor-roles-endpoints-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/fareharbor-booking-with-resource-uses-response-json-schema-schema.json
+  - type: JSONSchema
+    url: json-schema/fareharbor-booking-with-payments-response-json-schema-schema.json
+  - type: JSONSchema
+    url: json-schema/fareharbor-booking-response-json-schema-schema.json
+  - type: JSONSchema
+    url: json-schema/fareharbor-items-response-json-schema-schema.json
+  - type: JSONSchema
+    url: json-schema/fareharbor-item-response-json-schema-schema.json
+  - type: JSONSchema
+    url: json-schema/fareharbor-availability-response-json-schema-schema.json
+- aid: fareharbor:fareharbor-users-endpoints-api
+  name: FareHarbor Users Endpoints API
+  description: >-
+    The Users endpoints provide access to user information within the context of company operations, specifically
+    for crew management purposes.
+  humanURL: https://developer.fareharbor.com/api/external/v1/
+  baseURL: https://fareharbor.com/api/external/v1
+  tags:
+  - Users Endpoints
+  properties:
+  - type: OpenAPI
+    url: openapi/fareharbor-users-endpoints-api-openapi.yml
   - type: JSONSchema
     url: json-schema/fareharbor-booking-with-resource-uses-response-json-schema-schema.json
   - type: JSONSchema

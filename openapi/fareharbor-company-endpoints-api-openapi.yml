@@ -1,0 +1,785 @@
+openapi: 3.2.0
+info:
+  title: FareHarbor Integration Center Company Endpoints API
+  version: '1.0'
+  contact:
+    email: support@fareharbor.com
+    name: FareHarbor
+    url: https://help.fareharbor.com/hc/
+  description: The Company endpoints in the FareHarbor API provide robust functionalities for accessing and managing information related to companies that offer tours and activities.
+servers:
+- url: https://fareharbor.com/api/external/v1
+  description: production
+- url: https://demo.fareharbor.com/api/external/v1
+  description: demo
+tags:
+- name: Company Endpoints
+  description: The Company endpoints in the FareHarbor API provide robust functionalities for accessing and managing information related to companies that offer tours and activities.
+paths:
+  /companies/\Z:
+    get:
+      summary: Companies
+      operationId: get-companies
+      deprecated: false
+      tags:
+      - Company Endpoints
+      parameters:
+      - $ref: '#/components/parameters/X-FareHarbor-API-App'
+      - $ref: '#/components/parameters/X-FareHarbor-API-User'
+      responses:
+        '200':
+          description: '
+
+            Returns an array of `Company` objects.
+
+
+            Returns a list of all companies for which you have permission to create bookings; note that this may include companies that have no bookable availabilities.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/COMPANIES_RESPONSE_JSON_SCHEMA'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '504':
+          $ref: '#/components/responses/GatewayTimeout'
+      description: 'The `/companies` endpoint lists every FareHarbor supplier that an API Partner can access and book through the API. The companies on this list are determined by which suppliers have requested the enablement of the API access for the given API Partner on their dashboard.
+
+
+        When this request is successful, the API partner will receive a response from our system showing all the accessible suppliers alongside the respective company names, shortnames and the currency of their accounts.
+
+
+        **Things to note:**
+
+        * The value for the “shortname” will always be what is used in the subsequent endpoints in order to access a specific company’s information.
+
+        * If (in the live environment) you do not see a supplier listed on this endpoint, there could be a few reasons why that is. It could be that the supplier has not requested your enablement yet. It could also be that you made the request using one currency user key when the supplier is on a different currency. Lastly, it may be possible that the supplier has been offboarded from FareHarbor and therefore no longer accessible.
+
+        * Routine calls to this endpoint are recommended to refresh the most up to date list of available suppliers. If a company shortname is no longer available, that shortname can be removed from future /items/ and /availabilities/ requests to avoid ongoing errors.'
+  /companies/<company-shortname>/:
+    get:
+      summary: Company
+      operationId: get-company
+      deprecated: false
+      tags:
+      - Company Endpoints
+      parameters:
+      - $ref: '#/components/parameters/X-FareHarbor-API-App'
+      - $ref: '#/components/parameters/X-FareHarbor-API-User'
+      - schema:
+          type: string
+          example: 'hawaiianadventures
+
+            '
+        name: company-shortname
+        in: path
+        required: true
+        description: '
+
+          A unique FareHarbor name assigned to each company when their Dashboard is created, used to access the company''s specific information.
+
+          '
+      responses:
+        '200':
+          description: '
+
+            Returns a `Company` object (extended representation).
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/COMPANY_RESPONSE_JSON_SCHEMA'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '504':
+          $ref: '#/components/responses/GatewayTimeout'
+      description: 'The `/company` endpoint allows the API Partner to specify one supplier company from the list in the `/companies` endpoint and view company-level information configured in the supplier’s FareHarbor general settings, such as company description, health and safety policy, company location, website URL, and more.
+
+
+        **Things to Note:**
+
+        * API Partners usually use this endpoint to import basic company details during the initial onboarding and to confirm that the company details on their side are accurate.
+
+        * The location field shown here at the company-level is typically the supplier''s primary address, but it is possible that different items sold by the supplier take place at other locations. These locations would be indicated on the /items endpoint.'
+components:
+  schemas:
+    Codes403:
+      type: string
+      enum:
+      - app-invalid
+      - app-key-invalid
+      - invalid-checkin-permissions-error
+      - orderize-booking-uuid-invalid-error
+      - user-key-invalid
+    COMPANIES_RESPONSE_JSON_SCHEMA:
+      $schema: http://json-schema.org/draft-04/schema#
+      additionalProperties: false
+      definitions:
+        address:
+          additionalProperties: false
+          properties:
+            city:
+              example: Honolulu
+              type: string
+            country:
+              example: US
+              type: string
+            postal_code:
+              example: '96821'
+              type: string
+            province:
+              example: HI
+              type: string
+            street:
+              example: 123 Wailupe Cir
+              type: string
+          required:
+          - city
+          - country
+          - postal_code
+          - province
+          - street
+          type: object
+        company:
+          additionalProperties: false
+          properties:
+            affiliated_since:
+              description: If the API user’s company is an affiliate, then we will see a timestamp of when the relationship started (set in utc time).
+              example: 2020-06-17T15:44:03+0000
+              format: datetime
+              oneOf:
+              - description: If the API user’s company is an affiliate, then we will see a timestamp of when the relationship started (set in utc time).
+                example: 2020-06-17T15:44:03+0000
+                format: datetime
+                type: string
+              - type: 'null'
+            contact_email:
+              description: The company's contact email.
+              example: info@hawaiianadventures.com
+              type: string
+            contact_phone:
+              description: The company's contact phone.
+              example: +1-808-555-1234
+              type: string
+            currency:
+              description: The company's currency.
+              enum:
+              - aed
+              - aud
+              - bgn
+              - brl
+              - cad
+              - chf
+              - czk
+              - dkk
+              - eur
+              - gbp
+              - hkd
+              - huf
+              - mxn
+              - nok
+              - nzd
+              - pln
+              - ron
+              - sek
+              - sgd
+              - usd
+              example: usd
+              type: string
+            name:
+              description: The company's name.
+              example: Hawaiian Adventures
+              type: string
+            primary_location:
+              oneOf:
+              - $ref: '#/components/schemas/COMPANIES_RESPONSE_JSON_SCHEMA/definitions/location'
+              - type: 'null'
+            shortname:
+              description: A unique FareHarbor name assigned to each company when their Dashboard is created, used to access the company's specific information.
+              example: hawaiianadventures
+              type: string
+          required:
+          - shortname
+          - name
+          - currency
+          - affiliated_since
+          - primary_location
+          - contact_email
+          - contact_phone
+          type: object
+        location:
+          additionalProperties: false
+          properties:
+            address:
+              $ref: '#/components/schemas/COMPANIES_RESPONSE_JSON_SCHEMA/definitions/address'
+              description: The location's physical address.
+            google_place_id:
+              description: The location's Google Place ID.
+              example: ChIJYZ4srGUSAHwRT1Da4amp3x
+              format: uuid
+              type: string
+            latitude:
+              description: The location's latitude.
+              oneOf:
+              - example: 90
+                type: number
+              - type: 'null'
+            longitude:
+              description: The location's longitude.
+              oneOf:
+              - example: 0
+                type: number
+              - type: 'null'
+            note:
+              description: A brief note about this location that can be displayed to end users.
+              example: Next to the blue fence.
+              format: markdown
+              type: string
+            note_safe_html:
+              description: A brief note about this location that can be displayed to end users.
+              example: <p>Next to the blue fence.</p>
+              format: markdown
+              type: string
+            pk:
+              description: The location's unique ID.
+              example: 234234
+              format: int32
+              type: number
+            tripadvisor_url:
+              description: The location's TripAdvisor URL.
+              example: https://www.tripadvisor.com/Attraction_Review-g60982-d184886-Reviews-Epic_Jet_Ski_Tour-Honolulu_Oahu_Hawaii.html
+              format: uri
+              type: string
+            type:
+              description: The location's type.
+              example: primary
+              type: string
+          required:
+          - pk
+          - type
+          - note
+          - note_safe_html
+          - address
+          - longitude
+          - latitude
+          - google_place_id
+          - tripadvisor_url
+          type: object
+      properties:
+        companies:
+          items:
+            $ref: '#/components/schemas/COMPANIES_RESPONSE_JSON_SCHEMA/definitions/company'
+          type: array
+      required:
+      - companies
+      type: object
+    COMPANY_RESPONSE_JSON_SCHEMA:
+      $schema: http://json-schema.org/draft-04/schema#
+      additionalProperties: false
+      definitions:
+        address:
+          additionalProperties: false
+          properties:
+            city:
+              example: Honolulu
+              type: string
+            country:
+              example: US
+              type: string
+            postal_code:
+              example: '96821'
+              type: string
+            province:
+              example: HI
+              type: string
+            street:
+              example: 123 Wailupe Cir
+              type: string
+          required:
+          - city
+          - country
+          - postal_code
+          - province
+          - street
+          type: object
+        company:
+          additionalProperties: false
+          properties:
+            about:
+              description: About page content for the company.
+              example: Hawaiian Adventures offers several water activities that you are sure to enjoy.
+              format: markdown
+              type: string
+            about_safe_html:
+              description: About page content for the company.
+              example: <p>Hawaiian Adventures offers several water activities that you are sure to enjoy.</p>
+              format: markdown
+              type: string
+            address:
+              $ref: '#/components/schemas/COMPANY_RESPONSE_JSON_SCHEMA/definitions/address'
+              description: The company's physical address.
+            affiliated_since:
+              description: If the API user’s company is an affiliate, then we will see a timestamp of when the relationship started (set in utc time).
+              example: 2020-06-17T15:44:03+0000
+              format: datetime
+              oneOf:
+              - description: If the API user’s company is an affiliate, then we will see a timestamp of when the relationship started (set in utc time).
+                example: 2020-06-17T15:44:03+0000
+                format: datetime
+                type: string
+              - type: 'null'
+            billing_address:
+              $ref: '#/components/schemas/COMPANY_RESPONSE_JSON_SCHEMA/definitions/address'
+              description: The company's billing address.
+            booking_notes:
+              description: General notes for booking customers.
+              example: 'Weather conditions will be evaluated at the time of check-in.
+
+
+                -If using a voucher, please bring the voucher with you.'
+              format: markdown
+              type: string
+            booking_notes_safe_html:
+              description: General notes for booking customers.
+              example: '<p>Weather conditions will be evaluated at the time of check-in.
+
+
+                -If using a voucher, please bring the voucher with you.</p>'
+              format: markdown
+              type: string
+            contact_email:
+              description: The company's contact email.
+              example: info@hawaiianadventures.com
+              type: string
+            contact_phone:
+              description: The company's contact phone.
+              example: +1-808-555-1234
+              type: string
+            currency:
+              description: The company's currency.
+              enum:
+              - aed
+              - aud
+              - bgn
+              - brl
+              - cad
+              - chf
+              - czk
+              - dkk
+              - eur
+              - gbp
+              - hkd
+              - huf
+              - mxn
+              - nok
+              - nzd
+              - pln
+              - ron
+              - sek
+              - sgd
+              - usd
+              example: usd
+              type: string
+            facebook_url:
+              description: The company's Facebook address.
+              example: https://facebook.com/url
+              format: uri
+              type: string
+            faq:
+              description: FAQ page content for the company.
+              example: '# What should I bring?
+
+
+                We suggest that you bring a swimming suit, a towel, and sunscreen.'
+              format: markdown
+              type: string
+            faq_safe_html:
+              description: FAQ page content for the company.
+              example: '<h1>What should I bring?</h1>
+
+                <p>We suggest that you bring a swimming suit, sunscreen, and a towel.</p>'
+              format: markdown
+              type: string
+            health_and_safety_policy:
+              description: The company's health and safety policy. This is supplemental to the item level health_and_safety_policy field, and is only displayed on the FareHarbor Dashboard if the specific item does not have a value for health_and_safety_policy set.
+              example: 'Your health is our top priority, and we have put special measures in place to keep all guests safe both during and after your activity.
+
+
+                * Stringent Cleaning – We''ve increased the frequency of disinfecting surfaces and high touch areas.
+
+                * Social Distancing – Guests are required to stay 6 feet apart.
+
+                * Wellness Checks – Employees receive daily wellness checks to ensure they are healthy and symptom-free.'
+              format: markdown
+              type: string
+            health_and_safety_policy_safe_html:
+              description: The company's health and safety policy. This is supplemental to the item level health_and_safety_policy field, and is only displayed on the FareHarbor Dashboard if the specific item does not have a value for health_and_safety_policy set.
+              example: '<p>Your health is our top priority, and we have put special measures in place to keep all guests safe both during and after your activity.</p>
+
+                <ul>
+
+                <li>Stringent Cleaning – We''ve increased the frequency of disinfecting surfaces and high touch areas.</li>
+
+                <li>Social Distancing – Guests are required to stay 6 feet apart.</li>
+
+                <li>Wellness Checks – Employees receive daily wellness checks to ensure they are healthy and symptom-free.</li>
+
+                </ul>'
+              format: markdown
+              type: string
+            instagram_url:
+              description: The company's Instagram address.
+              example: https://instagram.com/url
+              format: uri
+              type: string
+            intro:
+              description: Homepage content for the company.
+              example: We offer the best water activities on Oahu
+              format: markdown
+              type: string
+            intro_safe_html:
+              description: Homepage content for the company.
+              example: <p>We offer the best water activities on Oahu</p>
+              format: markdown
+              type: string
+            name:
+              description: The company's name.
+              example: Hawaiian Adventures
+              type: string
+            open_hours:
+              description: Represents the company's general opening and closing times. Used for general company information or for context for all-day availabilities, but should not be used in place of specific availability start and end times.
+              oneOf:
+              - $ref: '#/components/schemas/COMPANY_RESPONSE_JSON_SCHEMA/definitions/open_hours'
+                description: Represents the company's general opening and closing times. Used for general company information or for context for all-day availabilities, but should not be used in place of specific availability start and end times.
+              - type: 'null'
+            pinterest_url:
+              description: The company's Pinterest address.
+              example: https://pintrest.com/url
+              format: uri
+              type: string
+            primary_location:
+              oneOf:
+              - $ref: '#/components/schemas/COMPANY_RESPONSE_JSON_SCHEMA/definitions/location'
+              - type: 'null'
+            primary_location_heading:
+              example: 1 Ma'alaea way, Wailuku, HI, 95656
+              type: string
+            shortname:
+              description: A unique FareHarbor name assigned to each company when their Dashboard is created, used to access the company's specific information.
+              example: hawaiianadventures
+              type: string
+            summary:
+              description: A short tagline or summary for the company.
+              example: Water activities 365 days a year
+              type: string
+            timezone:
+              description: The company's local timezone.
+              example: America/Los_Angeles
+              type: string
+            tripadvisor_url:
+              description: The company's Trip Advisor address.
+              example: https://tripadvisor.com/url
+              format: uri
+              type: string
+            twitter_url:
+              description: The company's Twitter address.
+              example: https://twitter.com/url
+              format: uri
+              type: string
+            url:
+              description: The company's website address.
+              example: https://company-url.com
+              format: uri
+              type: string
+            yelp_url:
+              description: The company's Yelp address.
+              example: https://yelp.com/url
+              format: uri
+              type: string
+            youtube_url:
+              description: The company's Youtube address.
+              example: https://youtube.com/url
+              format: uri
+              type: string
+          required:
+          - shortname
+          - name
+          - url
+          - facebook_url
+          - instagram_url
+          - tripadvisor_url
+          - twitter_url
+          - yelp_url
+          - youtube_url
+          - pinterest_url
+          - currency
+          - summary
+          - about
+          - about_safe_html
+          - booking_notes
+          - booking_notes_safe_html
+          - faq
+          - faq_safe_html
+          - intro
+          - intro_safe_html
+          - address
+          - billing_address
+          - primary_location
+          - primary_location_heading
+          - health_and_safety_policy
+          - health_and_safety_policy_safe_html
+          - open_hours
+          - affiliated_since
+          - timezone
+          - contact_email
+          - contact_phone
+          type: object
+        location:
+          additionalProperties: false
+          properties:
+            address:
+              $ref: '#/components/schemas/COMPANY_RESPONSE_JSON_SCHEMA/definitions/address'
+              description: The location's physical address.
+            google_place_id:
+              description: The location's Google Place ID.
+              example: ChIJYZ4srGUSAHwRT1Da4amp3x
+              format: uuid
+              type: string
+            latitude:
+              description: The location's latitude.
+              oneOf:
+              - example: 90
+                type: number
+              - type: 'null'
+            longitude:
+              description: The location's longitude.
+              oneOf:
+              - example: 0
+                type: number
+              - type: 'null'
+            note:
+              description: A brief note about this location that can be displayed to end users.
+              example: Next to the blue fence.
+              format: markdown
+              type: string
+            note_safe_html:
+              description: A brief note about this location that can be displayed to end users.
+              example: <p>Next to the blue fence.</p>
+              format: markdown
+              type: string
+            pk:
+              description: The location's unique ID.
+              example: 234234
+              format: int32
+              type: number
+            tripadvisor_url:
+              description: The location's TripAdvisor URL.
+              example: https://www.tripadvisor.com/Attraction_Review-g60982-d184886-Reviews-Epic_Jet_Ski_Tour-Honolulu_Oahu_Hawaii.html
+              format: uri
+              type: string
+            type:
+              description: The location's type.
+              example: primary
+              type: string
+          required:
+          - pk
+          - type
+          - note
+          - note_safe_html
+          - address
+          - longitude
+          - latitude
+          - google_place_id
+          - tripadvisor_url
+          type: object
+        open_hours:
+          additionalProperties: false
+          properties:
+            friday:
+              oneOf:
+              - $ref: '#/components/schemas/COMPANY_RESPONSE_JSON_SCHEMA/definitions/open_hours_weekday'
+              - type: 'null'
+            monday:
+              oneOf:
+              - $ref: '#/components/schemas/COMPANY_RESPONSE_JSON_SCHEMA/definitions/open_hours_weekday'
+              - type: 'null'
+            saturday:
+              oneOf:
+              - $ref: '#/components/schemas/COMPANY_RESPONSE_JSON_SCHEMA/definitions/open_hours_weekday'
+              - type: 'null'
+            sunday:
+              oneOf:
+              - $ref: '#/components/schemas/COMPANY_RESPONSE_JSON_SCHEMA/definitions/open_hours_weekday'
+              - type: 'null'
+            thursday:
+              oneOf:
+              - $ref: '#/components/schemas/COMPANY_RESPONSE_JSON_SCHEMA/definitions/open_hours_weekday'
+              - type: 'null'
+            tuesday:
+              oneOf:
+              - $ref: '#/components/schemas/COMPANY_RESPONSE_JSON_SCHEMA/definitions/open_hours_weekday'
+              - type: 'null'
+            wednesday:
+              oneOf:
+              - $ref: '#/components/schemas/COMPANY_RESPONSE_JSON_SCHEMA/definitions/open_hours_weekday'
+              - type: 'null'
+          required:
+          - sunday
+          - monday
+          - tuesday
+          - wednesday
+          - thursday
+          - friday
+          - saturday
+          type: object
+        open_hours_weekday:
+          additionalProperties: false
+          properties:
+            close_time:
+              example: '17:00'
+              format: time
+              type: string
+            open_time:
+              example: '10:00'
+              format: time
+              type: string
+          required:
+          - open_time
+          - close_time
+          type: object
+      properties:
+        company:
+          $ref: '#/components/schemas/COMPANY_RESPONSE_JSON_SCHEMA/definitions/company'
+      required:
+      - company
+      type: object
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      required:
+      - code
+      - message
+    Codes400:
+      type: string
+      enum:
+      - availability-date-range-invalid
+      - book-data-parse-error
+      - book-data-validation-error
+      - bookability-error
+      - booking-cancellation-error
+      - booking-creation-error
+      - booking-custom-field-value-creation-error
+      - booking-custom-field-values-invalid
+      - booking-note-error
+      - contact-error
+      - content-type-invalid-error
+      - customer-custom-field-value-creation-error
+      - customer-custom-field-value-update-error
+      - customer-custom-field-values-invalid
+      - customer-type-rates-invalid
+      - invalid-checkin-already-checked-in
+      - invalid-checkin-customer
+      - invalid-checkin-status-error
+      - invalid-qr-code-error
+      - key-missing
+      - lodging-pk-invalid
+      - no-default-checkin-status-error
+      - orderize-booking-uuid-invalid-error
+      - payment-error
+      - rebooking-uuid-invalid-error
+      - resource-bookability-error
+      - voucher-number-invalid
+      - voucher-number-not-specified
+    Error400:
+      allOf:
+      - $ref: '#/components/schemas/Error'
+      - type: object
+        properties:
+          code:
+            $ref: '#/components/schemas/Codes400'
+    Error403:
+      allOf:
+      - $ref: '#/components/schemas/Error'
+      - type: object
+        properties:
+          code:
+            $ref: '#/components/schemas/Codes403'
+    Error404:
+      allOf:
+      - $ref: '#/components/schemas/Error'
+      - type: object
+        properties:
+          code:
+            $ref: '#/components/schemas/Codes404'
+    Codes404:
+      type: string
+      enum:
+      - availability-pk-invalid
+      - booking-uuid-invalid
+      - company-shortname-invald
+      - customer-custom-field-value-pk-invalid
+      - item-pk-invalid
+  responses:
+    Forbidden:
+      description: Forbidden (see [Error Codes](#tag/Error-Codes))
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error403'
+    BadRequest:
+      description: Bad Request (see [Error Codes](#tag/Error-Codes))
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error400'
+    NotFound:
+      description: The specified resource was not found (see [Error Codes](#tag/Error-Codes))
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error404'
+    TooManyRequests:
+      description: Too Many Requests (see [Rate Limits](#tag/Getting-Started/Rate-Limits))
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    GatewayTimeout:
+      description: '[Gateway Timeout](#tag/Getting-Started/Timeouts)'
+  parameters:
+    X-FareHarbor-API-User:
+      name: X-FareHarbor-API-User
+      in: header
+      required: true
+      schema:
+        type: string
+      description: USER-KEY (Please log in to see your key)
+      example: USER-KEY
+    X-FareHarbor-API-App:
+      name: X-FareHarbor-API-App
+      in: header
+      required: true
+      schema:
+        type: string
+      description: APP-KEY (Please log in to see your key)
+      example: APP-KEY
+x-stoplight:
+  id: obltqlvi1ac1n

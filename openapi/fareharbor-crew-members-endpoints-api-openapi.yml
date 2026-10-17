@@ -1,0 +1,553 @@
+openapi: 3.2.0
+info:
+  title: FareHarbor Integration Center Crew Members Endpoints API
+  version: '1.0'
+  contact:
+    email: support@fareharbor.com
+    name: FareHarbor
+    url: https://help.fareharbor.com/hc/
+  description: The Crew Members endpoints in the FareHarbor API provide comprehensive functionality for managing crew assignments on availabilities.
+servers:
+- url: https://fareharbor.com/api/external/v1
+  description: production
+- url: https://demo.fareharbor.com/api/external/v1
+  description: demo
+tags:
+- name: Crew Members Endpoints
+  description: The Crew Members endpoints in the FareHarbor API provide comprehensive functionality for managing crew assignments on availabilities.
+paths:
+  /companies/<shortname>/availabilities/<availability.pk>/crew-members/:
+    get:
+      summary: Crew Members
+      operationId: get-crew-members
+      deprecated: false
+      tags:
+      - Crew Members Endpoints
+      parameters:
+      - $ref: '#/components/parameters/X-FareHarbor-API-App'
+      - $ref: '#/components/parameters/X-FareHarbor-API-User'
+      - schema:
+          type: string
+          example: 'hawaiianadventures
+
+            '
+        name: shortname
+        in: path
+        required: true
+        description: '
+
+          The shortname of the company.
+
+          '
+      - schema:
+          type: integer
+          example: '4787
+
+            '
+        name: availability.pk
+        in: path
+        required: true
+        description: '
+
+          The id of the Availability.
+
+          '
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CREW_MEMBERS_RESPONSE_JSON_SCHEMA'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '504':
+          $ref: '#/components/responses/GatewayTimeout'
+      description: ''
+    post:
+      summary: Crew Members
+      operationId: post-crew-members
+      deprecated: false
+      tags:
+      - Crew Members Endpoints
+      parameters:
+      - $ref: '#/components/parameters/X-FareHarbor-API-App'
+      - $ref: '#/components/parameters/X-FareHarbor-API-User'
+      - schema:
+          type: string
+          example: 'hawaiianadventures
+
+            '
+        name: shortname
+        in: path
+        required: true
+        description: '
+
+          The shortname of the company.
+
+          '
+      - schema:
+          type: integer
+          example: '4787
+
+            '
+        name: availability.pk
+        in: path
+        required: true
+        description: '
+
+          The id of the Availability.
+
+          '
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CREW_MEMBER_RESPONSE_JSON_SCHEMA'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '504':
+          $ref: '#/components/responses/GatewayTimeout'
+      description: ''
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CREATE_CREW_MEMBER_REQUEST_JSON_SCHEMA'
+  /companies/<shortname>/availabilities/<availability.pk>/crew-members/(?P<crew_member_id>\d+)/:
+    patch:
+      summary: Crew Member
+      operationId: patch-crew-member
+      deprecated: false
+      tags:
+      - Crew Members Endpoints
+      parameters:
+      - $ref: '#/components/parameters/X-FareHarbor-API-App'
+      - $ref: '#/components/parameters/X-FareHarbor-API-User'
+      - schema:
+          type: string
+          example: 'hawaiianadventures
+
+            '
+        name: shortname
+        in: path
+        required: true
+        description: '
+
+          The shortname of the company.
+
+          '
+      - schema:
+          type: integer
+          example: '4787
+
+            '
+        name: availability.pk
+        in: path
+        required: true
+        description: '
+
+          The id of the Availability.
+
+          '
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CREW_MEMBER_RESPONSE_JSON_SCHEMA'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '504':
+          $ref: '#/components/responses/GatewayTimeout'
+      description: ''
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UPDATE_CREW_MEMBER_REQUEST_JSON_SCHEMA'
+    delete:
+      summary: Crew Member
+      operationId: delete-crew-member
+      deprecated: false
+      tags:
+      - Crew Members Endpoints
+      parameters:
+      - $ref: '#/components/parameters/X-FareHarbor-API-App'
+      - $ref: '#/components/parameters/X-FareHarbor-API-User'
+      - schema:
+          type: string
+          example: 'hawaiianadventures
+
+            '
+        name: shortname
+        in: path
+        required: true
+        description: '
+
+          The shortname of the company.
+
+          '
+      - schema:
+          type: integer
+          example: '4787
+
+            '
+        name: availability.pk
+        in: path
+        required: true
+        description: '
+
+          The id of the Availability.
+
+          '
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CREW_MEMBER_RESPONSE_JSON_SCHEMA'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '504':
+          $ref: '#/components/responses/GatewayTimeout'
+      description: ''
+components:
+  schemas:
+    Codes403:
+      type: string
+      enum:
+      - app-invalid
+      - app-key-invalid
+      - invalid-checkin-permissions-error
+      - orderize-booking-uuid-invalid-error
+      - user-key-invalid
+    CREW_MEMBER_RESPONSE_JSON_SCHEMA:
+      $schema: http://json-schema.org/draft-04/schema#
+      additionalProperties: false
+      definitions:
+        crew_member:
+          additionalProperties: false
+          description: A user assigned to work on a specific availability.
+          properties:
+            note:
+              description: A text note providing additional context about the crew member's assignment.
+              example: Responsible for safety briefing and equipment check
+              type: string
+            pk:
+              description: The crew member's unique identifier.
+              example: 12345
+              format: int32
+              type: number
+            role:
+              $ref: '#/components/schemas/CREW_MEMBER_RESPONSE_JSON_SCHEMA/definitions/role'
+              description: The role assigned to the crew member, if any.
+            user:
+              $ref: '#/components/schemas/CREW_MEMBER_RESPONSE_JSON_SCHEMA/definitions/user'
+              description: The user assigned as a crew member.
+          required:
+          - pk
+          - user
+          type: object
+        role:
+          additionalProperties: false
+          description: A specific position or responsibility that can be assigned to crew members.
+          properties:
+            pk:
+              description: The role's unique identifier.
+              example: 1
+              format: int32
+              type: number
+            short_name:
+              description: The role's short name or title.
+              example: captain
+              type: string
+          required:
+          - pk
+          - short_name
+          type:
+          - object
+          - 'null'
+        user:
+          additionalProperties: false
+          description: A person who can be assigned as a crew member.
+          properties:
+            name:
+              description: The user's full name.
+              example: John Smith
+              type: string
+            username:
+              description: The user's unique username.
+              example: jsmith
+              type: string
+          required:
+          - name
+          - username
+          type: object
+      description: Response containing a single crew member assignment.
+      properties:
+        crew_member:
+          $ref: '#/components/schemas/CREW_MEMBER_RESPONSE_JSON_SCHEMA/definitions/crew_member'
+          description: The crew member assignment details.
+      required:
+      - crew_member
+      title: Crew Member Response
+      type: object
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      required:
+      - code
+      - message
+    Codes400:
+      type: string
+      enum:
+      - availability-date-range-invalid
+      - book-data-parse-error
+      - book-data-validation-error
+      - bookability-error
+      - booking-cancellation-error
+      - booking-creation-error
+      - booking-custom-field-value-creation-error
+      - booking-custom-field-values-invalid
+      - booking-note-error
+      - contact-error
+      - content-type-invalid-error
+      - customer-custom-field-value-creation-error
+      - customer-custom-field-value-update-error
+      - customer-custom-field-values-invalid
+      - customer-type-rates-invalid
+      - invalid-checkin-already-checked-in
+      - invalid-checkin-customer
+      - invalid-checkin-status-error
+      - invalid-qr-code-error
+      - key-missing
+      - lodging-pk-invalid
+      - no-default-checkin-status-error
+      - orderize-booking-uuid-invalid-error
+      - payment-error
+      - rebooking-uuid-invalid-error
+      - resource-bookability-error
+      - voucher-number-invalid
+      - voucher-number-not-specified
+    CREW_MEMBERS_RESPONSE_JSON_SCHEMA:
+      $schema: http://json-schema.org/draft-04/schema#
+      additionalProperties: false
+      definitions:
+        crew_member:
+          additionalProperties: false
+          description: A user assigned to work on a specific availability.
+          properties:
+            note:
+              description: A text note providing additional context about the crew member's assignment.
+              example: Responsible for safety briefing and equipment check
+              type: string
+            pk:
+              description: The crew member's unique identifier.
+              example: 12345
+              format: int32
+              type: number
+            role:
+              $ref: '#/components/schemas/CREW_MEMBERS_RESPONSE_JSON_SCHEMA/definitions/role'
+              description: The role assigned to the crew member, if any.
+            user:
+              $ref: '#/components/schemas/CREW_MEMBERS_RESPONSE_JSON_SCHEMA/definitions/user'
+              description: The user assigned as a crew member.
+          required:
+          - pk
+          - note
+          - user
+          type: object
+        role:
+          additionalProperties: false
+          description: A specific position or responsibility that can be assigned to crew members.
+          properties:
+            pk:
+              description: The role's unique identifier.
+              example: 1
+              format: int32
+              type: number
+            short_name:
+              description: The role's short name or title.
+              example: captain
+              type: string
+          required:
+          - pk
+          - short_name
+          type:
+          - object
+          - 'null'
+        user:
+          additionalProperties: false
+          description: A person who can be assigned as a crew member.
+          properties:
+            name:
+              description: The user's full name.
+              example: John Smith
+              type: string
+            username:
+              description: The user's unique username.
+              example: jsmith
+              type: string
+          required:
+          - name
+          - username
+          type: object
+      description: Response containing a list of crew members assigned to an availability.
+      properties:
+        crew_members:
+          description: List of crew members assigned to the availability.
+          items:
+            $ref: '#/components/schemas/CREW_MEMBERS_RESPONSE_JSON_SCHEMA/definitions/crew_member'
+          type: array
+      required:
+      - crew_members
+      title: Crew Members Response
+      type: object
+    Error400:
+      allOf:
+      - $ref: '#/components/schemas/Error'
+      - type: object
+        properties:
+          code:
+            $ref: '#/components/schemas/Codes400'
+    CREATE_CREW_MEMBER_REQUEST_JSON_SCHEMA:
+      $schema: http://json-schema.org/draft-04/schema#
+      additionalProperties: false
+      description: JSON body for creating a crew member assignment on an availability.
+      properties:
+        note:
+          description: Optional note providing additional context, instructions, or information about the crew member's assignment.
+          example: Responsible for safety briefing and equipment check
+          type: string
+        role:
+          description: Optional short name of the role to assign to the crew member. Must match an existing role short_name for the company.
+          example: captain
+          type: string
+        username:
+          description: Username of the user to add as a crew member. Must be a valid username within the system.
+          example: jsmith
+          type: string
+      required:
+      - username
+      title: Create Crew Member Request
+      type: object
+    UPDATE_CREW_MEMBER_REQUEST_JSON_SCHEMA:
+      $schema: http://json-schema.org/draft-04/schema#
+      additionalProperties: false
+      description: JSON body for updating an existing crew member assignment on an availability.
+      properties:
+        note:
+          description: Optional note providing additional context, instructions, or information about the crew member's assignment.
+          example: 'Updated: Now responsible for safety briefing and equipment check'
+          type: string
+        role:
+          description: Optional short name of the role to assign to the crew member. Must match an existing role short_name for the company. Pass null to remove the role assignment.
+          example: captain
+          type:
+          - string
+          - 'null'
+      title: Update Crew Member Request
+      type: object
+    Error403:
+      allOf:
+      - $ref: '#/components/schemas/Error'
+      - type: object
+        properties:
+          code:
+            $ref: '#/components/schemas/Codes403'
+    Error404:
+      allOf:
+      - $ref: '#/components/schemas/Error'
+      - type: object
+        properties:
+          code:
+            $ref: '#/components/schemas/Codes404'
+    Codes404:
+      type: string
+      enum:
+      - availability-pk-invalid
+      - booking-uuid-invalid
+      - company-shortname-invald
+      - customer-custom-field-value-pk-invalid
+      - item-pk-invalid
+  responses:
+    Forbidden:
+      description: Forbidden (see [Error Codes](#tag/Error-Codes))
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error403'
+    BadRequest:
+      description: Bad Request (see [Error Codes](#tag/Error-Codes))
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error400'
+    NotFound:
+      description: The specified resource was not found (see [Error Codes](#tag/Error-Codes))
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error404'
+    TooManyRequests:
+      description: Too Many Requests (see [Rate Limits](#tag/Getting-Started/Rate-Limits))
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    GatewayTimeout:
+      description: '[Gateway Timeout](#tag/Getting-Started/Timeouts)'
+  parameters:
+    X-FareHarbor-API-User:
+      name: X-FareHarbor-API-User
+      in: header
+      required: true
+      schema:
+        type: string
+      description: USER-KEY (Please log in to see your key)
+      example: USER-KEY
+    X-FareHarbor-API-App:
+      name: X-FareHarbor-API-App
+      in: header
+      required: true
+      schema:
+        type: string
+      description: APP-KEY (Please log in to see your key)
+      example: APP-KEY
+x-stoplight:
+  id: obltqlvi1ac1n

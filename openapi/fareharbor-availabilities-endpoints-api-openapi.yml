@@ -1,0 +1,1573 @@
+openapi: 3.2.0
+info:
+  title: FareHarbor Integration Center Availabilities Endpoints API
+  version: '1.0'
+  contact:
+    email: support@fareharbor.com
+    name: FareHarbor
+    url: https://help.fareharbor.com/hc/
+  description: The `/availabilities` endpoint is used to retrieve all bookable availabilities for a single item within a specified date or date range.
+servers:
+- url: https://fareharbor.com/api/external/v1
+  description: production
+- url: https://demo.fareharbor.com/api/external/v1
+  description: demo
+tags:
+- name: Availabilities Endpoints
+  description: The `/availabilities` endpoint is used to retrieve all bookable availabilities for a single item within a specified date or date range.
+paths:
+  /companies/<shortname>/availabilities/<availability.pk>/lodgings/:
+    get:
+      summary: Availability Lodgings
+      operationId: get-availability-lodgings
+      deprecated: false
+      tags:
+      - Availabilities Endpoints
+      parameters:
+      - $ref: '#/components/parameters/X-FareHarbor-API-App'
+      - $ref: '#/components/parameters/X-FareHarbor-API-User'
+      - schema:
+          type: string
+          example: 'hawaiianadventures
+
+            '
+        name: shortname
+        in: path
+        required: true
+        description: '
+
+          A unique FareHarbor name assigned to each company when their Dashboard is created, used to access the company''s specific information.
+
+          '
+      - schema:
+          type: integer
+          example: '4787
+
+            '
+        name: availability.pk
+        in: path
+        required: true
+        description: '
+
+          The unique numerical ID of the requested `Availability` object, that is then used during the booking process.
+
+          '
+      responses:
+        '200':
+          description: '
+
+            Returns an array of `Lodging` objects that include availability specific data.
+
+
+            The `is_pickup_available` property indicates whether a pickup is offered for the lodging (for the availability specified in the request URL). This value reflects the current state of the system and can change when updates are made.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AVAILABILITY_LODGINGS_RESPONSE_JSON_SCHEMA'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '504':
+          $ref: '#/components/responses/GatewayTimeout'
+      description: Used to check lodging options on a specific availability, including whether pick-up is available for each lodging option.
+  /companies/<shortname>/availabilities/<availability.pk>/:
+    get:
+      summary: Availability
+      operationId: get-availability
+      deprecated: false
+      tags:
+      - Availabilities Endpoints
+      parameters:
+      - $ref: '#/components/parameters/X-FareHarbor-API-App'
+      - $ref: '#/components/parameters/X-FareHarbor-API-User'
+      - schema:
+          type: string
+          example: 'hawaiianadventures
+
+            '
+        name: shortname
+        in: path
+        required: true
+        description: '
+
+          A unique FareHarbor name assigned to each company when their Dashboard is created, used to access the company''s specific information.
+
+          '
+      - schema:
+          type: integer
+          example: '4787
+
+            '
+        name: availability.pk
+        in: path
+        required: true
+        description: '
+
+          The unique numerical ID of the requested `Availability` object, that is then used during the booking process.
+
+          '
+      - schema:
+          type: string
+          example: '[yes|no]
+
+            '
+        name: detailed
+        in: query
+        required: false
+        description: '
+
+          Include additional availability details
+
+          '
+      responses:
+        '200':
+          description: '
+
+            Returns an `Availability` object (extended representation).
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AVAILABILITY_RESPONSE_JSON_SCHEMA'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '504':
+          $ref: '#/components/responses/GatewayTimeout'
+      description: 'Used to pull information for a single availability within FareHarbor.
+
+
+        To get additional information such as `effective_cancellation_policy` and `effective_booking_cutoff` in the response, add the query parameter `?detailed=yes` to the end of the URL.'
+  /companies/<shortname>/items/<item.pk>/minimal/availabilities/date/<date>/:
+    get:
+      summary: Minimal Availabilities By Date
+      operationId: get-minimal-availabilities-by-date
+      deprecated: false
+      tags:
+      - Availabilities Endpoints
+      parameters:
+      - $ref: '#/components/parameters/X-FareHarbor-API-App'
+      - $ref: '#/components/parameters/X-FareHarbor-API-User'
+      - schema:
+          type: string
+          example: 'hawaiianadventures
+
+            '
+        name: shortname
+        in: path
+        required: true
+        description: '
+
+          A unique FareHarbor name assigned to each company when their Dashboard is created, used to access the company''s specific information.
+
+          '
+      - schema:
+          type: integer
+          example: '1867
+
+            '
+        name: item.pk
+        in: path
+        required: true
+        description: '
+
+          The unique numerical ID of the bookable product (referred to as `item` in FareHarbor).
+
+          '
+      - schema:
+          type: string
+          format: date
+          example: '2015-01-22
+
+            '
+        name: date
+        in: path
+        required: true
+        description: '
+
+          `date` should be in the format `YYYY-MM-DD` and is taken to be the in company''s local time.
+
+          '
+      - schema:
+          type: string
+          example: '[yes|no]
+
+            '
+        name: detailed
+        in: query
+        required: false
+        description: '
+
+          Include additional availability details
+
+          '
+      - schema:
+          type: string
+          example: '[yes|no]
+
+            '
+        name: bookable_only
+        in: query
+        required: false
+        description: '
+
+          Include only availabilities that are bookable
+
+          '
+      - schema:
+          type: string
+          example: '[yes|no]
+
+            '
+        name: custom_fields_summary
+        in: query
+        required: false
+        description: '
+
+          Include summarized custom field metadata
+
+          '
+      responses:
+        '200':
+          description: '
+
+            Returns an array of `Availability` objects (minimal representation).
+
+
+            Returns possibly-bookable availabilities for `date` (in the company''s local time). Note that possibly-bookable availabilities do not include those for which customers are requested to "call to book".
+
+
+            Excludes custom field information from the response.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MINIMAL_AVAILABILITIES_RESPONSE_JSON_SCHEMA'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '504':
+          $ref: '#/components/responses/GatewayTimeout'
+      description: 'Used to fetch all bookable availabilities for a single item within a specified `date` (in the company''s local time) in a simplified format (without custom field information and other fields).
+
+
+        This variation can be useful for caching availabilities when extra fields are not needed, and it also performs with greater speed.
+
+
+        To get additional information such as `effective_cancellation_policy` and `effective_booking_cutoff` in the response, add the query parameter `?detailed=yes` to the end of the URL.
+
+
+        To get metadata information on the custom field instances in the response, add the query parameter `?custom_fields_summary=yes` at the end of the URL.'
+  /companies/<shortname>/items/<item.pk>/minimal/availabilities/date-range/<start-date>/<end-date>/:
+    get:
+      summary: Minimal Availabilities By Date Range
+      operationId: get-minimal-availabilities-by-date-range
+      deprecated: false
+      tags:
+      - Availabilities Endpoints
+      parameters:
+      - $ref: '#/components/parameters/X-FareHarbor-API-App'
+      - $ref: '#/components/parameters/X-FareHarbor-API-User'
+      - schema:
+          type: string
+          example: 'hawaiianadventures
+
+            '
+        name: shortname
+        in: path
+        required: true
+        description: '
+
+          A unique FareHarbor name assigned to each company when their Dashboard is created, used to access the company''s specific information.
+
+          '
+      - schema:
+          type: integer
+          example: '1867
+
+            '
+        name: item.pk
+        in: path
+        required: true
+        description: '
+
+          The unique numerical ID of the bookable product (referred to as `item` in FareHarbor).
+
+          '
+      - schema:
+          type: string
+          format: date
+          example: '2015-01-22
+
+            '
+        name: start-date
+        in: path
+        required: true
+        description: '
+
+          Marks the start (inclusive) of the requested time period. `start-date` should be in the format YYYY-MM-DD and taken to be in the company''s local time.
+
+          '
+      - schema:
+          type: string
+          format: date
+          example: '2015-01-22
+
+            '
+        name: end-date
+        in: path
+        required: true
+        description: '
+
+          Marks the end (inclusive) of the requested time period. `end-date` should be in the format YYYY-MM-DD and taken to be in the company''s local time.
+
+          '
+      - schema:
+          type: string
+          example: '[yes|no]
+
+            '
+        name: detailed
+        in: query
+        required: false
+        description: '
+
+          Include additional availability details
+
+          '
+      - schema:
+          type: string
+          example: '[yes|no]
+
+            '
+        name: bookable_only
+        in: query
+        required: false
+        description: '
+
+          Include only availabilities that are bookable
+
+          '
+      - schema:
+          type: string
+          example: '[yes|no]
+
+            '
+        name: custom_fields_summary
+        in: query
+        required: false
+        description: '
+
+          Include summarized custom field metadata
+
+          '
+      responses:
+        '200':
+          description: '
+
+            Returns an array of `Availability` objects (minimal representation).
+
+
+            Returns possibly-bookable availabilities for the range `start-date` through `end-date` (in the company''s local time). Note that possibly-bookable availabilities do not include those for which customers are requested to "call to book".
+
+
+            Excludes custom field information from the response.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MINIMAL_AVAILABILITIES_RESPONSE_JSON_SCHEMA'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '504':
+          $ref: '#/components/responses/GatewayTimeout'
+      description: 'Used to fetch all bookable availabilities for a single item within a specified `date` range (in the company''s local time) in a simplified format (without custom field information and other fields). The largest date range that can be pulled in one single request is 7 days.
+
+
+        This variation can be useful for caching availabilities when extra fields are not needed, and it also performs with greater speed.
+
+
+        To get additional information such as `effective_cancellation_policy` and `effective_booking_cutoff` in the response, add the query parameter `?detailed=yes` to the end of the URL.
+
+
+        To get metadata information on the custom field instances in the response, add the query parameter `?custom_fields_summary=yes` at the end of the URL.'
+components:
+  schemas:
+    MINIMAL_AVAILABILITIES_RESPONSE_JSON_SCHEMA:
+      $schema: http://json-schema.org/draft-04/schema#
+      additionalProperties: false
+      definitions:
+        availability:
+          properties:
+            capacity:
+              description: The overall maximum number of customers that can currently book this availability; this number will change over time as other customers book.
+              example: 3
+              type: number
+            crew_members:
+              items:
+                $ref: '#/components/schemas/MINIMAL_AVAILABILITIES_RESPONSE_JSON_SCHEMA/definitions/crew_member'
+              type: array
+            custom_field_instances:
+              items:
+                $ref: '#/components/schemas/MINIMAL_AVAILABILITIES_RESPONSE_JSON_SCHEMA/definitions/custom_field_instance_summary'
+              type: array
+            customer_type_rates:
+              items:
+                $ref: '#/components/schemas/MINIMAL_AVAILABILITIES_RESPONSE_JSON_SCHEMA/definitions/customer_type_rate'
+              type: array
+            effective_booking_cutoff:
+              $ref: '#/components/schemas/MINIMAL_AVAILABILITIES_RESPONSE_JSON_SCHEMA/definitions/effective_booking_cutoff'
+            effective_cancellation_policy:
+              $ref: '#/components/schemas/MINIMAL_AVAILABILITIES_RESPONSE_JSON_SCHEMA/definitions/effective_cancellation_policy'
+            end_at:
+              description: The availability's end time (set in the company's local time); note that this time can be arbitrarily long or short, and that start_at can equal end_at for 'point' availabilities.
+              example: 2023-08-18T03:30:00-0600
+              format: datetime
+              type: string
+            headline:
+              description: The availability's public headline. Only included when `detailed=yes`.
+              example: Epic Jet Ski Tour
+              type: string
+            maximum_party_size:
+              oneOf:
+              - example: 1
+                type: number
+              - type: 'null'
+            minimum_party_size:
+              oneOf:
+              - example: 1
+                type: number
+              - type: 'null'
+            online_booking_status:
+              description: The availability's status.
+              enum:
+              - auto
+              - open
+              - call
+              - closed
+              - cancelled
+              example: auto
+              type: string
+            pk:
+              description: The availabilities's unique ID.
+              example: 50291151
+              format: int32
+              type: number
+            start_at:
+              description: The availability's start time (set in the company's local time); note that this time can be arbitrarily long or short, and that start_at can equal end_at for 'point' availabilities.
+              example: 2023-08-18T00:30:00-0600
+              format: datetime
+              type: string
+          required:
+          - pk
+          - start_at
+          - end_at
+          - capacity
+          - minimum_party_size
+          - maximum_party_size
+          - online_booking_status
+          - customer_type_rates
+          type: object
+        crew_member:
+          additionalProperties: false
+          properties:
+            note:
+              description: A note on the crew member.
+              type: string
+            pk:
+              description: The crew member's unique ID.
+              format: int32
+              type: number
+            role:
+              $ref: '#/components/schemas/MINIMAL_AVAILABILITIES_RESPONSE_JSON_SCHEMA/definitions/role'
+              description: The role of the crew member.
+            user:
+              $ref: '#/components/schemas/MINIMAL_AVAILABILITIES_RESPONSE_JSON_SCHEMA/definitions/user'
+              description: The crew member user.
+          required:
+          - pk
+          - note
+          - user
+          type: object
+        custom_field_instance_summary:
+          additionalProperties: false
+          properties:
+            custom_field:
+              $ref: '#/components/schemas/MINIMAL_AVAILABILITIES_RESPONSE_JSON_SCHEMA/definitions/custom_field_summary'
+            pk:
+              description: The custom field instance's unique ID.
+              example: 2681
+              format: int32
+              type: number
+          required:
+          - pk
+          - custom_field
+          type: object
+        custom_field_summary:
+          additionalProperties: false
+          properties:
+            is_priced:
+              description: Indicates whether the custom field has pricing configured.
+              example: false
+              type: boolean
+            is_required:
+              description: Indicates whether the custom field requires a value.
+              example: true
+              type: boolean
+            modifier_kind:
+              description: Determines whether an offset or percentage is used when the total is adjusted or set.
+              enum:
+              - percentage
+              - offset
+              example: percentage
+              type: string
+            modifier_type:
+              description: Determines whether the total is adjusted or set.
+              enum:
+              - adjust
+              - set
+              - none
+              example: adjust
+              type: string
+            name:
+              description: The name of the custom field.
+              example: Weight
+              type: string
+            offset:
+              description: 'When modifier_type is adjust: a positive or negative amount value. When modifier_type is set: a positive amount value. Only applicable when modifier_kind is offset.'
+              type: number
+            percentage:
+              description: 'When modifier_type is adjust: a number between -100 and 100 inclusive. When modifier_type is set: a number between 0 and 100 inclusive. Only applicable when modifier_kind is percentage.'
+              example: 35
+              type: number
+            pk:
+              description: The custom field's unique ID.
+              example: 4502
+              format: int32
+              type: number
+            total:
+              description: The absolute price of a single custom field of this type when modifier_kind is offset. May be 0 for percentage pricing until applied to a base amount.
+              example: 20000
+              type: number
+            type:
+              description: The custom field's type.
+              example: short
+              type: string
+          required:
+          - pk
+          - name
+          - type
+          - is_required
+          - is_priced
+          - modifier_kind
+          - modifier_type
+          - offset
+          - percentage
+          - total
+          type: object
+        customer_prototype:
+          additionalProperties: false
+          properties:
+            display_name:
+              description: The customer prototype's display name.
+              example: Adult
+              type: string
+            maximum_age:
+              oneOf:
+              - description: The maximum age for this customer type (inclusive).
+                example: 64
+                type: number
+              - type: 'null'
+            minimum_age:
+              oneOf:
+              - description: The minimum age for this customer type (inclusive).
+                example: 18
+                type: number
+              - type: 'null'
+            note:
+              type: string
+            pk:
+              description: The customer prototype's unique ID.
+              example: 2522
+              format: int32
+              type: number
+            total:
+              description: The price of a single customer of this type.
+              example: 20000
+              type: number
+            total_including_tax:
+              description: The price of a single customer of this type plus applicable taxes.
+              example: 21550
+              type: number
+          required:
+          - pk
+          - display_name
+          - note
+          - minimum_age
+          - maximum_age
+          - total
+          type: object
+        customer_type:
+          additionalProperties: false
+          properties:
+            note:
+              description: A brief note about this customer type that can be displayed to end users.
+              example: At least 18 years old.
+              type: string
+            pk:
+              description: The customer type's unique ID.
+              example: 589
+              format: int32
+              type: number
+            plural:
+              description: The plural form of the name of this customer type.
+              example: Adults
+              type: string
+            singular:
+              description: The singular form of the name of this customer type.
+              example: Adult
+              type: string
+          required:
+          - pk
+          - singular
+          - plural
+          - note
+          type: object
+        customer_type_rate:
+          additionalProperties: false
+          properties:
+            capacity:
+              oneOf:
+              - description: The maximum number of customers of this type that can currently book this availability; this number will change over time as other customers book.
+                example: 10
+                type: number
+              - type: 'null'
+            custom_field_instances:
+              items:
+                $ref: '#/components/schemas/MINIMAL_AVAILABILITIES_RESPONSE_JSON_SCHEMA/definitions/custom_field_instance_summary'
+              type: array
+            customer_prototype:
+              $ref: '#/components/schemas/MINIMAL_AVAILABILITIES_RESPONSE_JSON_SCHEMA/definitions/customer_prototype'
+            customer_type:
+              $ref: '#/components/schemas/MINIMAL_AVAILABILITIES_RESPONSE_JSON_SCHEMA/definitions/customer_type'
+            maximum_party_size:
+              oneOf:
+              - type: number
+              - type: 'null'
+            minimum_party_size:
+              oneOf:
+              - type: number
+              - type: 'null'
+            pk:
+              description: The customer type rate's unique ID.
+              example: 978
+              format: int32
+              type: number
+          required:
+          - pk
+          - capacity
+          - minimum_party_size
+          - maximum_party_size
+          - customer_type
+          - customer_prototype
+          type: object
+        cutoff_time:
+          oneOf:
+          - description: The cutoff time (in company's local time).
+            example: 2024-04-16T00:00:00-1000
+            format: datetime
+            type: string
+          - type: 'null'
+        effective_booking_cutoff:
+          additionalProperties: false
+          properties:
+            cutoff:
+              $ref: '#/components/schemas/MINIMAL_AVAILABILITIES_RESPONSE_JSON_SCHEMA/definitions/cutoff_time'
+          required:
+          - cutoff
+          type: object
+        effective_cancellation_policy:
+          additionalProperties: false
+          properties:
+            cutoff:
+              $ref: '#/components/schemas/MINIMAL_AVAILABILITIES_RESPONSE_JSON_SCHEMA/definitions/cutoff_time'
+            type:
+              description: The cancellation policy's type
+              enum:
+              - hours-before-start
+              - hours-before-midnight
+              - always
+              - never
+              example: hours-before-start
+              type: string
+          required:
+          - type
+          - cutoff
+          type: object
+        role:
+          additionalProperties: false
+          properties:
+            pk:
+              description: The role's unique ID.
+              format: int32
+              type: number
+            short_name:
+              description: The roles's short name.
+              type: string
+          required:
+          - pk
+          - short_name
+          type: object
+        user:
+          additionalProperties: false
+          properties:
+            name:
+              description: The name of the user.
+              type: string
+            username:
+              description: The username of the user.
+              type: string
+          required:
+          - name
+          - username
+          type: object
+      properties:
+        availabilities:
+          items:
+            $ref: '#/components/schemas/MINIMAL_AVAILABILITIES_RESPONSE_JSON_SCHEMA/definitions/availability'
+          type: array
+      required:
+      - availabilities
+      type: object
+    AVAILABILITY_RESPONSE_JSON_SCHEMA:
+      $schema: http://json-schema.org/draft-04/schema#
+      additionalProperties: false
+      definitions:
+        address:
+          additionalProperties: false
+          properties:
+            city:
+              example: Honolulu
+              type: string
+            country:
+              example: US
+              type: string
+            postal_code:
+              example: '96821'
+              type: string
+            province:
+              example: HI
+              type: string
+            street:
+              example: 123 Wailupe Cir
+              type: string
+          required:
+          - city
+          - country
+          - postal_code
+          - province
+          - street
+          type: object
+        availability:
+          properties:
+            capacity:
+              description: The overall maximum number of customers that can currently book this availability; this number will change over time as other customers book.
+              example: 3
+              type: number
+            crew_members:
+              items:
+                $ref: '#/components/schemas/AVAILABILITY_RESPONSE_JSON_SCHEMA/definitions/crew_member'
+              type: array
+            custom_field_instances:
+              items:
+                $ref: '#/components/schemas/AVAILABILITY_RESPONSE_JSON_SCHEMA/definitions/custom_field_instance'
+              type: array
+            customer_type_rates:
+              items:
+                $ref: '#/components/schemas/AVAILABILITY_RESPONSE_JSON_SCHEMA/definitions/customer_type_rate'
+              type: array
+            effective_booking_cutoff:
+              $ref: '#/components/schemas/AVAILABILITY_RESPONSE_JSON_SCHEMA/definitions/effective_booking_cutoff'
+            effective_cancellation_policy:
+              $ref: '#/components/schemas/AVAILABILITY_RESPONSE_JSON_SCHEMA/definitions/effective_cancellation_policy'
+            end_at:
+              description: The availability's end time (set in the company's local time); note that this time can be arbitrarily long or short, and that start_at can equal end_at for 'point' availabilities.
+              example: 2023-08-18T03:30:00-0600
+              format: datetime
+              type: string
+            headline:
+              description: The availability's headline.
+              example: Epic Jet Ski Tour
+              type: string
+            item:
+              $ref: '#/components/schemas/AVAILABILITY_RESPONSE_JSON_SCHEMA/definitions/item'
+            maximum_party_size:
+              oneOf:
+              - example: 1
+                type: number
+              - type: 'null'
+            minimum_party_size:
+              oneOf:
+              - example: 1
+                type: number
+              - type: 'null'
+            online_booking_status:
+              description: The availability's status.
+              enum:
+              - auto
+              - open
+              - call
+              - closed
+              - cancelled
+              example: auto
+              type: string
+            pk:
+              description: The availabilities's unique ID.
+              example: 50291151
+              format: int32
+              type: number
+            start_at:
+              description: The availability's start time (set in the company's local time); note that this time can be arbitrarily long or short, and that start_at can equal end_at for 'point' availabilities.
+              example: 2023-08-18T00:30:00-0600
+              format: datetime
+              type: string
+          required:
+          - pk
+          - start_at
+          - end_at
+          - capacity
+          - minimum_party_size
+          - maximum_party_size
+          - online_booking_status
+          - headline
+          - item
+          - customer_type_rates
+          - custom_field_instances
+          type: object
+        crew_member:
+          additionalProperties: false
+          properties:
+            note:
+              description: A note on the crew member.
+              type: string
+            pk:
+              description: The crew member's unique ID.
+              format: int32
+              type: number
+            role:
+              $ref: '#/components/schemas/AVAILABILITY_RESPONSE_JSON_SCHEMA/definitions/role'
+              description: The role of the crew member.
+            user:
+              $ref: '#/components/schemas/AVAILABILITY_RESPONSE_JSON_SCHEMA/definitions/user'
+              description: The crew member user.
+          required:
+          - pk
+          - note
+          - user
+          type: object
+        custom_field:
+          additionalProperties: false
+          properties:
+            booking_notes:
+              description: Notes for the customer specific to the custom field.
+              example: ''
+              format: markdown
+              type: string
+            booking_notes_safe_html:
+              description: Notes for the customer specific to the custom field.
+              format: markdown
+              type: string
+            count_max:
+              description: The maximum amount possible for a count type custom field.
+              example: 300
+              type: number
+            count_min:
+              description: The minimum amount possible for a count type custom field.
+              example: 0
+              type: number
+            description:
+              description: The custom field's description.
+              example: Do you need additional safety equipment?
+              format: markdown
+              type: string
+            description_safe_html:
+              description: The custom field's description.
+              example: <p>Do you need additional safety equipment?</p>
+              format: markdown
+              type: string
+            extended_options:
+              items:
+                $ref: '#/components/schemas/AVAILABILITY_RESPONSE_JSON_SCHEMA/definitions/extended_option'
+              type: array
+            is_always_per_customer:
+              description: Whether pricing should be applied to each customer (when the customer field is at the booking level).
+              example: true
+              type: boolean
+            is_required:
+              description: Indicates whether the custom field requires a value.
+              example: false
+              type: boolean
+            is_taxable:
+              description: Whether pricing should be applied to each customer (when the customer field is at the booking level).
+              example: true
+              type: boolean
+            modifier_kind:
+              description: Determines whether an offset or percentage is used when the total is adjusted or set.
+              enum:
+              - percentage
+              - offset
+              example: percentage
+              type: string
+            modifier_type:
+              description: Determines whether the total is adjusted or set.
+              enum:
+              - adjust
+              - set
+              - none
+              example: adjust
+              type: string
+            name:
+              description: The name of the custom field.
+              example: Safety Equipment
+              type: string
+            offset:
+              description: 'When modifier_type is adjust: a positive or negative amount value. When modifier_type is set: a positive amount value. Only applicable when modifier_kind is offset.'
+              type: number
+            percentage:
+              description: 'When modifier_type is adjust: a number between -100 and 100 inclusive. When modifier_type is set: a number between 0 and 100 inclusive. Only applicable when modifier_kind is percentage.'
+              example: 35
+              type: number
+            pk:
+              description: The custom field's unique ID.
+              example: 4502
+              format: int32
+              type: number
+            tags:
+              items:
+                $ref: '#/components/schemas/AVAILABILITY_RESPONSE_JSON_SCHEMA/definitions/tag'
+              type: array
+            title:
+              type: string
+            total:
+              description: The price of a single custom field of this type.
+              example: 20000
+              type: number
+            total_including_tax:
+              description: The price of a single custom field of this type plus applicable taxes.
+              example: 21550
+              type: number
+            type:
+              description: The custom field's type.
+              enum:
+              - yes-no
+              - short
+              - long
+              - extended-option
+              - count
+              example: extended-option
+              type: string
+          required:
+          - pk
+          - type
+          - is_required
+          - description
+          - description_safe_html
+          - name
+          - booking_notes
+          - booking_notes_safe_html
+          - offset
+          - total
+          - total_including_tax
+          type: object
+        custom_field_instance:
+          additionalProperties: false
+          properties:
+            custom_field:
+              $ref: '#/components/schemas/AVAILABILITY_RESPONSE_JSON_SCHEMA/definitions/custom_field'
+              description: The custom field associated with the custom field instance.
+            pk:
+              description: The custom field instance's unique ID.
+              example: 2681
+              format: int32
+              type: number
+          required:
+          - pk
+          - custom_field
+          type: object
+        customer_prototype:
+          additionalProperties: false
+          properties:
+            display_name:
+              description: The customer prototype's display name.
+              example: Adult
+              type: string
+            maximum_age:
+              oneOf:
+              - description: The maximum age for this customer type (inclusive).
+                example: 64
+                type: number
+              - type: 'null'
+            minimum_age:
+              oneOf:
+              - description: The minimum age for this customer type (inclusive).
+                example: 18
+                type: number
+              - type: 'null'
+            note:
+              type: string
+            pk:
+              description: The customer prototype's unique ID.
+              example: 2522
+              format: int32
+              type: number
+            total:
+              description: The price of a single customer of this type.
+              example: 20000
+              type: number
+            total_including_tax:
+              description: The price of a single customer of this type plus applicable taxes.
+              example: 21550
+              type: number
+          required:
+          - pk
+          - display_name
+          - note
+          - minimum_age
+          - maximum_age
+          - total
+          type: object
+        customer_type:
+          additionalProperties: false
+          properties:
+            note:
+              description: A brief note about this customer type that can be displayed to end users.
+              example: At least 18 years old.
+              type: string
+            pk:
+              description: The customer type's unique ID.
+              example: 589
+              format: int32
+              type: number
+            plural:
+              description: The plural form of the name of this customer type.
+              example: Adults
+              type: string
+            singular:
+              description: The singular form of the name of this customer type.
+              example: Adult
+              type: string
+          required:
+          - pk
+          - singular
+          - plural
+          - note
+          type: object
+        customer_type_rate:
+          additionalProperties: false
+          properties:
+            capacity:
+              oneOf:
+              - description: The maximum number of customers of this type that can currently book this availability; this number will change over time as other customers book.
+                example: 10
+                type: number
+              - type: 'null'
+            custom_field_instances:
+              items:
+                $ref: '#/components/schemas/AVAILABILITY_RESPONSE_JSON_SCHEMA/definitions/custom_field_instance'
+              type: array
+            customer_prototype:
+              $ref: '#/components/schemas/AVAILABILITY_RESPONSE_JSON_SCHEMA/definitions/customer_prototype'
+            customer_type:
+              $ref: '#/components/schemas/AVAILABILITY_RESPONSE_JSON_SCHEMA/definitions/customer_type'
+            maximum_party_size:
+              oneOf:
+              - example: 1
+                type: number
+              - type: 'null'
+            minimum_party_size:
+              oneOf:
+              - type: number
+              - type: 'null'
+            pk:
+              description: The customer type rate's unique ID.
+              example: 978
+              format: int32
+              type: number
+            total:
+              description: The price of a single customer of this type.
+              example: 20000
+              type: number
+            total_including_tax:
+              description: The price of a single customer of this type plus applicable taxes.
+              example: 21550
+              type: number
+          required:
+          - pk
+          - total
+          - capacity
+          - minimum_party_size
+          - maximum_party_size
+          - customer_type
+          - customer_prototype
+          - custom_field_instances
+          type: object
+        cutoff_time:
+          oneOf:
+          - description: The cutoff time (in company's local time).
+            example: 2024-04-16T00:00:00-1000
+            format: datetime
+            type: string
+          - type: 'null'
+        effective_booking_cutoff:
+          additionalProperties: false
+          properties:
+            cutoff:
+              $ref: '#/components/schemas/AVAILABILITY_RESPONSE_JSON_SCHEMA/definitions/cutoff_time'
+          required:
+          - cutoff
+          type: object
+        effective_cancellation_policy:
+          additionalProperties: false
+          properties:
+            cutoff:
+              $ref: '#/components/schemas/AVAILABILITY_RESPONSE_JSON_SCHEMA/definitions/cutoff_time'
+            type:
+              description: The cancellation policy's type
+              enum:
+              - hours-before-start
+              - hours-before-midnight
+              - always
+              - never
+              example: hours-before-start
+              type: string
+          required:
+          - type
+          - cutoff
+          type: object
+        extended_option:
+          additionalProperties: false
+          properties:
+            description:
+              description: The extended option's description.
+              example: Need a helmet?
+              format: markdown
+              type: string
+            description_safe_html:
+              description: The extended option's description.
+              example: <p>Need a helmet?</p>
+              format: markdown
+              type: string
+            is_always_per_customer:
+              description: Whether pricing should be applied to each customer (when the customer field is at the booking level).
+              example: true
+              type: boolean
+            is_taxable:
+              description: Whether pricing should be applied to each customer (when the customer field is at the booking level).
+              example: true
+              type: boolean
+            modifier_kind:
+              description: Determines whether an offset or percentage is used when the total is adjusted or set.
+              enum:
+              - percentage
+              - offset
+              example: percentage
+              type: string
+            modifier_type:
+              description: Determines whether the total is adjusted or set.
+              enum:
+              - adjust
+              - set
+              - none
+              example: adjust
+              type: string
+            name:
+              description: The extended option's name.
+              example: Helmet
+              type: string
+            offset:
+              description: 'When modifier_type is adjust: a positive or negative amount value. When modifier_type is set: a positive amount value. Only applicable when modifier_kind is offset.'
+              type: number
+            percentage:
+              description: 'When modifier_type is adjust: a number between -100 and 100 inclusive. When modifier_type is set: a number between 0 and 100 inclusive. Only applicable when modifier_kind is percentage.'
+              example: 35
+              type: number
+            pk:
+              description: The extended option's unique ID.
+              example: 105
+              format: int32
+              type: number
+            total:
+              description: The price of a single custom field of this type.
+              example: 20000
+              type: number
+            total_including_tax:
+              description: The price of a single custom field of this type plus applicable taxes.
+              example: 21550
+              type: number
+          required:
+          - pk
+          - name
+          - description
+          - description_safe_html
+          - modifier_kind
+          - modifier_type
+          - offset
+          - percentage
+          - is_always_per_customer
+          - is_taxable
+          - total
+          - total_including_tax
+          type: object
+        item:
+          additionalProperties: false
+          properties:
+            headline:
+              description: The item's headline.
+              example: Epic Jet Ski Tour
+              type: string
+            name:
+              description: The item's name.
+              example: Jet Ski Tour
+              type: string
+            pk:
+              description: The items's unique ID.
+              example: 1867
+              format: int32
+              type: number
+            primary_location:
+              oneOf:
+              - $ref: '#/components/schemas/AVAILABILITY_RESPONSE_JSON_SCHEMA/definitions/primary_location'
+              - type: 'null'
+          required:
+          - pk
+          - name
+          - headline
+          - primary_location
+          type: object
+        primary_location:
+          additionalProperties: false
+          properties:
+            address:
+              $ref: '#/components/schemas/AVAILABILITY_RESPONSE_JSON_SCHEMA/definitions/address'
+              description: The location's physical address.
+            google_place_id:
+              description: The location's Google Place ID.
+              example: ChIJYZ4srGUSAHwRT1Da4amp3x
+              format: uuid
+              type: string
+            latitude:
+              description: The location's latitude.
+              oneOf:
+              - example: '-157.85'
+                type: number
+              - type: 'null'
+            longitude:
+              description: The location's longitude.
+              oneOf:
+              - example: '21.30'
+                type: number
+              - type: 'null'
+            note:
+              description: A brief note about this location that can be displayed to end users.
+              example: Next to the blue fence.
+              format: markdown
+              type: string
+            note_safe_html:
+              description: A brief note about this location that can be displayed to end users.
+              example: <p>Next to the blue fence.</p>
+              format: markdown
+              type: string
+            pk:
+              description: The location's unique ID.
+              example: 234234
+              format: int32
+              type: number
+            tripadvisor_url:
+              description: The location's TripAdvisor URL.
+              example: https://www.tripadvisor.com/Attraction_Review-g60982-d184886-Reviews-Epic_Jet_Ski_Tour-Honolulu_Oahu_Hawaii.html
+              format: uri
+              type: string
+            type:
+              description: The location's type.
+              example: primary
+              type: string
+          required:
+          - pk
+          - type
+          - note
+          - note_safe_html
+          - address
+          - longitude
+          - latitude
+          - google_place_id
+          - tripadvisor_url
+          type: object
+        role:
+          additionalProperties: false
+          properties:
+            pk:
+              description: The role's unique ID.
+              format: int32
+              type: number
+            short_name:
+              description: The roles's short name.
+              type: string
+          required:
+          - pk
+          - short_name
+          type: object
+        tag:
+          additionalProperties: false
+          properties:
+            name:
+              description: The tag's display name.
+              example: Outdoor adventure
+              type: string
+            shortname:
+              description: The tag's short name. The short name is unique per company and is limited to lowercase letters (a-z), digits (0-9), and the dash character.
+              example: outdoor
+              type: string
+          required:
+          - name
+          type: object
+        user:
+          additionalProperties: false
+          properties:
+            name:
+              description: The name of the user.
+              type: string
+            username:
+              description: The username of the user.
+              type: string
+          required:
+          - name
+          - username
+          type: object
+      properties:
+        availability:
+          $ref: '#/components/schemas/AVAILABILITY_RESPONSE_JSON_SCHEMA/definitions/availability'
+      required:
+      - availability
+      type: object
+    Codes403:
+      type: string
+      enum:
+      - app-invalid
+      - app-key-invalid
+      - invalid-checkin-permissions-error
+      - orderize-booking-uuid-invalid-error
+      - user-key-invalid
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      required:
+      - code
+      - message
+    Codes400:
+      type: string
+      enum:
+      - availability-date-range-invalid
+      - book-data-parse-error
+      - book-data-validation-error
+      - bookability-error
+      - booking-cancellation-error
+      - booking-creation-error
+      - booking-custom-field-value-creation-error
+      - booking-custom-field-values-invalid
+      - booking-note-error
+      - contact-error
+      - content-type-invalid-error
+      - customer-custom-field-value-creation-error
+      - customer-custom-field-value-update-error
+      - customer-custom-field-values-invalid
+      - customer-type-rates-invalid
+      - invalid-checkin-already-checked-in
+      - invalid-checkin-customer
+      - invalid-checkin-status-error
+      - invalid-qr-code-error
+      - key-missing
+      - lodging-pk-invalid
+      - no-default-checkin-status-error
+      - orderize-booking-uuid-invalid-error
+      - payment-error
+      - rebooking-uuid-invalid-error
+      - resource-bookability-error
+      - voucher-number-invalid
+      - voucher-number-not-specified
+    AVAILABILITY_LODGINGS_RESPONSE_JSON_SCHEMA:
+      $schema: http://json-schema.org/draft-04/schema#
+      additionalProperties: false
+      definitions:
+        lodging:
+          additionalProperties: false
+          properties:
+            is_pickup_available:
+              description: Indicates whether a pickup is offered for the lodging (for the availability specified in the request URL). This value reflects the current state of the system and can change when updates are made.
+              example: true
+              type: boolean
+            name:
+              description: The lodging's name.
+              example: Wyndham Royal Garden
+              type: string
+            pickup_time:
+              description: The preferred pickup time (set in the company's local time).
+              example: 2024-10-08T09:00:00-0400
+              format: datetime
+              type:
+              - string
+              - 'null'
+            pk:
+              description: The lodging's unique ID.
+              example: 2314
+              format: int32
+              type: number
+            preferred_pickup:
+              $ref: '#/components/schemas/AVAILABILITY_LODGINGS_RESPONSE_JSON_SCHEMA/definitions/preferred_pickup'
+          required:
+          - pk
+          - name
+          - is_pickup_available
+          type: object
+        preferred_pickup:
+          additionalProperties: false
+          properties:
+            latitude:
+              description: The preferred pickup location's latitude.
+              example: '-157.85'
+              type:
+              - number
+              - 'null'
+            longitude:
+              description: The preferred pickup location's longitude.
+              example: '21.30'
+              type:
+              - number
+              - 'null'
+            map_url:
+              description: The google maps link of the preferred pickup location
+              example: https://goo.gl/maps/qW2THBcd5Pj8Ga8w6
+              format: uri
+              type: string
+            name:
+              description: The name of the preferred pickup location
+              example: Frankton Bus Shelter
+              type: string
+          required:
+          - name
+          - map_url
+          - longitude
+          - latitude
+          type: object
+      properties:
+        lodgings:
+          items:
+            $ref: '#/components/schemas/AVAILABILITY_LODGINGS_RESPONSE_JSON_SCHEMA/definitions/lodging'
+          type: array
+      required:
+      - lodgings
+      type: object
+    Error400:
+      allOf:
+      - $ref: '#/components/schemas/Error'
+      - type: object
+        properties:
+          code:
+            $ref: '#/components/schemas/Codes400'
+    Error403:
+      allOf:
+      - $ref: '#/components/schemas/Error'
+      - type: object
+        properties:
+          code:
+            $ref: '#/components/schemas/Codes403'
+    Error404:
+      allOf:
+      - $ref: '#/components/schemas/Error'
+      - type: object
+        properties:
+          code:
+            $ref: '#/components/schemas/Codes404'
+    Codes404:
+      type: string
+      enum:
+      - availability-pk-invalid
+      - booking-uuid-invalid
+      - company-shortname-invald
+      - customer-custom-field-value-pk-invalid
+      - item-pk-invalid
+  responses:
+    Forbidden:
+      description: Forbidden (see [Error Codes](#tag/Error-Codes))
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error403'
+    BadRequest:
+      description: Bad Request (see [Error Codes](#tag/Error-Codes))
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error400'
+    NotFound:
+      description: The specified resource was not found (see [Error Codes](#tag/Error-Codes))
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error404'
+    TooManyRequests:
+      description: Too Many Requests (see [Rate Limits](#tag/Getting-Started/Rate-Limits))
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    GatewayTimeout:
+      description: '[Gateway Timeout](#tag/Getting-Started/Timeouts)'
+  parameters:
+    X-FareHarbor-API-User:
+      name: X-FareHarbor-API-User
+      in: header
+      required: true
+      schema:
+        type: string
+      description: USER-KEY (Please log in to see your key)
+      example: USER-KEY
+    X-FareHarbor-API-App:
+      name: X-FareHarbor-API-App
+      in: header
+      required: true
+      schema:
+        type: string
+      description: APP-KEY (Please log in to see your key)
+      example: APP-KEY
+x-stoplight:
+  id: obltqlvi1ac1n

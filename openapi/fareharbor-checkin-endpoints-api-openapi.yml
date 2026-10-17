@@ -1,0 +1,2170 @@
+openapi: 3.2.0
+info:
+  title: FareHarbor Integration Center Checkin Endpoints API
+  version: '1.0'
+  contact:
+    email: support@fareharbor.com
+    name: FareHarbor
+    url: https://help.fareharbor.com/hc/
+  description: The check-in endpoints in the FareHarbor API provide essential capabilities for managing the check-in processes efficiently and seamlessly.
+servers:
+- url: https://fareharbor.com/api/external/v1
+  description: production
+- url: https://demo.fareharbor.com/api/external/v1
+  description: demo
+tags:
+- name: Checkin Endpoints
+  description: The check-in endpoints in the FareHarbor API provide essential capabilities for managing the check-in processes efficiently and seamlessly.
+paths:
+  /companies/<shortname>/checkin/:
+    put:
+      summary: Checkin Qr Code
+      operationId: put-checkin-qr-code
+      deprecated: false
+      tags:
+      - Checkin Endpoints
+      parameters:
+      - $ref: '#/components/parameters/X-FareHarbor-API-App'
+      - $ref: '#/components/parameters/X-FareHarbor-API-User'
+      - schema:
+          type: string
+          example: 'hawaiianadventures
+
+            '
+        name: shortname
+        in: path
+        required: true
+        description: '
+
+          A unique FareHarbor name assigned to each company when their Dashboard is created, used to access the company''s specific information.
+
+          '
+      responses:
+        '200':
+          description: "\nReturns a `Booking` object with the customers status updated to reflect that they are checked in. \n\nWhen \"auto\" check-in is used in the request, an HTTP 400 will be returned if the customer (or, in the case of whole booking checkin, any customer) is already checked in.\n"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BOOKING_RESPONSE_JSON_SCHEMA'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '504':
+          $ref: '#/components/responses/GatewayTimeout'
+      description: Used to check in a booking based on QR code.
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CHECKIN_QR_CODE_REQUEST_JSON_SCHEMA'
+  /companies/<company-shortname>/checkin-statuses/:
+    get:
+      summary: Checkin Statuses
+      operationId: get-checkin-statuses
+      deprecated: false
+      tags:
+      - Checkin Endpoints
+      parameters:
+      - $ref: '#/components/parameters/X-FareHarbor-API-App'
+      - $ref: '#/components/parameters/X-FareHarbor-API-User'
+      - schema:
+          type: string
+          example: 'hawaiianadventures
+
+            '
+        name: company-shortname
+        in: path
+        required: true
+        description: '
+
+          A unique FareHarbor name assigned to each company when their Dashboard is created, used to access the company''s specific information.
+
+          '
+      responses:
+        '200':
+          description: '
+
+            Returns an array of `CheckinStatus` objects for the `Company`. Note that checkin statuses are unique per company.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CHECKIN_STATUSES_RESPONSE_JSON_SCHEMA'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '504':
+          $ref: '#/components/responses/GatewayTimeout'
+      description: Used to pull a list of available checkin statuses by specifying it directly via pk instead of having to automatically select the checkin status.
+  /companies/<shortname>/bookings/<Booking.uuid>/checkin/:
+    put:
+      summary: Checkin Booking
+      operationId: put-checkin-booking
+      deprecated: false
+      tags:
+      - Checkin Endpoints
+      parameters:
+      - $ref: '#/components/parameters/X-FareHarbor-API-App'
+      - $ref: '#/components/parameters/X-FareHarbor-API-User'
+      - schema:
+          type: string
+          example: 'hawaiianadventures
+
+            '
+        name: shortname
+        in: path
+        required: true
+        description: '
+
+          A unique FareHarbor name assigned to each company when their Dashboard is created, used to access the company''s specific information.
+
+          '
+      - schema:
+          type: string
+          format: uuid
+          example: 'd75102be-9732-4523-90a8-c698eff2b983
+
+            '
+        name: Booking.uuid
+        in: path
+        required: true
+        description: '
+
+          The UUID that was generated when you first created the booking.
+
+          '
+      responses:
+        '200':
+          description: '
+
+            Returns a `Booking` object with the customers status updated to reflect that they are checked in.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BOOKING_RESPONSE_JSON_SCHEMA'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '504':
+          $ref: '#/components/responses/GatewayTimeout'
+      description: Used to check in a booking based on the booking UUID.
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CHECKIN_BOOKING_REQUEST_JSON_SCHEMA'
+components:
+  schemas:
+    BOOKING_RESPONSE_JSON_SCHEMA:
+      $schema: http://json-schema.org/draft-04/schema#
+      additionalProperties: false
+      definitions:
+        address:
+          additionalProperties: false
+          properties:
+            city:
+              example: Honolulu
+              type: string
+            country:
+              example: US
+              type: string
+            postal_code:
+              example: '96821'
+              type: string
+            province:
+              example: HI
+              type: string
+            street:
+              example: 123 Wailupe Cir
+              type: string
+          required:
+          - city
+          - country
+          - postal_code
+          - province
+          - street
+          type: object
+        affiliate_company:
+          oneOf:
+          - additionalProperties: false
+            properties:
+              currency:
+                description: The company's currency.
+                enum:
+                - aed
+                - aud
+                - bgn
+                - brl
+                - cad
+                - chf
+                - czk
+                - dkk
+                - eur
+                - gbp
+                - hkd
+                - huf
+                - mxn
+                - nok
+                - nzd
+                - pln
+                - ron
+                - sek
+                - sgd
+                - usd
+                example: usd
+                type: string
+              name:
+                description: The affiliate companies name.
+                example: Affiliate Company
+                type: string
+              shortname:
+                description: A unique FareHarbor name assigned to each company when their Dashboard is created, used to access the company's specific information.
+                example: affiliate_company
+                type: string
+            required:
+            - shortname
+            - name
+            - currency
+            type: object
+          - description: ''
+            type: 'null'
+        affiliate_metadata:
+          description: Metadata from affiliate sources.
+          properties:
+            airbnb:
+              $ref: '#/components/schemas/BOOKING_RESPONSE_JSON_SCHEMA/definitions/airbnb_metadata'
+          type: object
+        affiliation:
+          additionalProperties: false
+          properties:
+            affiliate_company:
+              $ref: '#/components/schemas/BOOKING_RESPONSE_JSON_SCHEMA/definitions/affiliate_company'
+          required:
+          - affiliate_company
+          type: object
+        agent:
+          oneOf:
+          - additionalProperties: false
+            properties:
+              name:
+                description: The agent's name.
+                example: Eddie
+                type: string
+              pk:
+                description: The agent's unique ID.
+                example: 2314
+                format: int32
+                type: number
+            required:
+            - pk
+            - name
+            type: object
+          - description: ''
+            type: 'null'
+        airbnb_guest_profile:
+          description: An Airbnb guest profile.
+          properties:
+            direct_thread_id:
+              description: The direct thread ID for the guest.
+              example: '2164961599'
+              type:
+              - string
+              - 'null'
+            user_id:
+              description: The Airbnb user ID.
+              example: '17780410'
+              type:
+              - string
+              - 'null'
+          type: object
+        airbnb_metadata:
+          description: Metadata from Airbnb bookings.
+          properties:
+            activity_id:
+              description: The Airbnb activity ID.
+              example: '6137649'
+              type:
+              - string
+              - 'null'
+            channel_thread_id:
+              description: The Airbnb channel thread ID.
+              example: '2199079188'
+              type:
+              - string
+              - 'null'
+            guest_id:
+              description: The Airbnb guest ID.
+              example: '17780410'
+              type:
+              - string
+              - 'null'
+            guest_profiles:
+              description: List of Airbnb guest profiles.
+              items:
+                $ref: '#/components/schemas/BOOKING_RESPONSE_JSON_SCHEMA/definitions/airbnb_guest_profile'
+              type:
+              - array
+              - 'null'
+            host_id:
+              description: The Airbnb host ID.
+              example: '1234'
+              type:
+              - string
+              - 'null'
+            offering_id:
+              description: The Airbnb offering ID.
+              example: '5495433'
+              type:
+              - string
+              - 'null'
+          type: object
+        arrival:
+          oneOf:
+          - additionalProperties: false
+            properties:
+              display_text:
+                description: A formatted string that can be shown to customers.
+                example: Please arrive by 12:15 pm
+                type: string
+              notes:
+                description: Notes from the activity company regarding arrival (e.g. check-in location details, driving directions); may not be provided.
+                example: 'Check-in Time is at 12:15 for your 12:45 Zipline adventure time. Our check-in locations is at our KapohoKine Adventures Store: 224 Kamehameha Ave Suite 106 Hilo, HI 96720'
+                format: markdown
+                type: string
+              notes_safe_html:
+                example: 'Check-in Time is at 12:15 for your 12:45 Zipline adventure time. Our check-in locations is at our KapohoKine Adventures Store: 224 Kamehameha Ave Suite 106 Hilo, HI 96720'
+                format: markdown
+                type: string
+              time:
+                description: The arrival time (set in the company's local time); the customer must provide their own transporation and arrive at the activity location by this time.
+                example: 2024-04-11T13:15:00-1000
+                format: datetime
+                type: string
+            required:
+            - time
+            - notes
+            - notes_safe_html
+            - display_text
+            type: object
+          - description: ''
+            type: 'null'
+        availability:
+          additionalProperties: false
+          properties:
+            capacity:
+              description: The overall maximum number of customers that can currently book this availability; this number will change over time as other customers book.
+              example: 3
+              type: number
+            crew_members:
+              items:
+                $ref: '#/components/schemas/BOOKING_RESPONSE_JSON_SCHEMA/definitions/crew_member'
+              type: array
+            custom_field_instances:
+              items:
+                $ref: '#/components/schemas/BOOKING_RESPONSE_JSON_SCHEMA/definitions/custom_field_instance'
+              type: array
+            customer_type_rates:
+              items:
+                $ref: '#/components/schemas/BOOKING_RESPONSE_JSON_SCHEMA/definitions/customer_type_rate'
+              type: array
+            effective_cancellation_policy:
+              $ref: '#/components/schemas/BOOKING_RESPONSE_JSON_SCHEMA/definitions/effective_cancellation_policy'
+            end_at:
+              description: The availability's end time (set in the company's local time); note that this time can be arbitrarily long or short, and that start_at can equal end_at for 'point' availabilities.
+              example: 2023-08-18T03:30:00-0600
+              format: datetime
+              type: string
+            headline:
+              description: The availability's headline.
+              example: Epic Jet Ski Tour
+              type: string
+            item:
+              $ref: '#/components/schemas/BOOKING_RESPONSE_JSON_SCHEMA/definitions/item'
+            maximum_party_size:
+              oneOf:
+              - example: 1
+                type: number
+              - type: 'null'
+            minimum_party_size:
+              oneOf:
+              - example: 1
+                type: number
+              - type: 'null'
+            online_booking_status:
+              description: The availability's status.
+              enum:
+              - auto
+              - open
+              - call
+              - closed
+              - cancelled
+              example: auto
+              type: string
+            pk:
+              description: The availabilities's unique ID.
+              example: 50291151
+              format: int32
+              type: number
+            start_at:
+              description: The availability's start time (set in the company's local time); note that this time can be arbitrarily long or short, and that start_at can equal end_at for 'point' availabilities.
+              example: 2023-08-18T00:30:00-0600
+              format: datetime
+              type: string
+          required:
+          - pk
+          - start_at
+          - end_at
+          - capacity
+          - minimum_party_size
+          - maximum_party_size
+          - online_booking_status
+          - headline
+          - item
+          - customer_type_rates
+          - custom_field_instances
+          type: object
+        booking:
+          additionalProperties: false
+          properties:
+            affiliate_company:
+              $ref: '#/components/schemas/BOOKING_RESPONSE_JSON_SCHEMA/definitions/affiliate_company'
+            affiliate_metadata:
+              $ref: '#/components/schemas/BOOKING_RESPONSE_JSON_SCHEMA/definitions/affiliate_metadata'
+            agent:
+              $ref: '#/components/schemas/BOOKING_RESPONSE_JSON_SCHEMA/definitions/agent'
+            amount_paid:
+              oneOf:
+              - type: number
+              - type: 'null'
+            amount_paid_display:
+              oneOf:
+              - example: '0.0'
+                type: string
+              - type: 'null'
+            arrival:
+              $ref: '#/components/schemas/BOOKING_RESPONSE_JSON_SCHEMA/definitions/arrival'
+            availability:
+              $ref: '#/components/schemas/BOOKING_RESPONSE_JSON_SCHEMA/definitions/availability'
+              description: The availability to which this booking corresponds.
+            booked_by:
+              oneOf:
+              - type: 'null'
+              - additionalProperties: false
+                properties:
+                  name:
+                    type: string
+                required:
+                - name
+                type: object
+            company:
+              $ref: '#/components/schemas/BOOKING_RESPONSE_JSON_SCHEMA/definitions/company'
+            confirmation_url:
+              description: The booking's confirmation page URL.
+              format: uri
+              type: string
+            contact:
+              $ref: '#/components/schemas/BOOKING_RESPONSE_JSON_SCHEMA/definitions/contact'
+              description: Contact information for this booking.
+            created_at:
+              description: The date and time at which the booking was created (set in utc time).
+              example: 2024-06-20T17:14:33+0000
+              format: datetime
+              type: string
+            custom_field_values:
+              items:
+                $ref: '#/components/schemas/BOOKING_RESPONSE_JSON_SCHEMA/definitions/custom_field_value'
+              type: array
+            customer_count:
+              description: The number of customers on this booking.
+              example: 1
+              type: number
+            customers:
+              description: A list of customers on this booking.
+              items:
+                $ref: '#/components/schemas/BOOKING_RESPONSE_JSON_SCHEMA/definitions/customer'
+              type: array
+            dashboard_url:
+              description: The booking's dashboard URL.
+              example: https://fareharbor.com/hawaiianadventures/dashboard/?overlay=/contacts/7/bookings/d75102be-9732-4523-90a8-c698eff2b983/
+              format: uri
+              type: string
+            desk:
+              $ref: '#/components/schemas/BOOKING_RESPONSE_JSON_SCHEMA/definitions/desk'
+            display_id:
+              example: '#6876876'
+              type: string
+            effective_cancellation_policy:
+              $ref: '#/components/schemas/BOOKING_RESPONSE_JSON_SCHEMA/definitions/effective_cancellation_policy'
+            external_id:
+              description: An additional identifier if necessary.
+              maxLength: 128
+              type: string
+            generated_codes:
+              items:
+                $ref: '#/components/schemas/BOOKING_RESPONSE_JSON_SCHEMA/definitions/generated_code'
+              type: array
+            invoice_price:
+              oneOf:
+              - description: The invoice price of this booking. Assuming that the user of the API is a reseller this will be the amount that the user of the API owes the vendor on this booking, if the vendor has opted to set up that information; otherwise it will be null.
+                type: number
+              - type: 'null'
+            invoice_price_display:
+              oneOf:
+              - type: string
+              - type: 'null'
+            is_eligible_for_cancellation:
+              example: true
+              type: boolean
+            is_follow_up_email_disabled:
+              type: boolean
+            is_reminder_email_disabled:
+              type: boolean
+            is_subscribed_for_sms_updates:
+              description: Whether or not the contact would like the booking company to send them SMS updates about this booking. Note that the value of this field does not reflect whether or not the user has sent a STOP request to FareHarbor. If the user sends a STOP request to an External API client, that API client should respect that request.
+              example: false
+              type: boolean
+            line_items:
+              description: Line items on the booking.
+              items:
+                $ref: '#/components/schemas/BOOKING_RESPONSE_JSON_SCHEMA/definitions/line_item'
+              type: array
+            lodging:
+              oneOf:
+              - additionalProperties: false
+                properties:
+                  name:
+                    description: The lodging's name.
+                    example: Eddie
+                    type: string
+                  pk:
+                    description: The lodging's unique ID.
+                    example: 2314
+                    format: int32
+                    type: number
+                required:
+                - pk
+                - name
+                type: object
+              - description: ''
+                type: 'null'
+            note:
+              example: ''
+              format: markdown
+              type: string
+            note_safe_html:
+              example: ''
+              format: markdown
+              type: string
+            online_booking_references:
+              example: ''
+              type: string
+            order:
+              description: When there is no order associated with the booking, order will be null.
+              oneOf:
+              - properties:
+                  display_id:
+                    description: A unique identifier for the order
+                    example: ABTT
+                    type: string
+                type: object
+              - description: ''
+                type: 'null'
+            pickup:
+              $ref: '#/components/schemas/BOOKING_RESPONSE_JSON_SCHEMA/definitions/pickup'
+            pk:
+              description: The booking's unique ID.
+              example: 6876876
+              format: int32
+              type: number
+            rebooked_from:
+              oneOf:
+              - description: See [Rebooking](#tag/Rebooking)
+                example: d75102be-9732-4523-90a8-c698eff2b983
+                type: string
+              - type: 'null'
+            rebooked_to:
+              oneOf:
+              - description: See [Rebooking](#tag/Rebooking)
+                example: 10414711-3d20-4f4d-8ab3-eeaea26c2be3
+                type: string
+              - type: 'null'
+            receipt_subtotal:
+              oneOf:
+              - example: 36000
+                type: number
+              - type: 'null'
+            receipt_subtotal_display:
+              oneOf:
+              - example: '360.00'
+                type: string
+              - type: 'null'
+            receipt_taxes:
+              oneOf:
+              - example: 2776
+                type: number
+              - type: 'null'
+            receipt_taxes_display:
+              oneOf:
+              - example: '27.76'
+                type: string
+              - type: 'null'
+            receipt_total:
+              oneOf:
+              - example: 38776
+                type: number
+              - type: 'null'
+            receipt_total_display:
+              oneOf:
+              - example: '387.76'
+                type: string
+              - type: 'null'
+            related_bookings:
+              properties:
+                related_order:
+                  properties:
+                    bookings:
+                      description: Booking UUIDs related to the order
+                      example:
+                      - d75102be-9732-4523-90a8-c698eff2b983
+                      - a99e711d-2c70-48ce-87ff-0818942c3489
+                      items:
+                        type: string
+                      type: array
+                    id:
+                      description: Order ID
+                      example: ABTT
+                      type: string
+                  type: object
+              type: object
+            source_type:
+              enum:
+              - online
+              - direct
+              - pos
+              - reseller
+              - external-api
+              - kiosk
+              - imported
+              - unkown
+              example: online
+              type: string
+            status:
+              enum:
+              - booked
+              - cancelled
+              - rebooked
+              example: booked
+              type: string
+            uuid:
+              description: The booking's universally unique identifier; used to access the booking via the API.
+              example: d75102be-9732-4523-90a8-c698eff2b983
+              format: uuid
+              type: string
+            voucher_number:
+              example: ''
+              type: string
+            waiver_signatures:
+              $ref: '#/components/schemas/BOOKING_RESPONSE_JSON_SCHEMA/definitions/waiver_signatures'
+          required:
+          - pk
+          - uuid
+          - availability
+          - contact
+          - company
+          - affiliate_company
+          - customers
+          - invoice_price
+          - invoice_price_display
+          - display_id
+          - external_id
+          - order
+          - status
+          - rebooked_from
+          - rebooked_to
+          - confirmation_url
+          - voucher_number
+          - online_booking_references
+          - receipt_subtotal
+          - receipt_subtotal_display
+          - receipt_taxes
+          - receipt_taxes_display
+          - receipt_total
+          - receipt_total_display
+          - amount_paid
+          - amount_paid_display
+          - custom_field_values
+          - note
+          - note_safe_html
+          - pickup
+          - arrival
+          - effective_cancellation_policy
+          - is_eligible_for_cancellation
+          - agent
+          - desk
+          - dashboard_url
+          - customer_count
+          - is_subscribed_for_sms_updates
+          - is_follow_up_email_disabled
+          - is_reminder_email_disabled
+          - created_at
+          - source_type
+          - booked_by
+          - generated_codes
+          - waiver_signatures
+          - line_items
+          - lodging
+          - related_bookings
+          type: object
+        campaign:
+          additionalProperties: false
+          properties:
+            created_at:
+              description: The date and time the campaign was created at (set in utc time).
+              example: 2023-08-18T00:30:00+0000
+              format: datetime
+              type: string
+            is_archived:
+              example: false
+              type: boolean
+            name:
+              example: August Discounts
+              type: string
+            prefix:
+              example: FH
+              type: string
+            summary:
+              type: string
+          required:
+          - created_at
+          - is_archived
+          type: object
+        checkin_status:
+          additionalProperties: false
+          properties:
+            name:
+              description: The checkin status' name.
+              example: checked in
+              type: string
+            pk:
+              example: 10
+              format: int32
+              type: number
+            type:
+              type: string
+          required:
+          - pk
+          - name
+          - type
+          type: object
+        company:
+          additionalProperties: false
+          properties:
+            currency:
+              description: The company's currency.
+              enum:
+              - aed
+              - aud
+              - bgn
+              - brl
+              - cad
+              - chf
+              - czk
+              - dkk
+              - eur
+              - gbp
+              - hkd
+              - huf
+              - mxn
+              - nok
+              - nzd
+              - pln
+              - ron
+              - sek
+              - sgd
+              - usd
+              example: usd
+              type: string
+            name:
+              description: The company's name.
+              example: Hawaiian Adventures
+              type: string
+            shortname:
+              description: A unique FareHarbor name assigned to each company when their Dashboard is created, used to access the company's specific information.
+              example: hawaiianadventures
+              type: string
+          required:
+          - shortname
+          - name
+          - currency
+          type: object
+        contact:
+          additionalProperties: false
+          properties:
+            email:
+              description: The contact email for the party.
+              example: surfer@dude.com
+              format: email
+              type: string
+            is_subscribed_for_email_updates:
+              description: Whether or not the contact would like email updates.
+              example: false
+              type: boolean
+            language:
+              description: The contact language.
+              example: en-us
+              type: string
+            member:
+              oneOf:
+              - $ref: '#/components/schemas/BOOKING_RESPONSE_JSON_SCHEMA/definitions/member'
+              - type: 'null'
+            name:
+              description: The name of the head of the party.
+              example: Surfer Dude
+              type: string
+            normalized_phone:
+              description: The party's contact phone number. This will have a plus sign, the country code, and no extra characters such as commas or dashes.
+              example: '+14432221100'
+              type: string
+            phone:
+              description: The contact phone number for the party.
+              example: +1-443-222-1100
+              type: string
+            phone_country:
+              oneOf:
+              - description: The contact phone's country code.
+                example: US
+                type: string
+              - type: 'null'
+          required:
+          - name
+          - phone
+          - phone_country
+          - normalized_phone
+          - email
+          - is_subscribed_for_email_updates
+          type: object
+        crew_member:
+          additionalProperties: false
+          properties:
+            note:
+              description: A note on the crew member.
+              type: string
+            pk:
+              description: The crew member's unique ID.
+              format: int32
+              type: number
+            role:
+              $ref: '#/components/schemas/BOOKING_RESPONSE_JSON_SCHEMA/definitions/role'
+              description: The role of the crew member.
+            user:
+              $ref: '#/components/schemas/BOOKING_RESPONSE_JSON_SCHEMA/definitions/user'
+              description: The crew member user.
+          required:
+          - pk
+          - note
+          - user
+          type: object
+        custom_field:
+          additionalProperties: false
+          properties:
+            booking_notes:
+              description: General notes for booking customers.
+              example: Weather conditions will be evaluated at the time of check-in.\n\n-If using a voucher, please bring the voucher with you.
+              format: markdown
+              type: string
+            booking_notes_safe_html:
+              description: Notes for the customer specific to the custom field.
+              format: markdown
+              type: string
+            count_max:
+              description: The maximum amount possible for a count type custom field.
+              example: 300
+              type: number
+            count_min:
+              description: The minimum amount possible for a count type custom field.
+              example: 0
+              type: number
+            description:
+              description: The custom field's description.
+              example: Do you need additional safety equipment?
+              format: markdown
+              type: string
+            description_safe_html:
+              description: The custom field's description.
+              example: <p>Do you need additional safety equipment?</p>
+              format: markdown
+              type: string
+            extended_options:
+              items:
+                $ref: '#/components/schemas/BOOKING_RESPONSE_JSON_SCHEMA/definitions/extended_option'
+              type: array
+            is_always_per_customer:
+              description: Whether pricing should be applied to each customer (when the customer field is at the booking level).
+              example: true
+              type: boolean
+            is_required:
+              description: Indicates whether the custom field requires a value.
+              example: false
+              type: boolean
+            is_taxable:
+              description: Whether the cost of this option should affect the taxable total of a booking.
+              example: true
+              type: boolean
+            modifier_kind:
+              description: Determines whether an offset or percentage is used when the total is adjusted or set.
+              enum:
+              - percentage
+              - offset
+              example: percentage
+              type: string
+            modifier_type:
+              description: Determines whether the total is adjusted or set.
+              enum:
+              - adjust
+              - set
+              - none
+              example: adjust
+              type: string
+            name:
+              description: The name of the custom field.
+              example: Safety Equipment
+              type: string
+            offset:
+              description: 'When modifier_type is adjust: a positive or negative amount value. When modifier_type is set: a positive amount value. Only applicable when modifier_kind is offset.'
+              type: number
+            percentage:
+              description: 'When modifier_type is adjust: a number between -100 and 100 inclusive. When modifier_type is set: a number between 0 and 100 inclusive. Only applicable when modifier_kind is percentage.'
+              example: 35
+              type: number
+            pk:
+              description: The custom field's unique ID.
+              example: 4502
+              format: int32
+              type: number
+            tags:
+              items:
+                $ref: '#/components/schemas/BOOKING_RESPONSE_JSON_SCHEMA/definitions/tag'
+              type: array
+            title:
+              type: string
+            total:
+              description: The price of a single custom field of this type.
+              example: 20000
+              type: number
+            total_including_tax:
+              description: The price of a single custom field of this type plus applicable taxes.
+              example: 21550
+              type: number
+            type:
+              description: The custom field's type.
+              enum:
+              - yes-no
+              - short
+              - long
+              - extended-option
+              - count
+              - multi-campaign
+              - code-generator
+              - date
+              example: yes-no
+              type: string
+          required:
+          - pk
+          - type
+          - is_required
+          - description
+          - description_safe_html
+          - name
+          - booking_notes
+          - booking_notes_safe_html
+          - offset
+          - total
+          - total_including_tax
+          type: object
+        custom_field_instance:
+          additionalProperties: false
+          properties:
+            custom_field:
+              $ref: '#/components/schemas/BOOKING_RESPONSE_JSON_SCHEMA/definitions/custom_field'
+            pk:
+              description: The custom field instance's unique ID.
+              example: 2681
+              format: int32
+              type: number
+          required:
+          - pk
+          - custom_field
+          type: object
+        custom_field_value:
+          additionalProperties: false
+          properties:
+            custom_field:
+              $ref: '#/components/schemas/BOOKING_RESPONSE_JSON_SCHEMA/definitions/custom_field'
+            display_value:
+              example: 'false'
+              maxLength: 2048
+              type: string
+            name:
+              example: Name
+              type: string
+            pk:
+              description: A valid Custom Field pk.
+              example: 4502
+              format: int32
+              type: number
+            total_cost:
+              $ref: '#/components/schemas/BOOKING_RESPONSE_JSON_SCHEMA/definitions/total_cost'
+            value:
+              description: A string up to 2048 characters. If the custom field is of type yes-no, 'true' or 'false' must be specified. If the custom field is of type extended-option, an extended option pk must be specified.
+              example: 'false'
+              maxLength: 2048
+              type: string
+          required:
+          - pk
+          - custom_field
+          - name
+          - value
+          - display_value
+          - total_cost
+          type: object
+        customer:
+          additionalProperties: false
+          properties:
+            checkin_status:
+              description: The customer's checkin status. When there is no checkin status associated with the customer, checkin_status will be null.
+              oneOf:
+              - $ref: '#/components/schemas/BOOKING_RESPONSE_JSON_SCHEMA/definitions/checkin_status'
+              - description: ''
+                type: 'null'
+            checkin_url:
+              description: A short URL that can be rendered as a QR code for check-in purposes (the QR code should be 'type 4' with 'error correction H').
+              example: https://fhchk.co/abc
+              format: uri
+              type: string
+            custom_field_values:
+              description: A list of custom field values for the customer.
+              items:
+                $ref: '#/components/schemas/BOOKING_RESPONSE_JSON_SCHEMA/definitions/custom_field_value'
+              type: array
+            customer_type_rate:
+              $ref: '#/components/schemas/BOOKING_RESPONSE_JSON_SCHEMA/definitions/customer_type_rate'
+              description: The customer type rate to which this customer corresponds.
+            invoice_cost:
+              description: The invoice_cost will be included only if the permission View invoice prices is enabled, otherwise it will be null.
+              oneOf:
+              - properties:
+                  feeable:
+                    description: The portion of the price the is subject to fees.
+                    example: 20000
+                    type: number
+                  price:
+                    oneOf:
+                    - description: The line item price.
+                      example: 20000
+                      type: number
+                    - type: 'null'
+                  tax:
+                    description: The tax price.
+                    type: number
+                  tax_by_type:
+                    description: A breakdown of taxes by tax type.
+                    type: object
+                  taxable:
+                    description: The portion of the price that is subject to taxes.
+                    type: number
+                  total:
+                    description: The total cost after taxes and fees.
+                    example: 20000
+                    type: number
+                type: object
+              - description: ''
+                type: 'null'
+            pk:
+              example: 28
+              format: int32
+              type: number
+            seat_assigned:
+              $ref: '#/components/schemas/BOOKING_RESPONSE_JSON_SCHEMA/definitions/seat_assigned'
+            total_cost:
+              $ref: '#/components/schemas/BOOKING_RESPONSE_JSON_SCHEMA/definitions/total_cost'
+          required:
+          - pk
+          - checkin_url
+          - customer_type_rate
+          - custom_field_values
+          type: object
+        customer_prototype:
+          additionalProperties: false
+          properties:
+            display_name:
+              description: The customer prototype's display name.
+              example: Adult
+              type: string
+            maximum_age:
+              oneOf:
+              - example: 64
+                type: number
+              - type: 'null'
+            minimum_age:
+              oneOf:
+              - example: 18
+                type: number
+              - type: 'null'
+            note:
+              type: string
+            pk:
+              description: The customer prototype's unique ID.
+              example: 2522
+              format: int32
+              type: number
+            total:
+              description: The price of a single customer of this type.
+              example: 20000
+              type: number
+            total_including_tax:
+              description: The price of a single customer of this type plus applicable taxes.
+              example: 21550
+              type: number
+          required:
+          - pk
+          - display_name
+          - note
+          - minimum_age
+          - maximum_age
+          - total
+          type: object
+        customer_type:
+          additionalProperties: false
+          properties:
+            note:
+              description: A brief note about this customer type that can be displayed to end users.
+              example: At least 18 years old.
+              type: string
+            pk:
+              description: The customer type's unique ID.
+              example: 589
+              format: int32
+              type: number
+            plural:
+              description: The plural form of the name of this customer type.
+              example: Adults
+              type: string
+            singular:
+              description: The singular form of the name of this customer type.
+              example: Adult
+              type: string
+          required:
+          - pk
+          - singular
+          - plural
+          type: object
+        customer_type_rate:
+          additionalProperties: false
+          properties:
+            capacity:
+              oneOf:
+              - description: The maximum number of customers of this type that can currently book this availability; this number will change over time as other customers book.
+                example: 10
+                type: number
+              - type: 'null'
+            custom_field_instances:
+              items:
+                $ref: '#/components/schemas/BOOKING_RESPONSE_JSON_SCHEMA/definitions/custom_field_instance'
+              type: array
+            customer_prototype:
+              $ref: '#/components/schemas/BOOKING_RESPONSE_JSON_SCHEMA/definitions/customer_prototype'
+            customer_type:
+              $ref: '#/components/schemas/BOOKING_RESPONSE_JSON_SCHEMA/definitions/customer_type'
+            maximum_party_size:
+              oneOf:
+              - type: number
+              - type: 'null'
+            minimum_party_size:
+              oneOf:
+              - type: number
+              - type: 'null'
+            pk:
+              description: The customer type rate's unique ID.
+              example: 978
+              format: int32
+              type: number
+            total:
+              description: The price of a single customer of this type.
+              example: 20000
+              type: number
+            total_including_tax:
+              description: The price of a single customer of this type plus applicable taxes.
+              example: 21550
+              type: number
+          required:
+          - pk
+          - total
+          - capacity
+          - minimum_party_size
+          - maximum_party_size
+          - customer_type
+          - customer_prototype
+          type: object
+        desk:
+          oneOf:
+          - additionalProperties: false
+            properties:
+              name:
+                description: The desk's name.
+                example: Windward Side
+                type: string
+              pk:
+                description: The desk's unique ID.
+                example: 2314
+                format: int32
+                type: number
+            required:
+            - pk
+            - name
+            type: object
+          - description: ''
+            type: 'null'
+        effective_cancellation_policy:
+          additionalProperties: false
+          properties:
+            cutoff:
+              oneOf:
+              - description: The number of hours for the hours-before-start and hours-before-midnight types (set in the company's local time).
+                example: 2024-04-16T00:00:00-1000
+                format: datetime
+                type: string
+              - description: ''
+                type: 'null'
+            type:
+              description: The cancellation policy's type
+              enum:
+              - hours-before-start
+              - hours-before-midnight
+              - always
+              - never
+              example: hours-before-start
+              type: string
+          required:
+          - type
+          - cutoff
+          type: object
+        extended_option:
+          additionalProperties: false
+          properties:
+            description:
+              description: The extended option's description.
+              example: Need a helmet?
+              format: markdown
+              type: string
+            description_safe_html:
+              description: The extended option's description.
+              example: <p>Need a helmet?</p>
+              format: markdown
+              type: string
+            is_always_per_customer:
+              description: Whether pricing should be applied to each customer (when the customer field is at the booking level).
+              example: true
+              type: boolean
+            is_taxable:
+              description: Whether pricing should be applied to each customer (when the customer field is at the booking level).
+              example: true
+              type: boolean
+            modifier_kind:
+              description: Determines whether an offset or percentage is used when the total is adjusted or set.
+              enum:
+              - percentage
+              - offset
+              example: percentage
+              type: string
+            modifier_type:
+              description: Determines whether the total is adjusted or set.
+              enum:
+              - adjust
+              - set
+              - none
+              example: adjust
+              type: string
+            name:
+              description: The extended option's name.
+              example: Helmet
+              type: string
+            offset:
+              description: 'When modifier_type is adjust: a positive or negative amount value. When modifier_type is set: a positive amount value. Only applicable when modifier_kind is offset.'
+              type: number
+            percentage:
+              description: 'When modifier_type is adjust: a number between -100 and 100 inclusive. When modifier_type is set: a number between 0 and 100 inclusive. Only applicable when modifier_kind is percentage.'
+              example: 35
+              type: number
+            pk:
+              description: The extended option's unique ID.
+              example: 105
+              format: int32
+              type: number
+            total:
+              description: The price of a single custom field of this type.
+              example: 20000
+              type: number
+            total_including_tax:
+              description: The price of a single custom field of this type plus applicable taxes.
+              example: 21550
+              type: number
+          required:
+          - pk
+          - name
+          - description
+          - description_safe_html
+          - modifier_kind
+          - modifier_type
+          - offset
+          - percentage
+          - is_always_per_customer
+          - is_taxable
+          - total
+          - total_including_tax
+          type: object
+        fh_waiver_signatures:
+          description: A list of FareHarbor waivers signatures with details.
+          items:
+            properties:
+              address_line:
+                example: 7824 15th Ave
+                type:
+                - string
+                - 'null'
+              city:
+                example: Brooklyn
+                type:
+                - string
+                - 'null'
+              country:
+                example: US
+                type:
+                - string
+                - 'null'
+              dob:
+                example: '1991-01-05'
+                type:
+                - string
+                - 'null'
+              email:
+                example: johnsmith@example.com
+                format: email
+                type: string
+              first_name:
+                example: John
+                type: string
+              is_customer_parent:
+                description: Indicating if the signature has any related minor records.
+                example: false
+                type: boolean
+              is_marketing_allowed:
+                description: Whether the person signing the waiver has opted in for marketing communications.
+                example: true
+                type: boolean
+              last_name:
+                example: Smith
+                type: string
+              phone_number:
+                example: '+16468109900'
+                type:
+                - string
+                - 'null'
+              postcode:
+                example: '11228'
+                type:
+                - string
+                - 'null'
+              state_province:
+                example: NY
+                type:
+                - string
+                - 'null'
+            required:
+            - email
+            - first_name
+            - last_name
+            - is_marketing_allowed
+            - is_customer_parent
+            - dob
+            - phone_number
+            - address_line
+            - city
+            - state_province
+            - postcode
+            - country
+            type: object
+          type: array
+        generated_code:
+          additionalProperties: false
+          properties:
+            affiliation:
+              oneOf:
+              - $ref: '#/components/schemas/BOOKING_RESPONSE_JSON_SCHEMA/definitions/affiliation'
+              - type: 'null'
+            code:
+              description: The generated code.
+              type: string
+            generating_campaign:
+              $ref: '#/components/schemas/BOOKING_RESPONSE_JSON_SCHEMA/definitions/generating_campaign'
+            maximum_uses:
+              example: 10
+              type: number
+            use_count:
+              example: 1
+              type: number
+          required:
+          - affiliation
+          - code
+          - generating_campaign
+          - maximum_uses
+          - use_count
+          type: object
+        generating_campaign:
+          additionalProperties: false
+          properties:
+            campaign:
+              $ref: '#/components/schemas/BOOKING_RESPONSE_JSON_SCHEMA/definitions/campaign'
+            custom_field:
+              $ref: '#/components/schemas/BOOKING_RESPONSE_JSON_SCHEMA/definitions/custom_field'
+            instructions:
+              type: string
+            is_per_customer:
+              example: false
+              type: boolean
+            is_use_existing_codes:
+              example: false
+              type: boolean
+            maximum_uses:
+              example: 10
+              type: number
+          required:
+          - campaign
+          - custom_field
+          - instructions
+          - is_per_customer
+          - is_use_existing_codes
+          - maximum_uses
+          type: object
+        item:
+          additionalProperties: false
+          properties:
+            headline:
+              description: The item's headline.
+              example: Epic Jet Ski Tour
+              type: string
+            name:
+              description: The item's name.
+              example: Jet Ski Tour
+              type: string
+            pk:
+              description: The items's unique ID.
+              example: 1867
+              format: int32
+              type: number
+            primary_location:
+              oneOf:
+              - $ref: '#/components/schemas/BOOKING_RESPONSE_JSON_SCHEMA/definitions/primary_location'
+              - type: 'null'
+          required:
+          - pk
+          - name
+          - headline
+          - primary_location
+          type: object
+        line_item:
+          additionalProperties: false
+          properties:
+            description:
+              description: Description of the line item.
+              type: string
+            discount_code:
+              oneOf:
+              - description: The discount code applied to the line item.
+                type: string
+              - type: 'null'
+            is_private:
+              description: Whether the line item is hidden from the customer.
+              type: boolean
+            is_taxable:
+              description: Whether the line item is taxable.
+              type: boolean
+            offset:
+              description: Amount in the smallest currency unit (e.g. cents).
+              type: number
+            pk:
+              description: The line item unique identifier.
+              format: int32
+              type: number
+          required:
+          - pk
+          - description
+          - offset
+          - is_taxable
+          - is_private
+          - discount_code
+          type: object
+        member:
+          additionalProperties: false
+          properties:
+            code:
+              description: The member's ID.
+              example: WV8K8CG
+              type: string
+            created_at:
+              description: The date and time the member was created at (set in utc time).
+              example: 2023-08-18T00:30:00+0000
+              format: datetime
+              type: string
+            membership_ranges:
+              items:
+                $ref: '#/components/schemas/BOOKING_RESPONSE_JSON_SCHEMA/definitions/membership_range'
+              type: array
+            modified_at:
+              description: The date and time the member was last modified at (set in utc time).
+              example: 2023-08-18T00:30:00+0000
+              format: datetime
+              type: string
+            note:
+              type: string
+            pk:
+              description: The members's unique ID.
+              example: 874
+              format: int32
+              type: number
+          required:
+          - pk
+          - code
+          - created_at
+          - modified_at
+          - note
+          - membership_ranges
+          type: object
+        membership:
+          additionalProperties: false
+          properties:
+            duration:
+              description: The duration of the membershi[p.
+              example: 1
+              format: int32
+              type: number
+            duration_type:
+              enum:
+              - days
+              - weeks
+              - months
+              - years
+              example: years
+              type: string
+            note:
+              type: string
+            pk:
+              description: The membership's unique ID.
+              example: 17
+              format: int32
+              type: number
+            plural:
+              type: string
+            short_name:
+              description: The membership's short name.
+              type: string
+            singular:
+              type: string
+          required:
+          - pk
+          - short_name
+          - singular
+          - plural
+          - note
+          - duration
+          - duration_type
+          type: object
+        membership_range:
+          additionalProperties: false
+          properties:
+            end_at:
+              description: The end date of this membership range.
+              example: '2025-08-06T00:00:00'
+              format: datetime
+              type: string
+            is_cancelled:
+              example: false
+              type: boolean
+            is_deferred_start:
+              example: false
+              type: boolean
+            membership:
+              $ref: '#/components/schemas/BOOKING_RESPONSE_JSON_SCHEMA/definitions/membership'
+            pk:
+              description: The membership range's unique ID.
+              example: 965
+              format: int32
+              type: number
+            start_at:
+              description: The start date of this membership range.
+              example: '2024-08-06T00:00:00'
+              format: datetime
+              type: string
+            utc_end_at:
+              description: The end date of this membership range in utc.
+              example: 2025-08-06T07:00:00+0000
+              format: datetime
+              type: string
+            utc_start_at:
+              description: The start date of this membership range in utc.
+              example: 2024-08-06T07:00:00+0000
+              format: datetime
+              type: string
+          required:
+          - pk
+          - start_at
+          - utc_start_at
+          - end_at
+          - utc_end_at
+          - is_cancelled
+          - is_deferred_start
+          - membership
+          type: object
+        pickup:
+          description: If a lodging is specified and transportation is not available for the specified lodging (or any lodging), the pickup property will have a null value.
+          oneOf:
+          - additionalProperties: false
+            properties:
+              description:
+                description: Pickup instructions from the activity company; may not be provided.
+                example: Please meet us at the front entrance of your hotel and allow a 15 minute window for your driver to arrive.
+                format: markdown
+                type: string
+              description_safe_html:
+                description: Pickup instructions from the activity company; may not be provided.
+                example: Please meet us at the front entrance of your hotel and allow a 15 minute window for your driver to arrive.
+                format: markdown
+                type: string
+              display_text:
+                description: A formatted string that can be shown to customers.
+                example: We'll pick you up at 10:30am from Wyndham Royal Garden
+                type: string
+              map_url:
+                description: A URL to a map showing the pickup location; may not be provided.
+                example: https://goo.gl/maps/6QiYT
+                format: uri
+                type: string
+              name:
+                description: The name of the pickup location.
+                example: Wyndham Royal Garden
+                type: string
+              time:
+                description: The pickup time; the customer must arrive at the pickup location by this time.
+                example: 2016-08-01T10:30:00-1000
+                format: time
+                type: string
+            required:
+            - time
+            - name
+            - description
+            - description_safe_html
+            - map_url
+            - display_text
+            type: object
+          - description: ''
+            type: 'null'
+        primary_location:
+          additionalProperties: false
+          properties:
+            address:
+              $ref: '#/components/schemas/BOOKING_RESPONSE_JSON_SCHEMA/definitions/address'
+              description: The location's physical address.
+            google_place_id:
+              description: The location's Google Place ID.
+              example: ChIJYZ4srGUSAHwRT1Da4amp3x
+              format: uuid
+              type: string
+            latitude:
+              description: The location's latitude.
+              oneOf:
+              - example: '-157.85'
+                type: number
+              - type: 'null'
+            longitude:
+              description: The location's longitude.
+              oneOf:
+              - example: '21.30'
+                type: number
+              - type: 'null'
+            note:
+              description: A brief note about this location that can be displayed to end users.
+              example: Next to the blue fence.
+              format: markdown
+              type: string
+            note_safe_html:
+              description: A brief note about this location that can be displayed to end users.
+              example: <p>Next to the blue fence.</p>
+              format: markdown
+              type: string
+            pk:
+              description: The location's unique ID.
+              example: 234234
+              format: int32
+              type: number
+            tripadvisor_url:
+              description: The location's TripAdvisor URL.
+              example: https://www.tripadvisor.com/Attraction_Review-g60982-d184886-Reviews-Epic_Jet_Ski_Tour-Honolulu_Oahu_Hawaii.html
+              format: uri
+              type: string
+            type:
+              description: The location's type.
+              example: primary
+              type: string
+          required:
+          - pk
+          - type
+          - note
+          - note_safe_html
+          - address
+          - longitude
+          - latitude
+          - google_place_id
+          - tripadvisor_url
+          type: object
+        role:
+          additionalProperties: false
+          properties:
+            pk:
+              description: The role's unique ID.
+              format: int32
+              type: number
+            short_name:
+              description: The roles's short name.
+              type: string
+          required:
+          - pk
+          - short_name
+          type: object
+        seat_assigned:
+          oneOf:
+          - additionalProperties: false
+            properties:
+              name:
+                example: Seat A
+                type: string
+              pk:
+                description: The seat's unique ID.
+                example: 84460
+                format: int32
+                type: number
+              seat_group:
+                $ref: '#/components/schemas/BOOKING_RESPONSE_JSON_SCHEMA/definitions/seat_group'
+              seat_map:
+                $ref: '#/components/schemas/BOOKING_RESPONSE_JSON_SCHEMA/definitions/seat_map'
+              seat_zone:
+                $ref: '#/components/schemas/BOOKING_RESPONSE_JSON_SCHEMA/definitions/seat_zone'
+            required:
+            - pk
+            - name
+            - seat_map
+            - seat_zone
+            - seat_group
+            type: object
+          - description: ''
+            type: 'null'
+        seat_group:
+          additionalProperties: false
+          properties:
+            name:
+              example: Ungrouped
+              type: string
+            pk:
+              description: The seat group's unique ID.
+              example: 10096
+              format: int32
+              type: number
+          required:
+          - pk
+          - name
+          type: object
+        seat_map:
+          additionalProperties: false
+          properties:
+            name:
+              example: Seat Map A
+              type: string
+            pk:
+              description: The seat map's unique ID.
+              example: 1577
+              format: int32
+              type: number
+          required:
+          - pk
+          - name
+          type: object
+        seat_zone:
+          additionalProperties: false
+          properties:
+            name:
+              example: Default Zone
+              type: string
+            pk:
+              description: The seat zone's unique ID.
+              example: 5550
+              format: int32
+              type: number
+          required:
+          - pk
+          - name
+          type: object
+        smartwaiver_signatures:
+          description: A list of Smartwaiver signatures with details.
+          items:
+            properties:
+              dob_at:
+                example: '1991-07-08'
+                type: string
+              email:
+                example: johnsmith@example.com
+                format: email
+                type: string
+              is_age_verified:
+                description: Whether the person's age that is signing the waiver is verified.
+                example: true
+                type: boolean
+              name:
+                example: John Smith
+                type: string
+            required:
+            - email
+            - name
+            - is_age_verified
+            - dob_at
+            type: object
+          type: array
+        tag:
+          additionalProperties: false
+          properties:
+            name:
+              description: The tag's display name.
+              example: Outdoor adventure
+              type: string
+            shortname:
+              description: The tag's short name. The short name is unique per company and is limited to lowercase letters (a-z), digits (0-9), and the dash character.
+              example: outdoor
+              type: string
+          required:
+          - name
+          type: object
+        total_cost:
+          description: The total_cost will be included only if the permission View amounts is enabled, otherwise it will be null.
+          oneOf:
+          - properties:
+              feeable:
+                description: The portion of the price the is subject to fees.
+                example: 20000
+                type: number
+              price:
+                oneOf:
+                - description: The line item price.
+                  example: 20000
+                  type: number
+                - type: 'null'
+              tax:
+                description: The tax price.
+                type: number
+              tax_by_type:
+                description: A breakdown of taxes by tax type.
+                type: object
+              taxable:
+                description: The portion of the price that is subject to taxes.
+                type: number
+              total:
+                description: The total cost after taxes and fees.
+                example: 20000
+                type: number
+            type: object
+          - description: ''
+            type: 'null'
+        user:
+          additionalProperties: false
+          properties:
+            name:
+              description: The name of the user.
+              type: string
+            username:
+              description: The username of the user.
+              type: string
+          required:
+          - name
+          - username
+          type: object
+        waiver_signatures:
+          properties:
+            fareharbor:
+              $ref: '#/components/schemas/BOOKING_RESPONSE_JSON_SCHEMA/definitions/fh_waiver_signatures'
+            smartwaiver:
+              $ref: '#/components/schemas/BOOKING_RESPONSE_JSON_SCHEMA/definitions/smartwaiver_signatures'
+            wherewolf:
+              $ref: '#/components/schemas/BOOKING_RESPONSE_JSON_SCHEMA/definitions/wherewolf_waiver_signatures'
+          type: object
+        wherewolf_waiver_signatures:
+          description: A list of Wherewolf waivers signatures with details.
+          items:
+            properties:
+              dob_at:
+                example: '1991-07-08'
+                type: string
+              email:
+                example: johnsmith@example.com
+                format: email
+                type: string
+              is_age_verified:
+                description: Whether the person's age that is signing the waiver is verified.
+                example: true
+                type: boolean
+              name:
+                example: John Smith
+                type: string
+              wherewolf_participant_status:
+                oneOf:
+                - enum:
+                  - Checked In
+                  - Active
+                  - Finalised
+                  - Deleted
+                  - Ineligible
+                  - Started
+                  - Loaded
+                  - Blank
+                  - Incomplete
+                  - No-Show
+                  example: Checked In
+                  type: string
+                - description: ''
+                  type: 'null'
+            required:
+            - email
+            - name
+            - is_age_verified
+            - dob_at
+            - wherewolf_participant_status
+            type: object
+          type: array
+      properties:
+        booking:
+          $ref: '#/components/schemas/BOOKING_RESPONSE_JSON_SCHEMA/definitions/booking'
+      required:
+      - booking
+      type: object
+    Codes403:
+      type: string
+      enum:
+      - app-invalid
+      - app-key-invalid
+      - invalid-checkin-permissions-error
+      - orderize-booking-uuid-invalid-error
+      - user-key-invalid
+    CHECKIN_STATUSES_RESPONSE_JSON_SCHEMA:
+      $schema: http://json-schema.org/draft-04/schema#
+      additionalProperties: false
+      definitions:
+        checkin-status:
+          additionalProperties: false
+          description: The customer's checkin status. When there is no checkin status associated with the customer, checkin_status will be null.
+          properties:
+            name:
+              description: The checkin status' name.
+              example: checked in
+              type: string
+            pk:
+              example: 10
+              format: int32
+              type: number
+            type:
+              example: checked-in
+              type: string
+          required:
+          - pk
+          - name
+          - type
+          type: object
+      properties:
+        checkin_statuses:
+          items:
+            $ref: '#/components/schemas/CHECKIN_STATUSES_RESPONSE_JSON_SCHEMA/definitions/checkin-status'
+          type: array
+      required:
+      - checkin_statuses
+      type: object
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      required:
+      - code
+      - message
+    CHECKIN_BOOKING_REQUEST_JSON_SCHEMA:
+      $schema: http://json-schema.org/draft-04/schema#
+      additionalProperties: false
+      properties:
+        checkin_status:
+          oneOf:
+          - description: the string 'auto' indicates that checkin status should be automatically determined. The string 'unchanged' will leave the checkin status unchanged. Other string values may be supported in the future. When a checkin status pk is provided, the associated checkin status will be used. When null is provided, the checkin status will be reset. Defaults to 'auto' if the property is not provided.
+            example: auto
+            type: string
+          - type: number
+          - type: 'null'
+        customer:
+          oneOf:
+          - description: when a customer pk is specified, the associated customer will be checked in. When null is specified, all customers associated with the booking will be checked in. Defaults to null if the property is not provided.
+            example: 2481
+            type: number
+          - type: 'null'
+      type: object
+    Codes400:
+      type: string
+      enum:
+      - availability-date-range-invalid
+      - book-data-parse-error
+      - book-data-validation-error
+      - bookability-error
+      - booking-cancellation-error
+      - booking-creation-error
+      - booking-custom-field-value-creation-error
+      - booking-custom-field-values-invalid
+      - booking-note-error
+      - contact-error
+      - content-type-invalid-error
+      - customer-custom-field-value-creation-error
+      - customer-custom-field-value-update-error
+      - customer-custom-field-values-invalid
+      - customer-type-rates-invalid
+      - invalid-checkin-already-checked-in
+      - invalid-checkin-customer
+      - invalid-checkin-status-error
+      - invalid-qr-code-error
+      - key-missing
+      - lodging-pk-invalid
+      - no-default-checkin-status-error
+      - orderize-booking-uuid-invalid-error
+      - payment-error
+      - rebooking-uuid-invalid-error
+      - resource-bookability-error
+      - voucher-number-invalid
+      - voucher-number-not-specified
+    Error400:
+      allOf:
+      - $ref: '#/components/schemas/Error'
+      - type: object
+        properties:
+          code:
+            $ref: '#/components/schemas/Codes400'
+    Error403:
+      allOf:
+      - $ref: '#/components/schemas/Error'
+      - type: object
+        properties:
+          code:
+            $ref: '#/components/schemas/Codes403'
+    Error404:
+      allOf:
+      - $ref: '#/components/schemas/Error'
+      - type: object
+        properties:
+          code:
+            $ref: '#/components/schemas/Codes404'
+    Codes404:
+      type: string
+      enum:
+      - availability-pk-invalid
+      - booking-uuid-invalid
+      - company-shortname-invald
+      - customer-custom-field-value-pk-invalid
+      - item-pk-invalid
+    CHECKIN_QR_CODE_REQUEST_JSON_SCHEMA:
+      $schema: http://json-schema.org/draft-04/schema#
+      additionalProperties: false
+      properties:
+        checkin_status:
+          oneOf:
+          - description: the string 'auto' indicates that checkin status should be automatically determined. The string 'unchanged' will leave the checkin status unchanged. Other string values may be supported in the future. When a checkin status pk is provided, the associated checkin status will be used. When null is provided, the checkin status will be reset. Defaults to 'auto' if the property is not provided.
+            example: auto
+            type: string
+          - type: number
+          - type: 'null'
+        is_whole_booking:
+          description: Whether whole booking checkin is desired. If true, the checkin status for all customers associated with the booking will be updated. If false, the checkin status for the customer associated with the QR code (customer checkin URL) will be updated. Defaults to false if the property is not provided.
+          type: boolean
+        qr_code:
+          description: the customer's QR code data.
+          example: https://fhchk.co/abc
+          format: uri
+          type: string
+      required:
+      - qr_code
+      - is_whole_booking
+      type: object
+  responses:
+    Forbidden:
+      description: Forbidden (see [Error Codes](#tag/Error-Codes))
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error403'
+    BadRequest:
+      description: Bad Request (see [Error Codes](#tag/Error-Codes))
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error400'
+    NotFound:
+      description: The specified resource was not found (see [Error Codes](#tag/Error-Codes))
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error404'
+    TooManyRequests:
+      description: Too Many Requests (see [Rate Limits](#tag/Getting-Started/Rate-Limits))
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    GatewayTimeout:
+      description: '[Gateway Timeout](#tag/Getting-Started/Timeouts)'
+  parameters:
+    X-FareHarbor-API-User:
+      name: X-FareHarbor-API-User
+      in: header
+      required: true
+      schema:
+        type: string
+      description: USER-KEY (Please log in to see your key)
+      example: USER-KEY
+    X-FareHarbor-API-App:
+      name: X-FareHarbor-API-App
+      in: header
+      required: true
+      schema:
+        type: string
+      description: APP-KEY (Please log in to see your key)
+      example: APP-KEY
+x-stoplight:
+  id: obltqlvi1ac1n

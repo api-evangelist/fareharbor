@@ -1,0 +1,29 @@
+{
+  "provider": "fareharbor",
+  "sources": [
+    "_original/fareharbor-home-openapi.yml"
+  ],
+  "outputs": [
+    "fareharbor-availabilities-endpoints-api-openapi.yml",
+    "fareharbor-bookings-endpoints-api-openapi.yml",
+    "fareharbor-checkin-endpoints-api-openapi.yml",
+    "fareharbor-company-endpoints-api-openapi.yml",
+    "fareharbor-crew-members-endpoints-api-openapi.yml",
+    "fareharbor-items-endpoints-api-openapi.yml",
+    "fareharbor-lodging-endpoints-api-openapi.yml",
+    "fareharbor-ping-api-openapi.yml",
+    "fareharbor-roles-endpoints-api-openapi.yml",
+    "fareharbor-users-endpoints-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "fareharbor-home-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "fareharbor-home-openapi.yml: tagged paths GET /ping/\\Z -> Ping",
+    "fareharbor-home-openapi.yml: declared missing tag: Ping",
+    "apis.yml register: written (+10 apis, 11 total)"
+  ],
+  "skipped": []
+}
